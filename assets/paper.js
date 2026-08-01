@@ -24,6 +24,45 @@
     btn.textContent = next === "dark" ? "Light" : "Dark";
   });
 
+  /* ---- Language (EN / 中文) ------------------------------------------- */
+  /* English is the markup default, so the page is correct before this runs.
+     We only ever ADD data-lang="zh"; removing it returns to English. */
+  var LKEY = "paper-lang";
+
+  var setLang = function (lang, remember) {
+    if (lang === "zh") {
+      root.setAttribute("data-lang", "zh");
+      root.setAttribute("lang", "zh-Hans");
+    } else {
+      root.removeAttribute("data-lang");
+      root.setAttribute("lang", "en");
+    }
+    /* The English UI stays Latin-only, so the toggle reads "ZH" rather than
+       中 when English is active. */
+    document.querySelectorAll("[data-lang-toggle]").forEach(function (b) {
+      b.innerHTML = lang === "zh" ? '<b>中文</b> / EN' : '<b>EN</b> / ZH';
+      b.setAttribute("aria-label",
+        lang === "zh" ? "Switch to English" : "切换到中文");
+    });
+
+    /* The <title> is outside the .lang-* mechanism, so swap it by hand. */
+    document.title = "Miaomiao Dai 代淼淼";   /* name shown in both */
+    if (remember) { try { localStorage.setItem(LKEY, lang); } catch (e) {} }
+  };
+
+  var savedLang = null;
+  try { savedLang = localStorage.getItem(LKEY); } catch (e) {}
+  /* English is the default for every first visit — deliberately NOT
+     browser-detected, since the audience is international. Only a returning
+     visitor who chose 中文 gets it back. */
+  setLang(savedLang === "zh" ? "zh" : "en", false);
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-lang-toggle]");
+    if (!btn) return;
+    setLang(root.getAttribute("data-lang") === "zh" ? "en" : "zh", true);
+  });
+
   /* ---- Filter pills --------------------------------------------------- */
   /* Markup contract:
        <button class="pill" data-filter="all|<tag>" aria-pressed="true">
