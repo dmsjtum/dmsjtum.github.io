@@ -21,10 +21,11 @@
   <header class="masthead">
     <a class="wordmark" href="index.html">Miaomiao Dai <span class="accent">(τ)</span></a>
     <nav class="nav" aria-label="Primary">
-      <a href="index.html">Home</a>
-      <a href="research.html">Research</a>
-      <a href="about.html">About</a>
+      <a href="index.html"><span class="lang-en">Home</span><span class="lang-zh">首页</span></a>
+      <a href="index.html#publications"><span class="lang-en">Publications</span><span class="lang-zh">论文</span></a>
+      <a href="index.html#experience"><span class="lang-en">Experience</span><span class="lang-zh">经历</span></a>
       <a href="files/cv.pdf">CV</a>
+      <button class="lang-toggle" data-lang-toggle type="button"><b>EN</b> / ZH</button>
     </nav>
   </header>
 
@@ -34,12 +35,13 @@
          Use this layout OR the left-aligned rail — never both on a page. -->
     <section class="hero hero--center">
       <ol class="crumbs">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="research.html">Research</a></li>
+        <li><a href="index.html"><span class="lang-en">Home</span><span class="lang-zh">首页</span></a></li>
+        <li><a href="index.html#publications"><span class="lang-en">Publications</span><span class="lang-zh">论文</span></a></li>
         <li>HOP</li>
       </ol>
       <h1 class="display">HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning</h1>
-      <p class="hero__sub">Miaomiao Dai, Zhongqiang Ren</p>
+      <p class="hero__sub"><b>Miaomiao Dai</b>, Zhongqiang Ren</p>
+      <p class="pub__role" style="margin-top:14px"><span class="lang-en">Undergraduate first author · presented the talk</span><span class="lang-zh">本科生第一作者 · 本人作大会报告</span></p>
       <ul class="linkrow">
         <li><a class="btn" href="files/HOP.pdf">Paper (PDF)</a></li>
         <!-- Add these once they exist:
@@ -49,37 +51,43 @@
     </section>
 
     <dl class="meta" style="margin:56px auto 0;max-width:var(--measure)">
-      <dt>Venue</dt>     <dd>Robotics: Science and Systems (RSS), 2026</dd>
+      <dt>Venue</dt>     <dd>Robotics: Science and Systems (RSS), 2026 &middot; Sydney</dd>
       <dt>Advisor</dt>   <dd>Prof. Zhongqiang Ren, Shanghai Jiao Tong University</dd>
       <dt>Systems</dt>   <dd>Cartpole, Segway, quadrotor</dd>
     </dl>
 
-    <!-- Replace the placeholder with a results figure or a rollout video.
-         <div class="hero-media"><video src="files/hop.mp4" autoplay muted
-              loop playsinline></video></div> -->
-    <div class="hero-media hero-media--empty" aria-hidden="true"></div>
+    <figure class="figure" style="max-width:var(--measure);margin:48px auto 0">
+      <img src="assets/hop-talk.jpg"
+           alt="Presenting HOP on stage at RSS 2026, ICC Sydney">
+      <figcaption>
+        <span class="lang-en"><b>Presenting HOP at RSS 2026</b>, ICC Sydney, July 2026.</span>
+        <span class="lang-zh"><b>在 RSS 2026 作报告</b>，悉尼国际会议中心，2026 年 7 月。</span>
+      </figcaption>
+    </figure>
 
     <section class="section">
       <div class="prose" style="margin-inline:auto">
 
-        <h2>The horizon is part of the problem</h2>
-        <p>
+        <h2><span class="lang-en">The horizon is part of the problem</span><span class="lang-zh">视界本身就是问题的一部分</span></h2>
+        <p class="lang-en">
           A trajectory optimizer is usually handed three things: a system, a
           cost, and a duration. The first two are genuinely part of the problem.
           The third — how many timesteps the motion should take — is almost
           always a number someone tuned by hand until the results looked
           reasonable.
         </p>
-        <p>
+        <p class="lang-zh">轨迹优化器通常拿到三样东西：一个系统、一个代价函数、一个时长。前两者确实属于问题本身；第三个——这段运动该走多少步——却几乎总是有人手工调到看起来合理为止。</p>
+        <p class="lang-en">
           That matters more than it sounds. Pick a horizon that is too short and
           the task is infeasible. Too long and the robot dawdles, and the solver
           spends its effort on timesteps that do nothing. The standard fix is to
           try many horizons and keep the best, which means solving the whole
           problem once per candidate.
         </p>
+        <p class="lang-zh">这件事比听上去要紧。视界取短了任务不可行；取长了机器人磨蹭，求解器还要把力气花在什么都不做的时间步上。标准做法是多试几个视界取最好的，也就是每换一个候选就把整个问题重解一遍。</p>
 
-        <h2>Scoring every horizon at once</h2>
-        <p>
+        <h2><span class="lang-en">Scoring every horizon at once</span><span class="lang-zh">一次性评估所有候选视界</span></h2>
+        <p class="lang-en">
           The contribution of this paper is a closed-form result: the cost of
           <em>every</em> candidate horizon can be recovered from a single
           backward pass, rather than one solve per candidate. Because the
@@ -87,20 +95,23 @@
           information needed to evaluate stopping at each step, the search
           collapses from quadratic to linear in the number of candidates.
         </p>
-        <p>
+        <p class="lang-zh">本文的贡献是一个闭式结果：所有候选视界的代价都能从单次反向扫描中恢复，而不必逐个求解。因为 DDP 扫描本身已经算出的中间值函数，恰好携带了在每一步停止所需的信息，视界搜索因此从平方降到线性。</p>
+        <p class="lang-en">
           In practice this is up to <b>40× faster</b> than brute-force horizon
           search, and it returns the same selected horizon and the same cost —
           it is an exact acceleration, not an approximation.
         </p>
+        <p class="lang-zh">实测比暴力视界搜索快至多 40 倍，并且返回相同的选定视界与相同的代价——这是精确加速，不是近似。</p>
 
-        <h2>What comes next</h2>
-        <p>
+        <h2><span class="lang-en">What comes next</span><span class="lang-zh">接下来</span></h2>
+        <p class="lang-en">
           HOP assumes an unconstrained problem. Most useful robots are not
           unconstrained: they have joint limits, actuator saturation, and
           obstacles to avoid. AL-HOP extends the same one-sweep idea to hard
           state and control constraints through an augmented-Lagrangian
           formulation, and is currently under review.
         </p>
+        <p class="lang-zh">HOP 假设问题无约束，而大多数有用的机器人并非如此：它们有关节限位、执行器饱和、需要避开的障碍。AL-HOP 用增广拉格朗日形式把同样的单次扫描思想推广到硬状态与控制约束，目前在审稿中。</p>
       </div>
     </section>
 
