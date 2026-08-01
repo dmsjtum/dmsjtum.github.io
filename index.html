@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Miaomiao Dai (τ)</title>
+<meta name="description" content="Trajectory optimization and robot learning. RSS 2026.">
+<meta property="og:title" content="Miaomiao Dai">
+<meta property="og:description" content="Trajectory optimization and robot learning. RSS 2026.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dmsjtum.github.io/">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>τ</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Source+Sans+3:wght@200..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/paper.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <header class="masthead" style="padding-block:40px 0">
+    <span class="dim" style="letter-spacing:.14em;text-transform:uppercase;font-size:12px">Ann Arbor, MI</span>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="research.html">Research</a>
+      <a href="about.html">About</a>
+      <a href="files/cv.pdf">CV</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="specimen">
+      <h1 class="specimen__name">Miaomiao Dai <span class="accent">(τ)</span></h1>
+      <hr class="specimen__rule">
+      <p class="specimen__meta">
+        <span>Trajectory Optimization</span>
+        <span>Robot Learning</span>
+        <span>Michigan &middot; SJTU</span>
+        <span>RSS 2026</span>
+      </p>
+    </section>
+
+    <!-- ===== §01 Now ================================================= -->
+    <section class="section rail">
+      <div class="rail__mark">§01<span>Now</span></div>
+      <div>
+        <p class="lede">
+          I work on trajectory optimization, and mostly on a question standard
+          planners skip: how long should a motion take? Conventional solvers fix
+          the duration up front and re-solve for every guess. My work makes that
+          choice part of the solve itself.
+        </p>
+        <p class="lede">
+          I also deploy vision-language-action models on real hardware, which is
+          a useful corrective. The distance between a clean theoretical result
+          and an arm that actually picks up the right object is where most of the
+          interesting problems turn out to live.
+        </p>
+
+        <dl class="meta" style="margin-top:32px">
+          <dt>Email</dt>   <dd><a href="mailto:dmmsjtu@umich.edu">dmmsjtu@umich.edu</a></dd>
+          <dt>GitHub</dt>  <dd><a href="https://github.com/dmsjtum">github.com/dmsjtum</a></dd>
+          <dt>CV</dt>      <dd><a href="files/cv.pdf">cv.pdf</a></dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ===== §02 News =============================================== -->
+    <section class="section rail">
+      <div class="rail__mark">§02<span>News</span></div>
+      <div>
+        <ul class="timeline">
+
+          <li class="is-marked">
+            <a class="entry entry--lifted" href="project.html">
+              <div class="entry__head">
+                <h2 class="entry__title">Presented HOP at RSS 2026</h2>
+                <!-- TODO: confirm the exact talk date -->
+                <span class="entry__date">June 2026</span>
+              </div>
+              <p class="entry__desc">
+                Gave the talk as an undergraduate first author. HOP picks the
+                optimal time horizon inside a single solve instead of searching
+                over horizons.
+              </p>
+            </a>
+          </li>
+
+          <li>
+            <div class="entry">
+              <div class="entry__head">
+                <h2 class="entry__title">Completed my B.E. thesis at SJTU</h2>
+                <span class="entry__date">August 2026</span>
+              </div>
+              <p class="entry__desc">
+                A voice-interactive closed-loop VLA system for a low-cost
+                tabletop arm. I led a team of five.
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div class="entry">
+              <div class="entry__head">
+                <h2 class="entry__title">B.S.E. in Computer Science, University of Michigan</h2>
+                <span class="entry__date">May 2026</span>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="entry">
+              <div class="entry__head">
+                <h2 class="entry__title">AL-HOP submitted, under review</h2>
+                <span class="entry__date">March 2026</span>
+              </div>
+              <p class="entry__desc">
+                Extends HOP to hard state and control constraints while keeping
+                the one-sweep horizon prediction.
+              </p>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== §03 Selected work ====================================== -->
+    <section class="section rail">
+      <div class="rail__mark">§03<span>Work</span></div>
+      <div>
+        <ul class="index">
+          <li><a href="project.html">
+            <span>HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning</span>
+            <span class="index__venue">RSS 2026</span>
+          </a></li>
+          <li><a href="research.html">
+            <span>AL-HOP: Augmented-Lagrangian Horizon-Optimal Planning</span>
+            <span class="index__venue">Under review</span>
+          </a></li>
+          <li><a href="research.html">
+            <span>A Voice-Interactive Closed-Loop VLA System for Tabletop Manipulation</span>
+            <span class="index__venue">B.E. thesis, 2026</span>
+          </a></li>
+        </ul>
+        <p style="margin-top:24px"><a class="btn" href="research.html">All research →</a></p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 Miaomiao Dai</span>
+    <span><button class="theme-toggle" data-theme-toggle type="button">Dark</button></span>
+  </footer>
+
+</div>
+
+<script src="assets/paper.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research — Miaomiao Dai</title>
+<meta name="description" content="Papers on horizon-optimal trajectory optimization and vision-language-action manipulation.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>τ</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Source+Sans+3:wght@200..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/paper.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <header class="masthead">
+    <a class="wordmark" href="index.html">Miaomiao Dai <span class="accent">(τ)</span></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="research.html" aria-current="page">Research</a>
+      <a href="about.html">About</a>
+      <a href="files/cv.pdf">CV</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <section style="margin-top:72px">
+      <ol class="crumbs">
+        <li><a href="index.html">Home</a></li>
+        <li>Research</li>
+      </ol>
+      <h1 class="display display--xl">Research</h1>
+    </section>
+
+    <!-- ===== §01 Planning ============================================
+         Filter pills are omitted on purpose: with three items they would be
+         decoration. To re-enable once the list grows, add
+         <div class="filters"> with <button class="pill" data-filter="…">
+         and put data-tags="…" on each <li>. paper.js handles the rest. -->
+    <section class="section rail">
+      <div class="rail__mark">§01<span>Planning</span></div>
+      <div>
+        <ul class="cards">
+
+          <li>
+            <a class="card" href="project.html">
+              <div class="card__thumb card__thumb--empty" aria-hidden="true"></div>
+              <div class="card__body">
+                <h2 class="card__title">HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning</h2>
+                <p class="card__meta">Robotics: Science and Systems (RSS) &middot; 2026</p>
+                <p class="card__desc">
+                  A closed-form result that scores every candidate time horizon
+                  in one backward sweep, turning horizon search from O(N²) into
+                  O(N) — up to 40× faster than brute force, with the same
+                  selected horizon and cost.
+                </p>
+              </div>
+            </a>
+          </li>
+
+          <li>
+            <div class="card">
+              <div class="card__thumb card__thumb--empty" aria-hidden="true"></div>
+              <div class="card__body">
+                <h2 class="card__title">AL-HOP: Augmented-Lagrangian Horizon-Optimal Planning for Fast Constrained Trajectory Optimization</h2>
+                <p class="card__meta">Under review &middot; 2026</p>
+                <p class="card__desc">
+                  Extends HOP to hard state and control constraints — obstacles,
+                  actuator limits — with an augmented-Lagrangian formulation
+                  that preserves the one-sweep horizon prediction. Produced
+                  valid solutions on 100/100 benchmark problems across 10
+                  dynamical systems.
+                </p>
+              </div>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== §02 Manipulation ======================================== -->
+    <section class="section rail">
+      <div class="rail__mark">§02<span>Manipulation</span></div>
+      <div>
+        <ul class="cards">
+
+          <li>
+            <div class="card">
+              <div class="card__thumb card__thumb--empty" aria-hidden="true"></div>
+              <div class="card__body">
+                <h2 class="card__title">A Voice-Interactive Closed-Loop VLA System for Low-Cost Tabletop Manipulation</h2>
+                <p class="card__meta">B.E. thesis, Shanghai Jiao Tong University &middot; 2026</p>
+                <p class="card__desc">
+                  Spoken commands drive a π<sub>0.5</sub> policy on an SO-101
+                  arm, with a vision-language model verifying that the objects
+                  you named are actually in view before anything moves. Led a
+                  team of five; 70% end-to-end success with zero safety
+                  incidents.
+                </p>
+              </div>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== §03 All ================================================= -->
+    <section class="section rail">
+      <div class="rail__mark">§03<span>All</span></div>
+      <div>
+        <ul class="index">
+          <li><a href="project.html"><span>HOP: Fast DDP for Horizon-Optimal Trajectory Planning</span><span class="index__venue">RSS 2026</span></a></li>
+          <li><a href="research.html"><span>AL-HOP: Augmented-Lagrangian Horizon-Optimal Planning</span><span class="index__venue">Under review 2026</span></a></li>
+          <li><a href="research.html"><span>A Voice-Interactive Closed-Loop VLA System for Tabletop Manipulation</span><span class="index__venue">B.E. thesis 2026</span></a></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 Miaomiao Dai</span>
+    <span><button class="theme-toggle" data-theme-toggle type="button">Dark</button></span>
+  </footer>
+
+</div>
+
+<script src="assets/paper.js"></script>
+</body>
+</html>

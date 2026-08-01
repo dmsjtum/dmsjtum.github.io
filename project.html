@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HOP: Horizon-Optimal Trajectory Planning — Miaomiao Dai</title>
+<meta name="description" content="A closed-form result that scores every candidate time horizon in a single backward sweep. RSS 2026.">
+<meta property="og:title" content="HOP: Fast DDP for Horizon-Optimal Trajectory Planning">
+<meta property="og:description" content="Horizon search from O(N²) to O(N), up to 40× faster than brute force. RSS 2026.">
+<meta property="og:type" content="article">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>τ</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Source+Sans+3:wght@200..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/paper.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <header class="masthead">
+    <a class="wordmark" href="index.html">Miaomiao Dai <span class="accent">(τ)</span></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="research.html">Research</a>
+      <a href="about.html">About</a>
+      <a href="files/cv.pdf">CV</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Centered hero: breadcrumb, title, then one row of links.
+         Use this layout OR the left-aligned rail — never both on a page. -->
+    <section class="hero hero--center">
+      <ol class="crumbs">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="research.html">Research</a></li>
+        <li>HOP</li>
+      </ol>
+      <h1 class="display">HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning</h1>
+      <p class="hero__sub">Miaomiao Dai, Zhongqiang Ren</p>
+      <ul class="linkrow">
+        <li><a class="btn" href="files/HOP.pdf">Paper (PDF)</a></li>
+        <!-- Add these once they exist:
+        <li><a class="btn" href="https://arxiv.org/abs/…">arXiv</a></li>
+        <li><a class="btn" href="https://github.com/dmsjtum/…">Code</a></li> -->
+      </ul>
+    </section>
+
+    <dl class="meta" style="margin:56px auto 0;max-width:var(--measure)">
+      <dt>Venue</dt>     <dd>Robotics: Science and Systems (RSS), 2026</dd>
+      <dt>Advisor</dt>   <dd>Prof. Zhongqiang Ren, Shanghai Jiao Tong University</dd>
+      <dt>Systems</dt>   <dd>Cartpole, Segway, quadrotor</dd>
+    </dl>
+
+    <!-- Replace the placeholder with a results figure or a rollout video.
+         <div class="hero-media"><video src="files/hop.mp4" autoplay muted
+              loop playsinline></video></div> -->
+    <div class="hero-media hero-media--empty" aria-hidden="true"></div>
+
+    <section class="section">
+      <div class="prose" style="margin-inline:auto">
+
+        <h2>The horizon is part of the problem</h2>
+        <p>
+          A trajectory optimizer is usually handed three things: a system, a
+          cost, and a duration. The first two are genuinely part of the problem.
+          The third — how many timesteps the motion should take — is almost
+          always a number someone tuned by hand until the results looked
+          reasonable.
+        </p>
+        <p>
+          That matters more than it sounds. Pick a horizon that is too short and
+          the task is infeasible. Too long and the robot dawdles, and the solver
+          spends its effort on timesteps that do nothing. The standard fix is to
+          try many horizons and keep the best, which means solving the whole
+          problem once per candidate.
+        </p>
+
+        <h2>Scoring every horizon at once</h2>
+        <p>
+          The contribution of this paper is a closed-form result: the cost of
+          <em>every</em> candidate horizon can be recovered from a single
+          backward pass, rather than one solve per candidate. Because the
+          intermediate value functions a DDP sweep already computes carry the
+          information needed to evaluate stopping at each step, the search
+          collapses from quadratic to linear in the number of candidates.
+        </p>
+        <p>
+          In practice this is up to <b>40× faster</b> than brute-force horizon
+          search, and it returns the same selected horizon and the same cost —
+          it is an exact acceleration, not an approximation.
+        </p>
+
+        <h2>What comes next</h2>
+        <p>
+          HOP assumes an unconstrained problem. Most useful robots are not
+          unconstrained: they have joint limits, actuator saturation, and
+          obstacles to avoid. AL-HOP extends the same one-sweep idea to hard
+          state and control constraints through an augmented-Lagrangian
+          formulation, and is currently under review.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div style="max-width:var(--measure);margin-inline:auto">
+        <h2 class="eyebrow">Cite</h2>
+        <div class="codeblock">
+          <button class="copy" type="button">Copy</button>
+<pre>@inproceedings{dai2026hop,
+  title     = {HOP: Fast Differential Dynamic Programming for
+               Horizon-Optimal Trajectory Planning},
+  author    = {Dai, Miaomiao and Ren, Zhongqiang},
+  booktitle = {Robotics: Science and Systems (RSS)},
+  year      = {2026}
+}</pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 Miaomiao Dai</span>
+    <span><button class="theme-toggle" data-theme-toggle type="button">Dark</button></span>
+  </footer>
+
+</div>
+
+<script src="assets/paper.js"></script>
+</body>
+</html>
