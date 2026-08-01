@@ -96,7 +96,7 @@
 
   /* --- Measure & grid ---------------------------------------------------- */
   --measure:    768px;      /* prose column, measured from pi */
-  --shell:      1320px;
+  --shell:      1140px;
   --rail:       120px;      /* left gutter: section marks */
   --rail-gap:   44px;
   --note:       160px;      /* right margin: sidenotes */
@@ -729,8 +729,9 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
    -------------------------------------------------------------------------- */
 .bio {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 220px;
-  gap: 48px;
+  grid-template-columns: minmax(0, 62ch) minmax(150px, 200px);
+  justify-content: start;
+  gap: 56px;
   align-items: start;
   margin-top: 56px;
 }
@@ -883,3 +884,18 @@ html[data-lang="zh"] .pub__desc { line-break: strict; overflow-wrap: anywhere; }
   max-width: 56ch;
 }
 .name-note b { font-weight: 400; color: var(--accent); }
+
+/* Role badge on a publication — states your position on the paper when the
+   author list alone would not. Bordered rather than coloured: the accent is
+   already at its budget on this page, so this stands out by shape. */
+.pub__role {
+  display: inline-block;
+  font: 600 11px/15px var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 1px solid var(--edge);
+  padding: 3px 8px;
+  margin: 0 0 11px;
+}
+html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
