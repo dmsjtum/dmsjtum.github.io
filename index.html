@@ -84,10 +84,115 @@
         </dl>
       </div>
 
-      <!-- Drop a square headshot at assets/portrait.jpg and this lights up.
-           Until then the crop-mark grid reads as intentional. -->
-      <img class="bio__portrait" src="assets/portrait.jpg" alt="Miaomiao Dai"
-           onerror="this.onerror=null;this.src='data:image/svg+xml;charset=utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E'">
+      <!-- Right column: portrait, then a drawing of the two systems I
+           actually work on — the arm policies get deployed on, and the
+           quadrotor HOP is validated on. Joint angles are IK-solved so the
+           gripper genuinely meets the cube. -->
+      <div class="bio__side">
+        <img class="bio__portrait" src="assets/portrait.jpg" alt="Miaomiao Dai"
+             onerror="this.onerror=null;this.src='data:image/svg+xml;charset=utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E'">
+        <svg class="sketch" viewBox="0 0 200 250" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- One bench, two systems: the arm policies get deployed on, and
+               the quadrotor HOP is validated on. Joint angles are IK-solved
+               (scratchpad/ik.py), and the pose sequence starts and ends on the
+               same pose so the loop seam has nothing to jump across. The flight
+               path is kept above y=112 while the arm tops out near y=156. -->
+
+          <path d="M 6 226 L 194 226" stroke="currentColor" stroke-width="1.1" opacity=".45"/>
+
+          <!-- flight path, entirely in the sky -->
+          <path id="traj" d="M 44 112 C 80 56 130 50 176 84"/>
+          <path d="M 44 112 C 80 56 130 50 176 84"
+                stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                stroke-dasharray="0.1 10" opacity=".3">
+            <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.5s" repeatCount="indefinite"/>
+          </path>
+
+          <!-- T*: the horizon HOP selects. The one accent in the drawing. -->
+          <g class="accent">
+            <circle cx="176" cy="84" r="4.5" stroke="currentColor" stroke-width="1.5">
+              <animate attributeName="r" values="4.5;7;4.5" dur="2.8s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values=".95;.4;.95" dur="2.8s" repeatCount="indefinite"/>
+            </circle>
+            <text x="168" y="70" font-family="ui-monospace,SFMono-Regular,Menlo,monospace"
+                  font-size="9" fill="currentColor">T*</text>
+          </g>
+
+          <!-- quadrotor: out to T*, hold, back again -->
+          <g>
+            <animateMotion dur="9s" repeatCount="indefinite"
+                           keyPoints="0;1;1;0;0" keyTimes="0;0.38;0.50;0.88;1"
+                           calcMode="spline"
+                           keySplines=".45 0 .3 1; 0 0 1 1; .45 0 .3 1; 0 0 1 1">
+              <mpath href="#traj"/>
+            </animateMotion>
+            <g stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+              <path d="M -10 -2 L 10 -2"/>
+              <path d="M -10 -2 L -10 -6"/>
+              <path d="M  10 -2 L  10 -6"/>
+              <ellipse cx="-10" cy="-7" rx="6.5" ry="1.5">
+                <animate attributeName="rx" values="6.5;2;6.5" dur="0.42s" repeatCount="indefinite"/>
+              </ellipse>
+              <ellipse cx="10" cy="-7" rx="6.5" ry="1.5">
+                <animate attributeName="rx" values="2;6.5;2" dur="0.42s" repeatCount="indefinite"/>
+              </ellipse>
+              <rect x="-4.5" y="-2" width="9" height="5.5" rx="1.5"/>
+            </g>
+          </g>
+
+          <!-- Arm assembly scaled 1.18x about the bench: translate = (1-s)*anchor. -->
+          <g transform="translate(-8.6 -40.7) scale(1.18)">
+            <rect x="-6" y="-6" width="12" height="12" rx="1.5"
+                  stroke="currentColor" stroke-width="1.4">
+              <animateTransform attributeName="transform" type="translate"
+                values="94 219; 94 172; 22 172; 22 219; 22 219; 22 172; 94 172; 94 219; 94 219"
+                keyTimes="0; 0.10; 0.26; 0.36; 0.46; 0.56; 0.72; 0.82; 1"
+                dur="9s" repeatCount="indefinite" calcMode="spline"
+                keySplines=".4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1; .4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1"/>
+            </rect>
+
+            <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M 32 226 L 64 226"/>
+              <path d="M 42 226 L 42 204 L 54 204 L 54 226"/>
+
+              <g transform="translate(48 200)">
+                <animateTransform attributeName="transform" type="rotate"
+                  values="136.2; 63.1; 4.2; -69.9; -69.9; 4.2; 63.1; 136.2; 136.2"
+                  keyTimes="0; 0.10; 0.26; 0.36; 0.46; 0.56; 0.72; 0.82; 1"
+                  dur="9s" repeatCount="indefinite" additive="sum" calcMode="spline"
+                  keySplines=".4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1; .4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1"/>
+                <path d="M 0 0 L 0 -26"/>
+                <circle cx="0" cy="0" r="2.4"/>
+
+                <g transform="translate(0 -26)">
+                  <animateTransform attributeName="transform" type="rotate"
+                    values="-45.7; -8.5; -90.0; -106.9; -106.9; -90.0; -8.5; -45.7; -45.7"
+                    keyTimes="0; 0.10; 0.26; 0.36; 0.46; 0.56; 0.72; 0.82; 1"
+                    dur="9s" repeatCount="indefinite" additive="sum" calcMode="spline"
+                    keySplines=".4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1; .4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1"/>
+                  <path d="M 0 0 L 0 -28"/>
+                  <circle cx="0" cy="0" r="2.2"/>
+
+                  <!-- gripper eases open only while the cube rests on the bench -->
+                  <g transform="translate(0 -28)">
+                    <path d="M -5 0 L 5 0"/>
+                    <path>
+                      <animate attributeName="d" dur="9s" repeatCount="indefinite"
+                        keyTimes="0; 0.38; 0.42; 0.44; 0.48; 1"
+                        values="M -3 0 L -3 6.5; M -3 0 L -3 6.5; M -6 0 L -6 6.5; M -6 0 L -6 6.5; M -3 0 L -3 6.5; M -3 0 L -3 6.5"/>
+                    </path>
+                    <path>
+                      <animate attributeName="d" dur="9s" repeatCount="indefinite"
+                        keyTimes="0; 0.38; 0.42; 0.44; 0.48; 1"
+                        values="M 3 0 L 3 6.5; M 3 0 L 3 6.5; M 6 0 L 6 6.5; M 6 0 L 6 6.5; M 3 0 L 3 6.5; M 3 0 L 3 6.5"/>
+                    </path>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
     </section>
 
     <!-- ===== §01 News ================================================ -->

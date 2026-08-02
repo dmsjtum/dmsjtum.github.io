@@ -659,7 +659,9 @@ table.data caption {
    17. Footer
    -------------------------------------------------------------------------- */
 .footer {
-  margin-top: 120px; padding: 24px 0 64px;
+  /* Was 120/64, which left ~184px of blank paper under the rule — that read
+     as an unfinished page rather than a bottom margin. */
+  margin-top: 72px; padding: 20px 0 24px;
   border-top: 1px solid var(--ink);
   display: flex; flex-wrap: wrap;
   gap: 12px 32px; justify-content: space-between;
@@ -922,4 +924,32 @@ html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
 @media (max-width: 720px) {
   .pub__figs { grid-template-columns: 1fr 1fr; }
   .pub__figs .pub__thumb { max-width: none; }
+}
+
+/* --------------------------------------------------------------------------
+   24. Bio side column — portrait, then the working drawing
+   -------------------------------------------------------------------------- */
+.bio__side { display: grid; gap: 22px; align-content: start; }
+
+/* The two systems, drawn in the same line weight as everything else. Purely
+   decorative to a screen reader — aria-hidden on the <svg>. */
+.sketch {
+  width: 100%;
+  height: auto;
+  display: block;
+  color: var(--ink);
+  opacity: .82;
+}
+.sketch .accent { color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Freeze it. The drawing still reads as a scene when nothing moves. */
+  .sketch animate,
+  .sketch animateTransform,
+  .sketch animateMotion { display: none; }
+}
+@media (max-width: 720px) {
+  /* Beside the portrait rather than under it, so the bio stays compact. */
+  .bio__side { grid-template-columns: 150px 1fr; align-items: start; gap: 20px; }
+  .bio__portrait { max-width: none; }
 }
