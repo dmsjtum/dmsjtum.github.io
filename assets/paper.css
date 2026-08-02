@@ -59,7 +59,11 @@
   /* --- Paper & ink ------------------------------------------------------- */
   --paper:      #faf9f5;                  /* the sheet itself */
   --paper-hi:   #f2f0e8;                  /* recessed: cards, code, wells */
-  --surround:   #e2ded1;                  /* the desk the sheet lies on */
+  /* The desk. Deep enough that the sheet reads as lit and the hard edge and
+     offset shadow have something to work against — at the old #e2ded1 the
+     paper-to-desk contrast was 1.28:1 and the metaphor was doing nothing.
+     1.45:1. Past ~1.6 the desk turns khaki and starts competing. */
+  --surround:   #d6d1c0;
   --ink:        #0a0a0a;
   --ink-2:      rgba(10, 10, 10, 0.62);   /* secondary prose */
   --ink-3:      rgba(10, 10, 10, 0.42);   /* labels, dates, captions */
@@ -132,7 +136,7 @@
   --accent: #e2684d;
 }
 :root[data-theme="light"] {
-  --paper: #faf9f5; --paper-hi: #f2f0e8; --surround: #e2ded1;
+  --paper: #faf9f5; --paper-hi: #f2f0e8; --surround: #d6d1c0;
   --ink: #0a0a0a;
   --ink-2: rgba(10,10,10,0.62); --ink-3: rgba(10,10,10,0.42);
   --rule: rgba(10,10,10,0.13);  --rule-hi: rgba(10,10,10,0.30);
