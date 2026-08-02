@@ -94,6 +94,25 @@
     if (initial) apply(initial);
   }
 
+  /* ---- Reduced motion, for the SVG drawing ---------------------------- */
+  /* paper.css hides the <animate> elements with display:none, which is the
+     usual recipe and which Chrome ignores outright — SMIL keeps running and
+     the drawing keeps moving for someone who asked it not to. The CSS stays
+     for engines that do honor it; this is what actually stops it. Freezing
+     at t=0 rather than wherever it happens to be means the still is the
+     composed first frame of the loop. */
+  var motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var applyMotion = function () {
+    document.querySelectorAll("svg.sketch").forEach(function (svg) {
+      if (typeof svg.pauseAnimations !== "function") return;
+      if (motion.matches) { svg.setCurrentTime(0); svg.pauseAnimations(); }
+      else { svg.unpauseAnimations(); }
+    });
+  };
+  applyMotion();
+  if (motion.addEventListener) motion.addEventListener("change", applyMotion);
+  else if (motion.addListener) motion.addListener(applyMotion);   /* Safari <14 */
+
   /* ---- Copy buttons (BibTeX, install commands, …) --------------------- */
   document.addEventListener("click", function (e) {
     var btn = e.target.closest(".copy");

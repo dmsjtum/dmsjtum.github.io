@@ -140,6 +140,60 @@
             </g>
           </g>
 
+          <!-- A hopper on the empty pad under T*. Third morphology on the
+               bench: the arm manipulates, the quadrotor flies, this one only
+               knows how to leave the ground. One hop is 0.9s — exactly a tenth
+               of the 9s master loop, so it lands on the same beat every time
+               the arm sets the cube down. Rise and fall are separate splines
+               fitted to a parabola: slope 2 leaving the ground, 0 at the apex,
+               2 coming back down. Base poses are the standing pose, so it
+               freezes upright rather than mid-crouch under reduced motion. -->
+          <g transform="translate(172 226)" stroke="currentColor"
+             stroke-width="1.4" stroke-linecap="round">
+            <g>
+              <animateTransform attributeName="transform" type="translate"
+                values="0 0; 0 0; 0 -11; 0 0; 0 0"
+                keyTimes="0; 0.10; 0.50; 0.90; 1"
+                dur="0.9s" repeatCount="indefinite" calcMode="spline"
+                keySplines="0 0 1 1; .25 .5 .45 1; .55 0 .75 .5; 0 0 1 1"/>
+
+              <!-- Legs load through the push-off and absorb after touchdown.
+                   Feet splay wider as the hip drops, so the crouch reads as
+                   weight rather than as the whole robot shrinking. -->
+              <path d="M -5.5 0 L -3 0 L -1.4 -6">
+                <animate attributeName="d" dur="0.9s" repeatCount="indefinite"
+                  keyTimes="0; 0.10; 0.90; 0.98; 1"
+                  values="M -6.5 0 L -4 0 L -1.4 -4;
+                          M -5.5 0 L -3 0 L -1.4 -6;
+                          M -5.5 0 L -3 0 L -1.4 -6;
+                          M -6.5 0 L -4 0 L -1.4 -4;
+                          M -6.5 0 L -4 0 L -1.4 -4"/>
+              </path>
+              <path d="M 5.5 0 L 3 0 L 1.4 -6">
+                <animate attributeName="d" dur="0.9s" repeatCount="indefinite"
+                  keyTimes="0; 0.10; 0.90; 0.98; 1"
+                  values="M 6.5 0 L 4 0 L 1.4 -4;
+                          M 5.5 0 L 3 0 L 1.4 -6;
+                          M 5.5 0 L 3 0 L 1.4 -6;
+                          M 6.5 0 L 4 0 L 1.4 -4;
+                          M 6.5 0 L 4 0 L 1.4 -4"/>
+              </path>
+
+              <!-- Body rides the hip down through the crouch: 2px, the same
+                   distance the hip travels, so nothing telescopes. -->
+              <g>
+                <animateTransform attributeName="transform" type="translate"
+                  values="0 2; 0 0; 0 0; 0 2; 0 2"
+                  keyTimes="0; 0.10; 0.90; 0.98; 1"
+                  dur="0.9s" repeatCount="indefinite"/>
+                <rect x="-6" y="-16" width="12" height="10" rx="1.8"/>
+                <circle cx="0" cy="-11" r="2.1"/>
+                <path d="M 0 -16 L 0 -20"/>
+                <circle cx="0" cy="-21.2" r="1.2"/>
+              </g>
+            </g>
+          </g>
+
           <!-- Arm assembly scaled 1.18x about the bench: translate = (1-s)*anchor. -->
           <g transform="translate(-8.6 -40.7) scale(1.18)">
             <rect x="-6" y="-6" width="12" height="12" rx="1.5"
@@ -176,12 +230,15 @@
                   <!-- gripper eases open only while the cube rests on the bench -->
                   <g transform="translate(0 -28)">
                     <path d="M -5 0 L 5 0"/>
-                    <path>
+                    <!-- Base d is the closed pose: reduced motion switches the
+                         <animate> off, and without it the fingers had no d at
+                         all and vanished. -->
+                    <path d="M -3 0 L -3 6.5">
                       <animate attributeName="d" dur="9s" repeatCount="indefinite"
                         keyTimes="0; 0.38; 0.42; 0.44; 0.48; 1"
                         values="M -3 0 L -3 6.5; M -3 0 L -3 6.5; M -6 0 L -6 6.5; M -6 0 L -6 6.5; M -3 0 L -3 6.5; M -3 0 L -3 6.5"/>
                     </path>
-                    <path>
+                    <path d="M 3 0 L 3 6.5">
                       <animate attributeName="d" dur="9s" repeatCount="indefinite"
                         keyTimes="0; 0.38; 0.42; 0.44; 0.48; 1"
                         values="M 3 0 L 3 6.5; M 3 0 L 3 6.5; M 6 0 L 6 6.5; M 6 0 L 6 6.5; M 3 0 L 3 6.5; M 3 0 L 3 6.5"/>

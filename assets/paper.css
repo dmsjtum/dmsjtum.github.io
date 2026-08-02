@@ -943,7 +943,11 @@ html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
 .sketch .accent { color: var(--accent); }
 
 @media (prefers-reduced-motion: reduce) {
-  /* Freeze it. The drawing still reads as a scene when nothing moves. */
+  /* Freeze it. The drawing still reads as a scene when nothing moves.
+     NOTE: Chrome ignores display:none on SMIL animation elements — measured,
+     the drawing kept running. paper.js calls pauseAnimations() and does the
+     real work; this stays for engines that do honor it, and so the drawing
+     is still still when JS is off in one of them. */
   .sketch animate,
   .sketch animateTransform,
   .sketch animateMotion { display: none; }
