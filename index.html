@@ -19,7 +19,7 @@
 
 <!-- The cat, in her real colors: ginger fur, white muzzle, pink nose.
      The same head lives on the desktop as the agent-pet monitor. -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3.4 6.5 L2.2 1.4 L6.6 3.3 Z' fill='%23eda05e'/><path d='M12.6 6.5 L13.8 1.4 L9.4 3.3 Z' fill='%23eda05e'/><ellipse cx='8' cy='9.2' rx='6.1' ry='5.6' fill='%23eda05e'/><path d='M6.6 4.6 L6.5 6 M8 4.3 L8 5.9 M9.4 4.6 L9.5 6' stroke='%23cd7e3f' stroke-width='1' stroke-linecap='round'/><ellipse cx='8' cy='12' rx='2.6' ry='1.9' fill='%23f7efe4'/><circle cx='5.6' cy='9.3' r='1.25' fill='%232e2216'/><circle cx='10.4' cy='9.3' r='1.25' fill='%232e2216'/><path d='M7.3 11.2 L8.7 11.2 L8 12.1 Z' fill='%23d0715a'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g transform='translate(100 100) scale(1.22) translate(-100 -104)'> <path d='M56 72 L44 26 Q43 21 48 23 L97 45 Z' fill='%23FF9E3D' stroke='%238B5E34' stroke-width='3' stroke-linejoin='round' stroke-linecap='round'/> <path d='M61 61 L55 34 L83 47 Z' fill='%23FFD9A6'/> <path d='M144 72 L156 26 Q157 21 152 23 L103 45 Z' fill='%23FF9E3D' stroke='%238B5E34' stroke-width='3' stroke-linejoin='round' stroke-linecap='round'/> <path d='M139 61 L145 34 L117 47 Z' fill='%23FFD9A6'/> <ellipse cx='100' cy='104' rx='57' ry='50' fill='%23FF9E3D' stroke='%238B5E34' stroke-width='3' stroke-linejoin='round' stroke-linecap='round'/> <path d='M100 56 v14 M83 59 q3 7 4 12 M117 59 q-3 7 -4 12' stroke='%23EE8830' stroke-width='6' stroke-linecap='round' fill='none'/><circle cx='76' cy='106' r='14' fill='%233B2B1D'/> <circle cx='71.1' cy='100.68' r='4.8999999999999995' fill='%23fff'/> <circle cx='80.2' cy='111.32' r='2.3800000000000003' fill='%23fff' opacity='.95'/><circle cx='124' cy='106' r='14' fill='%233B2B1D'/> <circle cx='119.1' cy='100.68' r='4.8999999999999995' fill='%23fff'/> <circle cx='128.2' cy='111.32' r='2.3800000000000003' fill='%23fff' opacity='.95'/><path d='M94 123 h12 l-6 8 Z' fill='%23F7A8B4' stroke='%238B5E34' stroke-width='2' stroke-linejoin='round'/><path d='M90 136 q5 5 10 0 q5 5 10 0' stroke='%238B5E34' stroke-width='3.2' fill='none' stroke-linecap='round'/> </g></svg>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,6 +27,25 @@
 <link rel="preload" href="assets/fonts/signifier-regular.woff2" as="font" type="font/woff2" crossorigin>
 
 <link rel="stylesheet" href="assets/paper.css">
+
+<!-- Entrance gate. This has to run before first paint, which is why it is
+     inline and here rather than in paper.js: the hero starts at opacity 0,
+     and setting the attribute late is exactly what a flash of the finished
+     page looks like. Reduced motion never sets it, so that visitor gets the
+     page as static markup. The timeout is the failsafe — if paper.js never
+     arrives, nobody is left staring at an invisible bio. -->
+<script>
+  (function () {
+    var el = document.documentElement;
+    try {
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    } catch (e) { return; }
+    el.setAttribute("data-motion", "on");
+    setTimeout(function () {
+      if (!window.__paperEntrance) el.removeAttribute("data-motion");
+    }, 2500);
+  })();
+</script>
 </head>
 <body>
 
@@ -59,7 +78,10 @@
           <span class="lang-zh">2026 秋入学 · 宾夕法尼亚大学 机器人硕士</span>
         </p>
 
-        <div class="lang-en">
+        <!-- bio__text marks the paragraph block the entrance types into.
+             Both languages carry it; paper.js only ever touches the one
+             currently on screen, so toggling shows the other complete. -->
+        <div class="lang-en bio__text">
           <p class="lede">
             I am an incoming Master of Science in Robotics student at the
             University of Pennsylvania. I work on trajectory optimization, and
@@ -81,7 +103,7 @@
           </p>
         </div>
 
-        <div class="lang-zh">
+        <div class="lang-zh bio__text">
           <p class="lede">
             我即将进入宾夕法尼亚大学攻读机器人学硕士（MSR）。我的研究方向是轨迹优化，关注的是大多数规划器会跳过的一个问题：一段运动究竟应该持续多久？传统求解器把时长当作提前给定的参数，每换一个猜测就要重解一次。我的工作把这个选择本身变成求解的一部分。
           </p>
@@ -478,26 +500,43 @@
         </ul>
 
         <h2 class="eyebrow" style="margin-top:44px"><span class="lang-en">Research</span><span class="lang-zh">研究经历</span></h2>
+        <!-- Each row is title / affiliation / one result line. The result line
+             is where the numbers live, and it is the only place on the page
+             that carries the AL-HOP baseline comparison — the strongest single
+             piece of evidence here, so it earns the space. Bold marks the
+             claim a reader should leave with, never a whole clause. -->
         <ul class="rows">
           <li>
             <span class="when">2026 —</span>
             <span class="what">
-              <b><span class="lang-en">Touch-supervised visual representation learning</span><span class="lang-zh">触觉监督的视觉表征学习</span></b><br>
+              <b><span class="lang-en">Measured-touch supervision for visual representations</span><span class="lang-zh">实测触觉监督的视觉表征学习</span></b><br>
               <span><span class="lang-en">Touch Without Touch. Advisors: Prof. Hesheng Wang, SJTU IRMV Lab; Prof. Lin Shao, RoboScience.</span><span class="lang-zh">Touch Without Touch。导师：王贺升 教授（上海交大 IRMV 实验室）、邵林 教授（RoboScience）。</span></span>
+              <span class="res">
+                <span class="lang-en">Supervises a visual encoder with <b>measured pressure, force, and contact</b>, then deploys <b>RGB-only</b> — no tactile sensor at inference. Built the training stack: <b>JEPA-style latent prediction</b> with an EMA teacher over frozen visual and tactile features, unifying <b>five heterogeneous touch datasets</b> into one pipeline. Comparisons and their falsification criteria were <b>preregistered before training</b>.</span>
+                <span class="lang-zh">以<b>实测的压力、力与接触</b>信号监督视觉编码器，部署时<b>只用 RGB</b>，推理端不接任何触觉传感器。搭建了完整训练栈：在冻结的视觉与触觉特征之上做 <b>JEPA 式潜空间预测</b>（EMA teacher），并把<b>五个异构触觉数据集</b>统一进同一条流水线。所有对照与证伪判据均在<b>训练开始前预注册</b>。</span>
+              </span>
             </span>
           </li>
           <li>
             <span class="when">2025 — 2026</span>
             <span class="what">
               <b><span class="lang-en">Horizon-optimal trajectory optimization</span><span class="lang-zh">视界最优轨迹优化</span></b><br>
-              <span><span class="lang-en">Advisor: Prof. Zhongqiang Ren, SJTU. HOP (RSS 2026) and AL-HOP.</span><span class="lang-zh">导师：任中强 教授，上海交大。HOP（RSS 2026）与 AL-HOP。</span></span>
+              <span><span class="lang-en">Advisor: Prof. Zhongqiang Ren, SJTU. First author on both papers: HOP (RSS 2026) and AL-HOP.</span><span class="lang-zh">导师：任中强 教授，上海交大。两篇论文均为第一作者：HOP（RSS 2026）与 AL-HOP。</span></span>
+              <span class="res">
+                <span class="lang-en">Proved a <b>closed-form</b> result that scores every candidate time horizon in a single backward sweep, collapsing horizon search from <b>O(N²) to O(N)</b> — <b>up to 40× faster</b> than brute force, at an identical selected horizon and cost. The constrained extension, AL-HOP, returned solutions valid under the full nonlinear dynamics on <b>100/100</b> benchmark problems across 10 dynamical systems, against <b>79 / 71 / 55</b> for ALTRO and direct collocation (IPOPT, SNOPT), which also needed <b>1.6–3.1× the solve time</b> where both were valid.</span>
+                <span class="lang-zh">证明了一个<b>闭式结果</b>：单次反向扫描即可评估所有候选时间视界，把视界搜索从 <b>O(N²) 降到 O(N)</b>——比暴力搜索<b>快至多 40 倍</b>，且选出的视界与代价完全一致。约束版本 AL-HOP 在 10 类动力学系统的 <b>100/100</b> 个基准问题上给出满足完整非线性动力学的有效解，ALTRO 与直接配点法（IPOPT、SNOPT）分别为 <b>79 / 71 / 55</b>；在双方均有效的问题上，基线还需 <b>1.6–3.1 倍</b>求解时间。</span>
+              </span>
             </span>
           </li>
           <li>
             <span class="when">2026</span>
             <span class="what">
               <b><span class="lang-en">Voice-interactive closed-loop VLA manipulation</span><span class="lang-zh">语音交互式闭环 VLA 操作</span></b><br>
-              <span><span class="lang-en">Advisor: Prof. Yunlong Guo, SJTU. Group leader, team of five.</span><span class="lang-zh">导师：郭云龙 教授，上海交大。五人小组组长。</span></span>
+              <span><span class="lang-en">B.E. thesis. Advisor: Prof. Yunlong Guo, SJTU. Group leader, team of five.</span><span class="lang-zh">本科毕业设计。导师：郭云龙 教授，上海交大。五人小组组长。</span></span>
+              <span class="res">
+                <span class="lang-en">Deployed and fine-tuned a π<sub>0.5</sub> VLA policy on a low-cost SO-101 arm, and built the <b>VLM–policy grounding gate</b>: it verifies the spoken object is genuinely in view, rewrites the command into the policy's training-style phrasing, and <b>blocks motion when the evidence is insufficient</b>. The team's full system reached <b>70% end-to-end success</b> (85% pick, 75% placement) with <b>zero safety incidents</b>.</span>
+                <span class="lang-zh">在低成本 SO-101 机械臂上部署并微调 π<sub>0.5</sub> VLA 策略，并搭建了 <b>VLM–策略之间的接地校验</b>：先确认所指物体确实在视野中，把口语指令改写为策略训练时的表述，<b>证据不足则拒绝启动</b>。团队完整系统达到<b>端到端成功率 70%</b>（抓取 85%、放置 75%），<b>全程零安全事故</b>。</span>
+              </span>
             </span>
           </li>
         </ul>
