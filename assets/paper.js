@@ -260,6 +260,192 @@
     }
   }
 
+  /* ---- dollar, the site assistant ------------------------------------- */
+  /* Talks to a Cloudflare Worker that holds the DeepSeek key. Nothing secret
+     is ever in this file — the site is static and public, so anything shipped
+     here is shipped to everyone. See Info/assistant/worker.js. */
+  (function assistant() {
+
+    /* On localhost this points at Info/assistant/dev-server.js, which runs the
+       very same worker code against a key from the environment. In production
+       it is the deployed Worker. While that string is empty the widget does
+       not render at all: a chat box that fails on every message is worse than
+       no chat box, so it stays off until there is something to talk to. */
+    var API = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+      ? "http://localhost:8787"
+      : "";                       /* ← paste the workers.dev URL here */
+
+    if (!API) return;
+
+    var zh = function () { return root.getAttribute("data-lang") === "zh"; };
+    var t = function (en, cn) { return zh() ? cn : en; };
+
+    var CHIPS = [
+      ["What is HOP, in one paragraph?", "HOP 用一段话讲是什么？"],
+      ["How does AL-HOP compare to ALTRO?", "AL-HOP 和 ALTRO 比结果如何？"],
+      ["What is Touch Without Touch?", "Touch Without Touch 在做什么？"],
+      ["What robot learning experience?", "有哪些 robot learning 经历？"]
+    ];
+
+    /* --- build ------------------------------------------------------- */
+    var wrap = document.createElement("div");
+    wrap.className = "dollar";
+    wrap.innerHTML =
+      '<button class="dollar__hint" type="button"></button>' +
+      '<button class="dollar__btn" type="button">' +
+        '<img src="assets/dollar-hello.svg" alt="">' +
+      '</button>';
+
+    var panel = document.createElement("div");
+    panel.className = "chat";
+    panel.innerHTML =
+      '<div class="chat__head">' +
+        '<p class="chat__title"></p>' +
+        '<button class="chat__close" type="button" aria-label="Close">&times;</button>' +
+      '</div>' +
+      '<div class="chat__log" role="log" aria-live="polite"></div>' +
+      '<div class="chat__chips"></div>' +
+      '<form class="chat__form">' +
+        '<input class="chat__input" type="text" autocomplete="off">' +
+        '<button class="chat__send" type="submit"></button>' +
+      '</form>' +
+      '<p class="chat__note"></p>';
+
+    document.body.appendChild(wrap);
+    document.body.appendChild(panel);
+
+    var btn = wrap.querySelector(".dollar__btn");
+    var hint = wrap.querySelector(".dollar__hint");
+    var img = btn.querySelector("img");
+    var log = panel.querySelector(".chat__log");
+    var chips = panel.querySelector(".chat__chips");
+    var form = panel.querySelector(".chat__form");
+    var input = panel.querySelector(".chat__input");
+    var send = panel.querySelector(".chat__send");
+
+    /* Every visible string is rebuilt on a language toggle rather than
+       duplicated into .lang-en/.lang-zh spans — this markup is generated, so
+       there is no author-facing benefit to the span mechanism here. */
+    var label = function () {
+      hint.textContent = t("Ask me about Miaomiao", "问我关于淼淼的事");
+      btn.setAttribute("aria-label", t("Open the assistant", "打开小助手"));
+      panel.querySelector(".chat__title").textContent = t("Ask dollar", "问问 dollar");
+      input.placeholder = t("Ask about the research…", "问问研究相关的…");
+      send.textContent = t("Send", "发送");
+      panel.querySelector(".chat__note").textContent =
+        t("AI answers from Miaomiao's CV and papers. It can be wrong — email to confirm.",
+          "AI 依据淼淼的简历与论文作答，可能出错，重要信息请邮件核实。");
+      chips.innerHTML = "";
+      CHIPS.forEach(function (pair) {
+        var c = document.createElement("button");
+        c.type = "button";
+        c.className = "chat__chip";
+        c.textContent = t(pair[0], pair[1]);
+        c.addEventListener("click", function () { ask(c.textContent); });
+        chips.appendChild(c);
+      });
+    };
+    label();
+    document.addEventListener("click", function (e) {
+      if (e.target.closest("[data-lang-toggle]")) setTimeout(label, 0);
+    });
+
+    /* --- open / close ------------------------------------------------ */
+    var open = function (yes) {
+      panel.setAttribute("data-open", yes ? "1" : "0");
+      wrap.setAttribute("data-open", yes ? "1" : "0");
+      if (yes) {
+        wrap.classList.add("is-hushed");
+        input.focus();
+        if (!log.children.length) {
+          say("cat", t("Hi — I'm dollar. Ask me anything about Miaomiao's research, and I'll answer from their CV and papers.",
+                       "你好，我是 dollar。关于淼淼的研究随便问，我依据简历和论文来答。"));
+        }
+      }
+    };
+    btn.addEventListener("click", function () {
+      open(panel.getAttribute("data-open") !== "1");
+    });
+    hint.addEventListener("click", function () { open(true); });
+    panel.querySelector(".chat__close").addEventListener("click", function () { open(false); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && panel.getAttribute("data-open") === "1") open(false);
+    });
+
+    /* --- messages ----------------------------------------------------- */
+    var esc = function (s) {
+      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    };
+    var say = function (who, text) {
+      var el = document.createElement("div");
+      el.className = "chat__msg chat__msg--" + who;
+      /* Escape first, then re-introduce the one bit of markdown the model
+         reliably emits. Order matters: the other way round is an injection. */
+      el.innerHTML = esc(text).replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+      log.appendChild(el);
+      log.scrollTop = log.scrollHeight;
+      return el;
+    };
+
+    var history = [];
+    var busy = false;
+
+    var ask = function (text) {
+      text = (text || "").trim();
+      if (!text || busy) return;
+      busy = true;
+      send.disabled = true;
+      chips.style.display = "none";
+      input.value = "";
+      say("me", text);
+      history.push({ role: "user", content: text });
+
+      var dots = document.createElement("div");
+      dots.className = "chat__msg chat__msg--cat chat__dots";
+      dots.innerHTML = "<span></span><span></span><span></span>";
+      log.appendChild(dots);
+      log.scrollTop = log.scrollHeight;
+      btn.classList.add("is-busy");
+      img.src = "assets/dollar-think.svg";
+
+      var done = function () {
+        busy = false;
+        send.disabled = false;
+        dots.remove();
+        btn.classList.remove("is-busy");
+        img.src = "assets/dollar-hello.svg";
+      };
+
+      fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: history })
+      }).then(function (r) {
+        return r.json().then(function (d) { return { ok: r.ok, d: d }; });
+      }).then(function (res) {
+        done();
+        if (!res.ok || !res.d.reply) {
+          say("err", t("Sorry — I could not reach the model. Email dmmsjtu@umich.edu and Miaomiao will answer directly.",
+                       "抱歉，模型没连上。可以邮件 dmmsjtu@umich.edu，淼淼会直接回你。"));
+          history.pop();
+          return;
+        }
+        say("cat", res.d.reply);
+        history.push({ role: "assistant", content: res.d.reply });
+      }).catch(function () {
+        done();
+        history.pop();
+        say("err", t("Sorry — something went wrong. Email dmmsjtu@umich.edu instead.",
+                     "抱歉，出了点问题。可以直接邮件 dmmsjtu@umich.edu。"));
+      });
+    };
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      ask(input.value);
+    });
+  })();
+
   /* ---- Copy buttons (BibTeX, install commands, …) --------------------- */
   document.addEventListener("click", function (e) {
     var btn = e.target.closest(".copy");

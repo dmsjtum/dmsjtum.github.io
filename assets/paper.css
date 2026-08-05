@@ -1039,3 +1039,212 @@ html[data-motion="on"] .bio__side.is-in {
     opacity: 1; transform: none; transition: none;
   }
 }
+
+/* --------------------------------------------------------------------------
+   26. dollar  (the site assistant, sitting out on the desk)
+
+   Built entirely by paper.js — there is no markup for any of this in the
+   HTML, which is deliberate: the widget is useless without scripting, so a
+   no-JS visitor should not be given a button that cannot work, and a crawler
+   should not be given a chat log to index.
+
+   On a wide screen dollar sits in the desk margin beside the sheet, which is
+   the one place on this layout that is doing nothing. Below that width there
+   is no margin to sit in, so she becomes an ordinary corner button.
+   -------------------------------------------------------------------------- */
+.dollar {
+  position: fixed;
+  right: 20px;
+  bottom: 22px;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+@media (min-width: 1340px) {
+  .dollar { right: calc((100vw - var(--shell)) / 2 - 122px); }
+}
+
+.dollar__btn {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  width: 104px;
+  line-height: 0;
+  transition: transform .18s cubic-bezier(.22,.61,.36,1);
+}
+.dollar__btn:hover { transform: translateY(-3px) rotate(-2deg); }
+.dollar__btn:active { transform: translateY(-1px); }
+.dollar__btn img { width: 100%; }
+
+/* A cat who has been asked a question looks like she is thinking about it. */
+.dollar__btn.is-busy { animation: dollar-bob 1.1s ease-in-out infinite; }
+@keyframes dollar-bob {
+  0%, 100% { transform: translateY(0) }
+  50%      { transform: translateY(-5px) }
+}
+
+/* The nudge. It is the only thing telling a visitor the cat is clickable, so
+   it stays until it is used or dismissed once. */
+/* Above her, not beside her: the desk margin is ~220px at 1440 and this
+   label is wider than that, so sitting it to the left drops the tail right
+   on the sheet's border and into the "Hello!" the artwork already carries. */
+.dollar__hint {
+  position: absolute;
+  right: 6px;
+  bottom: 136px;
+  white-space: nowrap;
+  font: 400 12px/1.4 var(--mono);
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--edge);
+  box-shadow: var(--lift-sm);
+  padding: 7px 10px;
+  cursor: pointer;
+}
+.dollar__hint::after {
+  content: "";
+  position: absolute;
+  right: 34px;
+  bottom: -5px;
+  width: 8px;
+  height: 8px;
+  background: var(--paper);
+  border-right: 1px solid var(--edge);
+  border-bottom: 1px solid var(--edge);
+  transform: rotate(45deg);
+}
+.dollar[data-open="1"] .dollar__hint,
+.dollar.is-hushed .dollar__hint { display: none; }
+
+/* --- the panel ---------------------------------------------------------- */
+.chat {
+  position: fixed;
+  z-index: 61;
+  right: 20px;
+  bottom: 138px;
+  width: 372px;
+  max-width: calc(100vw - 32px);
+  background: var(--paper);
+  border: 1px solid var(--edge);
+  box-shadow: var(--lift);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+}
+@media (min-width: 1340px) {
+  .chat { right: calc((100vw - var(--shell)) / 2 - 122px); }
+}
+.chat[data-open="1"] { display: flex; }
+
+.chat__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 13px;
+  border-bottom: 1px solid var(--rule);
+}
+.chat__title {
+  font: 400 11px/1.4 var(--mono);
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+}
+html[data-lang="zh"] .chat__title { letter-spacing: .04em; }
+.chat__close {
+  appearance: none; border: 0; background: none; cursor: pointer;
+  font: 400 15px/1 var(--mono); color: var(--ink-3); padding: 2px 4px;
+}
+.chat__close:hover { color: var(--ink); }
+
+.chat__log {
+  padding: 13px;
+  overflow-y: auto;
+  max-height: min(46vh, 400px);
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.chat__msg {
+  font: 400 13px/19px var(--mono);
+  max-width: 92%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.chat__msg--me {
+  align-self: flex-end;
+  color: var(--ink);
+  background: var(--paper-hi);
+  border: 1px solid var(--rule);
+  padding: 7px 9px;
+}
+.chat__msg--cat { align-self: flex-start; color: var(--ink-2); }
+.chat__msg--cat b { color: var(--ink); font-weight: 600; }
+.chat__msg--err { align-self: flex-start; color: var(--accent); }
+
+/* Three dots while the model thinks. v4-flash reasons before it writes, so
+   this is on screen long enough to matter. */
+.chat__dots span {
+  display: inline-block; width: 4px; height: 4px; margin-right: 3px;
+  background: var(--ink-3); border-radius: 50%;
+  animation: dots 1.2s infinite;
+}
+.chat__dots span:nth-child(2) { animation-delay: .15s }
+.chat__dots span:nth-child(3) { animation-delay: .3s }
+@keyframes dots { 0%, 60%, 100% { opacity: .25 } 30% { opacity: 1 } }
+
+/* Openers. A visitor who does not know what to ask asks nothing, and this is
+   a page where the interesting questions are not obvious. */
+.chat__chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 13px 12px; }
+.chat__chip {
+  appearance: none; cursor: pointer;
+  font: 400 11px/1.3 var(--mono);
+  color: var(--ink-2);
+  background: none;
+  border: 1px solid var(--rule-hi);
+  padding: 5px 8px;
+}
+.chat__chip:hover { color: var(--ink); border-color: var(--ink); }
+
+.chat__form { display: flex; gap: 0; border-top: 1px solid var(--rule); }
+.chat__input {
+  flex: 1; min-width: 0;
+  appearance: none; border: 0; background: none;
+  font: 400 13px/19px var(--mono);
+  color: var(--ink);
+  padding: 11px 13px;
+}
+.chat__input::placeholder { color: var(--ink-3); }
+.chat__input:focus { outline: none; }
+.chat__send {
+  appearance: none; border: 0; border-left: 1px solid var(--rule);
+  background: none; cursor: pointer;
+  font: 400 12px/1 var(--mono);
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink);
+  padding: 0 14px;
+}
+.chat__send:hover { background: var(--paper-hi); }
+.chat__send:disabled { color: var(--ink-3); cursor: default; background: none; }
+
+.chat__note {
+  font: 400 10px/1.4 var(--mono);
+  color: var(--ink-3);
+  padding: 7px 13px 9px;
+  border-top: 1px solid var(--rule);
+}
+
+@media (max-width: 560px) {
+  .dollar__btn { width: 74px; }
+  .dollar__hint { right: 68px; bottom: 44px; }
+  .chat { right: 12px; left: 12px; width: auto; bottom: 104px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dollar__btn, .dollar__btn.is-busy { transition: none; animation: none; }
+  .chat__dots span { animation: none; opacity: .5; }
+}

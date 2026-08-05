@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <ellipse cx="100" cy="185" rx="52" ry="4.5" fill="#C9A97B" opacity=".3"/>
+  <path d="M144 162 Q170 168 166 146" fill="none" stroke="#9C6525" stroke-width="14" stroke-linecap="round"/>
+  <path d="M144 162 Q170 168 166 146" fill="none" stroke="#FBB859" stroke-width="9.5" stroke-linecap="round"/>
+  <path d="M160 150 l8 1 M156 160 l9 3" stroke="#EF9322" stroke-width="4" stroke-linecap="round"/>
+  <path d="M66 132 Q56 146 54 162 Q52 178 70 179 Q85 181 100 181 Q115 181 130 179
+    Q148 178 146 162 Q144 146 134 132 Z" fill="#FBB859" stroke="#9C6525" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M62 148 q-5 11 -3 24 M138 148 q5 11 3 24"
+    stroke="#9C6525" stroke-width="2.3" fill="none" stroke-linecap="round" opacity=".8"/>
+  <ellipse cx="100" cy="158" rx="27" ry="22" fill="#FDF1DB"/>
+  
+  <rect x="79" y="146" width="16" height="33" rx="7.5" fill="#FDF1DB" stroke="#9C6525" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  <rect x="105" y="146" width="16" height="33" rx="7.5" fill="#FDF1DB" stroke="#9C6525" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M87 173 v5 M113 173 v5" stroke="#9C6525" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M50 52 L47 18 Q46 11 53 14 L86 36 Z" fill="#FBB859" stroke="#9C6525" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M56 44 L54 24 L76 36 Z" fill="#FACDAD"/>
+  <path d="M150 52 L153 18 Q154 11 147 14 L114 36 Z" fill="#FBB859" stroke="#9C6525" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M144 44 L146 24 L124 36 Z" fill="#FACDAD"/><path d="M100 34 Q140 34 156 48 Q170 60 170 84 Q170 112 148 126
+    Q124 136 100 136 Q76 136 52 126 Q30 112 30 84 Q30 60 44 48 Q60 34 100 34 Z"
+    fill="#FBB859" stroke="#9C6525" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M100 40 v24 M82 44 q1 8 0 16 M118 44 q-1 8 0 16"
+    stroke="#EF9322" stroke-width="6.5" stroke-linecap="round" fill="none"/>
+  <path d="M33 90 h11 M34 103 h9 M167 90 h-11 M166 103 h-9"
+    stroke="#EF9322" stroke-width="5" stroke-linecap="round"/><ellipse cx="100" cy="117" rx="24" ry="15" fill="#FDF1DB"/><ellipse cx="74" cy="96" rx="14" ry="14.98" fill="#221A12"/>
+   <circle cx="68.96" cy="90.4" r="5.04" fill="#fff"/>
+   <circle cx="78.48" cy="101.88" r="2.24" fill="#fff" opacity=".95"/><ellipse cx="126" cy="96" rx="14" ry="14.98" fill="#221A12"/>
+   <circle cx="120.96" cy="90.4" r="5.04" fill="#fff"/>
+   <circle cx="130.48" cy="101.88" r="2.24" fill="#fff" opacity=".95"/><path d="M96 106 h8 l-4 6 Z" fill="#F79BA8"/><path d="M92 116 q4 4.5 8 0 q4 4.5 8 0"
+  stroke="#9C6525" stroke-width="2.8" fill="none" stroke-linecap="round"/><path d="M126 150 Q166 144 158 115" fill="none" stroke="#9C6525" stroke-width="15" stroke-linecap="round"/>
+  <path d="M126 150 Q166 144 158 115" fill="none" stroke="#FBB859" stroke-width="10.5" stroke-linecap="round"/>
+  <ellipse cx="158" cy="106" rx="9" ry="8" fill="#FDF1DB" stroke="#9C6525" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M170 92 q6 -3 9 -8 M174 104 q7 0 12 -3" stroke="#EF9322" stroke-width="3" fill="none" stroke-linecap="round"/>
+       <text x="6" y="30" font-family="Marker Felt, Chalkboard, cursive" font-size="21" fill="#EF9322" transform="rotate(-8 28 30)">Hello!</text></svg>
