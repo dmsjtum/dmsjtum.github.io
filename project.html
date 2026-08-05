@@ -20,6 +20,21 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Source+Sans+3:wght@200..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/paper.css">
+
+<!-- Same entrance gate as index.html; see the comment there. This page has no
+     bio to type, so it gets only the scroll unfold. -->
+<script>
+  (function () {
+    var el = document.documentElement;
+    try {
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    } catch (e) { return; }
+    el.setAttribute("data-motion", "on");
+    setTimeout(function () {
+      if (!window.__paperEntrance) el.removeAttribute("data-motion");
+    }, 2500);
+  })();
+</script>
 </head>
 <body>
 
