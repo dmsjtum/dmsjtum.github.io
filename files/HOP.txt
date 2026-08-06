@@ -1,0 +1,1197 @@
+HOP: Fast Differential Dynamic Programming for
+Horizon-Optimal Trajectory Planning
+Miaomiao Dai1 , Zhongqiang Ren1†
+
+Abstract—This paper considers a Horizon-Optimal Control
+problem that seeks a dynamically feasible trajectory while minimizing the planning horizon, which is a fundamental problem
+in robotics with numerous applications. While many famous
+optimal control methods, such as LQR, iLQR/DDP, are well
+studied and deployed on various robots, they often have a fixed
+planning horizon, and their horizon-optimal counterparts are still
+undiscovered. Recent literature solves the horizon-optimal LQR
+problem by shifting the horizon and reusing the value functions
+computed by the Riccati recursion, which leads to an efficient
+algorithm. However, this approach is limited to LQR with timeinvariant dynamics and costs only. This paper finds that the
+Riccati recursion can be reformulated into a form of Linear
+Fractional Transformation (LFT), which enjoys the structure
+that enables efficient computational reuse even for non-stationary
+dynamics and costs. Based on this insight, we develop a new
+efficient algorithm to solve Horizon-Optimal Time-Varying LQR
+problem to optimality by selecting an optimal horizon from a
+pre-specified maximum integer horizon. We then further fuse it
+with DDP to handle general non-quadratic costs and nonlinear
+dynamics. Results show that our approach always finds the same
+optimal solution as a naive brute force baseline method, while
+running up to 40 times faster. For nonlinear dynamics, our
+method always finds better solutions than approximation using
+time-invariant LQR.
+
+I. I NTRODUCTION
+Optimal Control (OC) problems seek a dynamically feasible
+trajectory that minimizes a cost functional defined along the
+trajectory, which is of fundamental importance in robotics, and
+is the basis for numerous research topics such as agile flight
+of drones [20, 6], dynamic balancing of legged robots [10],
+trajectory planning for multiple robots [14] or information
+search [4]. Many famous OC approaches, such as Linear
+Quadratic Regulator (LQR) [1], iterative LQR (iLQR) [11],
+and differential dynamic programming (DDP) [8], often assume a fixed planning horizon, which limits their usage
+especially in applications such as drone racing [20, 6], where
+the horizon itself is part of the objective to be minimized.
+To avoid fixed planning horizons, horizon-optimal (or timeoptimal) OC was studied and existing research can be roughly
+classified into three categories. The first class of methods
+seeks to first plan a geometric path and then determine the
+speed profile along the path to optimize the path completion time [9, 15, 2]. While being strong in their intended
+domains, the sequential planning of geometric path and speed
+profile may converge to highly sub-optimal or even infeasible
+1 Global College, Shanghai Jiao Tong University, China. This work was
+supported by the Natural Science Foundation of China under Grant 62403313
+and the Natural Science Foundation of Shanghai under Grant 24ZR1435900.
+† Corresponding author. zhongqiang.ren@sjtu.edu.cn.
+
+Fig. 1. For a 12-dimensional quadrotor dynamics model, our HOP-DDP finds
+the best solution trajectory with horizon T ∗ = 26 in 2.9 seconds while the
+DDP based on time-invariant LQR [16] and NLP converges to local minima
+T ∗ = 48, 30 in 3.8 and 71.8 seconds respectively.
+
+solutions. The second class includes the horizon itself as
+a decision variable within a general nonlinear programming
+framework [20, 6, 12, 7]. While being general to handle
+a variety of systems and tasks, this class of methods are
+often computationally expensive. The third class seeks to
+extend the classic OC methods, such as LQR and DDP, to
+their horizon-optimal counterparts [16, 18, 5, 3], usually by
+discretizing a given bounded horizon into time steps and
+selecting an optimal number of time steps during the trajectory
+optimization [16, 5]. While enjoying theoretical properties
+(such as solution optimality guarantees as in LQR) and being
+computationally efficient, this class of methods is currently
+limited to only a few special cases, which limits their usage.
+This paper is interested in the third class of methods, and
+develops new fast algorithms for horizon-optimal OC. Of
+close relevance to this paper, prior work [16] observes that:
+when solving LQR problem with Riccati recursion backwards
+from the end of the horizon to the starting time, as long as
+the dynamics and costs are stationary (i.e., time-invariant),
+“shifting the horizon” does not affect the value functions
+which allows reusing the value functions to efficiently solve
+the horizon-optimal LQR problem. Based on this result, prior
+work [16] further develops iLQR/DDP-like algorithms for
+nonlinear cases. However, for non-stationary dynamics or
+costs, the value functions are time-varying and thus cannot
+
+be reused any more, and this idea of shifting the horizon fails.
+This also limits the resulting iLQR/DDP, since linearizing the
+nonlinear dynamics along a trajectory at different times or
+positions can naturally lead to time-varying dynamics.
+To address this challenge and bypass the assumption on
+stationary dynamics and costs, we develop a new approach
+HOP (Horizon-Optimal Planning/Programming). The key idea
+in HOP is based on our observation that, the Riccati recursion
+can be reformulated into a form of Linear Fractional Transformation (LFT), which enjoys the structure that enables efficient
+computation by reusing a new form of value functions during
+the backwards pass, even for non-stationary dynamics and
+costs. Based on this idea, we develop HOP-LQR that can solve
+Horizon-Optimal Time-Varying LQR problem to optimality
+by selecting a best horizon from a pre-specified maximum
+integer horizon N . While naively solving the problem requires
+quadratic worst-case runtime complexity O(N 2 ), we show that
+our HOP-LQR reduces the runtime complexity to linear O(N ),
+which is same as a regular Riccati recursion for the basic LQR
+problem. Based on HOP-LQR, we further develop HOP-DDP
+by introducing an augmented state space formulation, which
+allows solving horizon-optimal OC problems with general
+nonlinear dynamics and non-quadratic costs efficiently.
+We compare our HOP against several baselines on different
+dynamic systems. Experimental results show that, our HOP
+always finds the same optimal solution as a naive brute force
+baseline method, while running up to 40 times faster, for
+both linear and nonlinear systems. In comparison to the shift
+horizon baseline method [16], while this baseline has similar
+runtime as ours, this baseline gets stuck in worse local minima
+for almost all instances when the dynamics is nonlinear, while
+our HOP and the brute force baseline always find a better local
+minima with up to 7% cheaper costs.
+For the rest of the paper, Sec. II defines the problems.
+Sec. III reviews the technical background. Sec. IV and V
+present our HOP-LQR and HOP-DDP. Sec. VI presents the
+results, and Sec. VII provides conclusion and future work.
+II. P ROBLEM D ESCRIPTION
+A. General Problem
+Let xk+1 = f (xk , uk ) denote the discrete-time dynamics
+of a system where xk ∈ Rn and uk ∈ Rm are the state
+and control vectors at time step k ∈ {0, 1, . . . , T − 1}. Here,
+T ∈ {1, 2, . . . , N } is the finish time step and N ∈ N is the
+maximum time horizon. Let UT = {u0 , . . . , uT −1 } denote
+the sequence of all controls. Let ℓ : Rn × Rm → R+ and
+ϕ : Rn → R+ denote the stage and terminal cost functions.
+Let a non-negative real number w ≥ 0 denote a weight factor.
+Problem 1 (General Problem).
+min
+
+UT ,T
+
+s.t.
+
+J = ϕ(xT ) +
+
+T
+−1
+X
+
+ℓ(xk , uk ) + wT
+
+k=0
+
+xk+1 = f (xk , uk ),
+x0 = x̄0
+T ∈ {1, 2, . . . , N }
+
+k = 0, . . . , T − 1
+
+(1)
+
+Here, the decision variables include both the control sequence UT = {u0 , . . . , uT −1 } and the finish time step T . The
+term wT penalizes the planning horizon, and thus encourages
+time-optimal behaviour of the system. When T is fixed and
+w = 0, Problem 1 becomes the regular OC problem with
+a fixed planning horizon. Without stage and terminal costs
+ϕ(xT ) = 0, ℓ(xk , uk ) = 0, k = 0, 1, · · · , T − 1 and w > 0,
+Problem 1 becomes the regular horizon-optimal OC problem.
+When the dynamics and cost terms are nonlinear and twice
+differentiable, Problem 1 can be iteratively approximated using
+Taylor expansion and solved using DDP/iLQR. For the rest
+of the paper, all our discussion on Problem 1 relies on the
+following Assumption.
+Assumption 1. The cost terms ϕ, ℓ are twice differentiable
+everywhere and the dynamics f can be linearized everywhere.
+B. HO-LQR Problem
+We first consider a simplified variant of Problem 1. Let
+Ak ∈ Rn×n and Bk ∈ Rn×m denote the system and the
+input matrices, which can be time-varying as indicated by
+the subscript k. Let Qk ⪰ 0 and Rk ≻ 0 denote the
+positive semi-definite state cost matrix and positive definite
+control cost matrix, respectively. Consider the system with
+linear dynamics xk+1 = Ak xk + Bk uk . The stage cost
+⊤
+⊤
+ℓ(xk , uk ) = x⊤
+k Qk xk + uk Rk uk and terminal cost xT QT xT
+are both quadratic. Problem 1 becomes Horizon-Optimal Linear Quadratic Regulator (HO-LQR) problem.
+Problem 2 (HO-LQR Problem).
+T
+−1
+X
+
+min
+
+J = 12 x⊤
+T QT xT +
+
+s.t.
+
+xk+1 = Ak xk + Bk uk ,
+
+UT ,T
+
+1
+2
+
+
+⊤
+x⊤
+k Qk xk + uk Rk uk + wT
+
+k=0
+
+k = 0, . . . , T − 1
+
+x0 = x̄0
+T ∈ {1, 2, . . . , N }
+(2)
+While the regular LQR problem only requires Qk , QT to
+be positive semi-definite, our method relies on the inverse of
+matrices (Sec. IV) which requires all Qk , QT to be positive
+definite so that the inversion of some matrices always exists.
+For the rest of the paper, all our discussion on Problem 2 relies
+on the following Assumption.
+Assumption 2. All matrices QT , Qk , Rk , k = 0, 1, · · · , N are
+positive definite (Qk ≻ 0, Rk ≻ 0, and QT ≻ 0).
+Remark 1. Both Problem 1 and 2 can be modified to include
+an additional goal constraint xT = xg where xg is the desired
+goal state to be reached by the system when t = T . As opposed
+to explicitly adding this constraint, an alternative way is to
+include it using soft constraints as described by the terminal
+cost ϕ, which is common in the OC literature. We therefore
+formulate the Problem 1 and 2 without the constraint xT = xg .
+
+III. P RELIMINARIES
+A. Fixed-Horizon LQR and Riccati Recursion
+The conventional discrete LQR problem (with fixed planning horizon) can be solved to optimality via dynamic programming. Let Vk (xk ) = 12 x⊤
+k Pk xk denote the value function
+that describes the cost-to-go from state xk at time step k,
+where Pk is computed backwards from k = T to k = 0.
+When k = T , the cost-to-go is same as the terminal cost
+with VT (xT ) = 12 x⊤
+T QT xT and PT = QT . For other
+k = {1, 2, · · · , T − 1}, the optimal solution is characterized
+by the backwards Riccati equations:
+Sk = Rk + Bk⊤ Pk+1 Bk ,
+Kk = Sk−1 Bk⊤ Pk+1 Ak ,
+
+(3)
+
+⊤
+Pk = Qk + A⊤
+k Pk+1 Ak − (Ak Pk+1 Bk )Kk .
+
+With a backward pass from k = T to k = 1, all Kk , Pk
+matrices can be computed and the optimal control for each
+step can be obtained by u∗k = −Kk xk .
+B. Horizon-Optimal Time-Invariant LQR
+As opposed to fixing the planning horizon T in LQR, T can
+also be optimized for systems with stationary dynamics and
+costs [16]. Specifically, let g denote a mapping corresponding
+to the computation process Pk = g(Pk+1 ) which obtains Pk
+from Pk+1 . When the system dynamics satisfy Ak = A, ∀k,
+Bk = B, ∀k (i.e., xk+1 = Axk + Buk , k = 0, . . . , T − 1)
+and the cost terms satisfy Qk = Q, ∀k, Rk = R, ∀k, the
+matrices A, B, Q, R in the Riccati equations are all constant
+for all time steps k. As a result, the mapping g becomes
+Pk = g(Pk+1 )
+
+(4)
+
+
+
+= Q + A⊤ Pk+1 I − B(R + B ⊤ Pk+1 B)−1 B ⊤ Pk+1 A.
+which is invariant across different time steps.
+This enables computational reuse: a single Riccati backward
+pass yields {P0 , P1 , . . . , PN }, from which we can extract the
+cost for any horizon t = 0, 1, 2, · · · , N − 1 as:
+Jt ≈ 21 x⊤
+0 PN −t x0 + tw.
+
+(5)
+
+The minimum among all these Jt provides the optimal solution
+to the problem and the corresponding t is the optimal horizon.
+This result is already shown in optimal-horizon control
+[16]. We illustrate this computational process in Fig. 2. The
+same map g(·) is reused at every step, so one backward pass
+produces all {Pk , k = 0, 1, 2, · · · , T }. The colors emphasize
+horizon shifting. For example, the blue case seeks JN , uses PN
+as the terminal matrix (i.e., time index is N+1) and computes
+the cost via P0 , while the green case seeks JN −1 , uses PN −1
+as the terminal matrix (i.e., time index is N ) and computes
+the cost via P1 .
+However, for time-varying systems, the mapping g becomes
+gk that is also time-varying, and one would have to compute gk
+for each time possible horizon k. As a result, the P -matrices
+cannot be reused, since for different horizons k, the set of
+matrices Pk = {Pt , t = 0, 1, 2, · · · , k} also varies and cannot
+
+Fig. 2. Illustration of the “shift horizon” one pass approach in [16] for
+time-invariant HO-LQR. The map g can be computed based on (A, B, Q, R)
+matrices, and is identical for all steps k. One backward pass yields all {Pk },
+which allows computing Jk by shifting the terminal index. For example, for
+horizon k = N (blue), the corresponding cost JN can be computed by using
+P0 . For horizon k = N − 1 (green), the corresponding cost JN −1 can be
+computed by using P1 . The optimal horizon can be computed by finding the
+horizon k∗ such that Jk∗ reaches the minimum among Jk for all possible k.
+
+be reused for different ks. In other words, there is a set Pk for
+each k = 1, 2, · · · , N . A naive approach is to solve for each
+possible horizon k with a Riccati recursion, which leads to N
+Riccati recursions in total and is computationally inefficient.
+IV. O PTIMAL H ORIZON T IME -VARYING LQR
+To address this challenge, our key idea (Fig. 3) is to
+rewrite the map gk as a new Linear Fractional Transformation
+(LFT) form g̃0:k (which is explained later), and some of the
+matrices that help compute g̃0:k can be reused. As a result,
+the recursively composed-map parameters only need to be
+computed once and can then be reused for different horizon
+queries over all candidate horizons k = 1, 2, · · · , N , which
+thus saves computational effort.
+A. Linear Fractional Transformation Form
+We first define necessary notations, and then rewrite the
+Riccati recursion into a new LFT-Riccati based on the inverse
+of cost-to-go matrices Pk . We prove that this LFT form is
+equivalent to the original Riccati recursion in Theorem 1.
+Based on this result, we further derive a LFT form for the
+time-varying case of LQR in Theorem 2, which then leads
+to an efficient algorithm HOP-LQR for the time-varying HOLQR problem as explained in the next subsection.
+Let P̃k := Pk−1 denote the inverse of the cost-to-go matrix
+Pk . Let g̃k denote the map from P̃k+1 to P̃k , i.e., P̃k =
+g̃k (P̃k+1 ). Let notation g̃0:k = g̃0 ◦ · · · ◦ g̃k denote a composed
+map that composes the maps g̃0 , g̃1 , · · · , g̃k sequentially, i.e.,
+P̃0 = g̃0:k (P̃k+1 )
+Theorem 1 (LFT-Riccati). The Riccati recursion is equivalent
+to the following LFT on the inverse of P matrices:
+g̃k (P̃ ) = Ek − Fk (P̃ + Gk )−1 Fk⊤ ,
+
+(6)
+
+such that P̃k = g̃k (P̃k+1 ). where,
+−1 ⊤
+−1 ⊤
+−1 ⊤
+Ek = Q−1
+k , Fk = Qk Ak , Gk = Ak Qk Ak + Bk Rk Bk .
+(7)
+
+Proof: We will use the Woodbury matrix identity: for
+invertible matrices A and C, the following identity holds.
+(A + U CV )−1 = A−1 − A−1 U (C −1 + V A−1 U )−1 V A−1 ,
+(8)
+
+Fig. 3. Illustration of our HOP-LQR Algorithm. Green Blocks: The system matrices are used to compute matrices (Ek , Fk , Gk ) and (E k , F k , Gk ). Top
+Row (Blue): The maps g̃k (·) forms the regular backward pass that maps P̃k to P̃k−1 . Bottom Row (Purple): The matrices (E k , F k , Gk ) allow computing
+the composed maps g̃0:k (·), which enables direct evaluation of the inverse of initial cost-to-go (P̃0 ) for any horizon k. For example, to evaluate the cost for
+(N −1)
+= g̃0:N −2 (P̃N −1 ). Then, the cost can be
+horizon N − 1, let P̃N −1 be the terminal cost-to-go matrix P˜T . Then, the initial cost-to-go matrix is P˜0
+(N −1) −1
+1 ⊤
+computed as JN −1 = 2 x0 (P̃0
+) x0 + w · (N − 1). After evaluating all the time steps Jk , k = 1, 2, · · · , N , we can find the minimal cost and select
+the corresponding time step as the optimal horizon.
+
+where A, C, U and V are matrices of sizes n1 × n1 , n2 × n2 ,
+n1 × n2 , and n2 × n1 respectively.
+Our proof consists of two steps. First, we rewrite the Riccati
+equation as:
+
+where,
+
+Wk = (Ek + Gk−1 )−1 ,
+⊤
+
+E k = E k−1 − F k−1 Wk F k−1 ,
+
+(14)
+
+F k = F k−1 Wk Fk ,
+
+Pk = Qk + A⊤
+k KAk
+
+(9)
+Gk = Gk − Fk⊤ Wk Fk ,
+
+
+where K = Pk+1 − Pk+1 Bk (Rk + Bk⊤ Pk+1 Bk )−1 Bk⊤ Pk+1 . with E 0 = E0 , F 0 = F0 , G0 = G0 .
+We recognize the term K as the right-hand side of the
+Note that (Ak , Bk , Qk , Rk ) matrices are known as the input
+Woodbury identity. By setting A−1 = Pk+1 , U = Bk ,
+of
+the problem, and (Ek , Fk , Gk , E k , F k , Gk ) are intermediate
+V = Bk⊤ , and C −1 = Rk , the identity (8) implies:
+variables computed based on (Ak , Bk , Qk , Rk ) and themselves
+−1
+recursively, and the composed map g̃k is computed based
+K = (Pk+1
++ Bk Rk−1 Bk⊤ )−1 .
+on E k , F k , Gk recursively. We will explain this recursive
+−1
+Substituting P̃k+1 = Pk+1
+and defining Sk = Bk Rk−1 Bk⊤ , the computation later in Alg. 1 with the help of Fig. 3. We now
+Riccati equation becomes:
+prove the correctness of this theorem.
+Proof: We prove Theorem 2 by induction. First, for the
+⊤
+−1
+Pk = Qk + Ak (P̃k+1 + Sk ) Ak .
+(10)
+base case (k = 0), it holds due to Theorem 1 and that
+(E 0 , F 0 , G0 ) = (E0 , F0 , G0 ). Then, for the inductive step,
+Next, we invert Eq. (10) to obtain the LFT form:
+assume the claim holds for k − 1:
+
+−1
+−1
+⊤
+P̃k = Pk−1 = Qk + A⊤
+(
+P̃
++
+S
+)
+A
+.
+(11)
+k+1
+k
+k
+k
+g̃0:k−1 (P̃ ) = E k−1 − F k−1 (P̃ + Gk−1 )−1 F k−1 .
+(15)
+
+We apply the Woodbury identity (8) again by setting A = Qk , By composition, g̃0:k (P̃ ) = g̃0:k−1 g̃k (P̃ ) . Substituting
+−1
+U = A⊤
+, which yields:
+Eq. (6) into the Eq. (15) yields
+k , V = Ak , and C = (P̃k+1 + Sk )
+
+
+
+−1
+−1 ⊤
+−1 ⊤
+−1 ⊤
+−1
+g̃
+(
+P̃
+)
+=
+E
+−
+F
+E
+−
+F
+(
+P̃
++
+G
+)
+F
+0:k
+k−1
+k−1
+k
+k
+k
+k
+P̃k = Q−1
+−
+Q
+A
+(
+P̃
++
+S
+)
++
+A
+Q
+A
+A
+Q
+.
+k+1
+k
+k k
+k k
+k
+k
+k
+k
+(16)
+−1 ⊤
+(12)
++G
+F
+.
+k−1
+
+Define Ek , Fk , Gk as in Eq. (7), we obtain the desired LFT
+form in Eq. (6).
+Theorem 1 allows us to rewrite the composite map into LFT
+form as well.
+Theorem 2 (LFT form of the composed maps). There exist
+matrices (E k , F k , Gk ), k = 0, 1, 2, · · · , N such that
+⊤
+
+g̃0:k (P̃ ) = E k − F k (P̃ + Gk )−1 F k ,
+
+(13)
+
+k−1
+
+⊤
+
+We simplify the inverse term between F k−1 and F k−1 . Let
+Wk = (Ek + Gk−1 )−1 . The term to be inverted becomes:
+
+−1
+M = Wk−1 − Fk (P̃ + Gk )−1 Fk⊤
+.
+(17)
+Applying the Woodbury identity (8) with A = Wk−1 :
+
+−1
+M = Wk +Wk Fk (P̃ + Gk ) − Fk⊤ Wk Fk
+Fk⊤ Wk . (18)
+
+Algorithm 1 HOP-LQR
+
+Substituting (18) back into (16) yields:
+
+Input: System matrices {Ak , Bk , Qk , Rk }, Initial state x0 , Terminal
+cost-to-go P̃T matrix, Time penalty w, Max horizon N
+Output: Optimal costs {Jt }N
+t=1 for all arrival times
+
+⊤
+
+g̃0:k (P̃ ) = E k−1 − F k−1 Wk F k−1
+|
+{z
+}
+Ek
+⊤
+
+// Phase 1: Compute Composed Maps
+
+− F k−1 Wk Fk (P̃ + Gk − Fk⊤ Wk Fk )−1 Fk⊤ Wk F k−1 . for k ← 0 to N − 1 do
+{z
+}
+|
+|
+{z
+}
+{z
+}
+|
+−1
+Fk
+
+Gk
+
+Ek ← Qk
+⊤
+Fk ← Q−1
+k Ak
+−1 ⊤
+Gk ← Ak Qk Ak + Bk Rk−1 Bk⊤
+
+⊤
+
+Fk
+
+The resulting terms match the desired recursive form.
+B. HOP-LQR Algorithm
+Based on Theorem 2, the complete HOP-LQR is summarized in Alg. 1 and illustrated in Fig. 3. HOP-LQR can be
+divided into two phases.
+1) Phase 1 Compute Composed Maps: HOP-LQR performs
+a single forward sweep to build the parameters of g̃k . First,
+for each step k, we use system matrices {Qi , Ri , Ai , Bi }N
+i=0 to
+compute the parameters (Ek , Fk , Gk ) (highlighted in green).
+As shown in the Top Row (highlighted in blue) of Fig. 3, these
+parameters fully define the single-step mapping g̃k , which
+represents the LFT form of the Riccati equation (Theorem 1).
+Then, instead of executing the backward recursion immediately, we use the recursion in Theorem 2 to accumulate
+these parameters forward, which helps compute the matrices
+(E k , F k , Gk ) (highlighted in green) that will be used to
+compute the composed map g̃0:k from time 0 to k.
+2) Phase 2 Fast Horizon Query: With the composed maps
+g̃0:k stored, evaluating the cost Jk for any horizon k =
+1, 2, · · · , N becomes a straightforward evaluation of the maps.
+We apply the stored map at index t − 1 to the terminal case
+(t)
+P̃t = P̃T . Specifically, the initial inverse cost-to-go P̃0 for
+(t)
+horizon t (marked as the superscript in P̃0 ) is:
+(t)
+
+P̃0 = g̃0:t−1 (P̃T ).
+
+(19)
+
+(t)
+Once P̃0 is obtained, the total cost is given by
+
+1 ⊤ (t) −1
+x (P̃ ) x0 + w · t
+(20)
+2 0 0
+This effectively avoids the need to solve the chain of g̃
+functions one by one.
+With all Jk computed, HOP-LQR can find the k ∗ such that
+Jk∗ reaches the minimum among all possible horizons k =
+1, 2, · · · , N , and this k ∗ is the optimal horizon to the problem.
+The controls can then be obtained in the same way as in regular
+LQR control policy:
+Jt =
+
+uk = − Rk−1 Bk⊤ (P̃k+1 + Bk Rk−1 Bk⊤ )−1 Ak xk ,
+{z
+}
+|
+
+(21)
+
+Kk
+
+C. Runtime Complexity Analysis
+Recall that N is the number of all possible horizons to
+be chosen from, and n is the dimensionality of the system’s
+state x. As aforementioned, a naive approach for the HorizonOptimal Time-Varying LQR problem requires solving the
+Riccati equation repeatedly for every horizon k = 1, . . . , N ,
+resulting in a worst-case runtime complexity of O(N 2 n3 ) that
+is quadratic with respect to the maximum horizon N .
+
+end
+Initialize: E 0 ← E0 , F 0 ← F0 , G0 ← G0
+for k ← 1 to N − 1 do
+Wk ← (Ek + Gk−1 )−1
+⊤
+E k ← E k−1 − F k−1 Wk F k−1
+F k ← F k−1 Wk Fk
+Gk ← Gk − Fk⊤ Wk Fk
+end
+// Phase 2: Fast Horizon Queries
+for t ← 1 to N do
+⊤
+P̃0 ← E t−1 − F t−1 (P̃T + Gt−1 )−1 F t−1
+−1
+P0 ← P̃0
+Jt ← 21 x⊤
+0 P0 x0 + t · w
+end
+return {Jt }N
+t=1 , arg mint Jt
+
+In contrast, our HOP-LQR only runs the forward recursion
+once to compute the composed maps, and then performs
+simple queries based on these maps. The runtime complexity
+for computing these composed map is O(N n3 ) and the
+runtime complexity for the queries is O(N n3 ) as well. The
+total runtime complexity is thus O(N n3 ) that is linear with
+respect to the maximum horizon N . We summarize this result
+with the following theorem.
+Theorem 3. With N being the number of all possible horizons
+to be chosen from, and n being the dimensionality of the
+system’s state x, the proposed HOP-LQR has worst-case
+runtime complexity of O(N n3 ).
+In other words, compared to the naive approach, HOP-LQR
+reduces the complexity from quadratic to linear with respect
+to the number of horizons N , which is of the same runtime
+complexity of the Riccati recursion for the fixed-horizon LQR.
+V. O PTIMAL H ORIZON I LQR AND DDP
+A. Augmented Dynamics and Cost
+Standard DDP/iLQR [11] solves nonlinear OC by iteratively approximating them as linear-quadratic sub-problems.
+Linearization introduces affine terms, which break the standard
+pure-quadratic LQR form (x⊤ P x) required by our LFT-based
+method as aforementioned. To address this, we perform a
+transformation including (1) approximation of the dynamics
+and cost function, (2) quadratization via completing the square,
+and (3) state augmentation. While some of these transformation are common in OC literature, to make the paper selfcontained, we present them in detail.
+1) Approximation: Given a nominal trajectory (x̄k , ūk ), we
+define the deviations δxk := xk − x̄k and δuk := uk − ūk .
+
+The linearized dynamics are:
+δxk+1 = Ak δxk + Bk δuk + ak ,
+
+(22)
+
+where Ak = ∇x f (x̄k , ūk ), Bk = ∇u f (x̄k , ūk ), and ak =
+f (x̄k , ūk ) − x̄k+1 .
+The stage cost is Taylor expanded to the second order:
+⊤
+ℓk ≈ ℓ(x̄k , ūk ) + w + ℓ⊤
+x,k δxk + ℓu,k δuk
+⊤
++ 12 δx⊤
+k ℓxx,k δxk + δxk ℓxu,k δuk
+
+(23)
+
++ 21 δu⊤
+k ℓuu,k δuk ,
+
+Recalling the identity 12 v ⊤ Rv = 12 (u+R−1 b)⊤ R(u+R−1 b) =
+1 ⊤
+⊤
+2 u Ru + u b + const., we can match terms to define the new
+control variable vk :
+(24)
+
+Substituting vk back into the cost function allows us to express
+the stage cost in a decoupled form. The expansion is:
+−1
+ℓk ≈ 12 δx⊤
+k (ℓxx,k − ℓxu,k ℓuu,k ℓux,k )δxk
+
++ 21 vk⊤ ℓuu,k vk
+
+
+−1
++ ℓ(x̄k , ūk ) + w − 12 ℓ⊤
+u,k ℓuu,k ℓu,k .
+
+(25)
+
+3) Augmentation: Even after using the new control variable, the dynamics and cost still contain state-dependent
+affine terms. We eliminate these by lifting the system into
+a homogeneous coordinate space via the augmented state
+zk = [δxk , 1]T . This allows us to absorb all linear and
+constant terms into the quadratic form.
+a) Augmented Dynamics: Substituting the new control
+variable vk in Eq. (24) into the dynamics yields the explicit
+update equation:
+
+
+δxk+1 = Ak − Bk ℓ−1
+uu,k ℓux,k δxk + Bk vk
+
+
+(26)
++ ak − Bk ℓ−1
+uu,k ℓu,k .
+We then rewrite it based on zk and get the new augmented
+system dynamics:
+aug
+zk+1 = Aaug
+k z k + B k vk ,
+
+
+
+Ak − Bk ℓ−1
+ℓux,k ak − Bk ℓ−1
+ℓu,k
+aug
+uu,k
+uu,k
+Ak =
+,
+0
+1
+ 
+Bk
+aug
+Bk =
+.
+0
+
+q̃k = ℓx,k − ℓxu,k ℓ−1
+uu,k ℓu,k .
+
+Then the augmented cost matrix becomes:
+#
+"
+Q̃k
+q̃k
+aug
+
+
+. (30)
+Qk = ⊤
+−1
+q̃k 2 ℓ(x̄k , ūk ) + w − 12 ℓ⊤
+u,k ℓuu,k ℓu,k
+Rk = ℓuu,k .
+1 ⊤
+ℓk ≈ 12 zk⊤ Qaug
+k zk + 2 vk Rk vk
+
+Similarly, the terminal cost matrix is:
+
+
+ϕxx,N
+ϕx,N
+Qaug
+=
+.
+N
+ϕ⊤
+2ϕ(x̄N )
+x,N
+
+(31)
+
+(32)
+
+B. HOP-DDP Algorithm
+
+⊤
+⊤
+1
+2 δuk ℓuu,k δuk + δuk (ℓux,k δxk + ℓu,k ).
+
+⊤
++ (ℓx,k − ℓxu,k ℓ−1
+uu,k ℓu,k ) δxk
+
+Q̃k = ℓxx,k − ℓxu,k ℓ−1
+uu,k ℓux,k ,
+
+The stage cost in augmented form is quadratic:
+
+which contains partial derivatives evaluated at (x̄k , ūk ), and
+the time penalty w is included as a constant term.
+2) Quadratization: The cross-term δx⊤
+k ℓxu,k δuk prevents
+direct application of standard LQR methods. To eliminate it,
+we complete the square for the control terms. We first group
+all terms dependent on δuk :
+
+vk := δuk + ℓ−1
+uu,k (ℓux,k δxk + ℓu,k ).
+
+b) Augmented Cost: Similarly, we define notations for
+the modified cost terms:
+
+(27)
+(28)
+(29)
+
+We now present the complete HOP-DDP Algorithm. With
+the augmented state space derived in Section V-A, the iterative
+optimization can be described in four steps (Alg. 2).
+1) Step 1: Linearization and Augmentation: The iteration
+begins by linearizing the nonlinear dynamics and quadratizing
+the cost function around the current nominal trajectory (x̄, ū)
+as mentioned in Sec. V-A, which yields the augmented system
+aug
+matrices Aaug
+k , Bk (Eq. 28) and the augmented cost matrices
+aug
+Qk , Rk (Eq. 31).
+2)
+Horizon Selection: With the system described
+ Step 2:aug
+N −1
+aug
+by (Aaug
+,
+B
+k
+k , Qk , Rk ) k=0 in a standard linear-quadratic
+form, we can now find an optimal horizon T ∗ by calling the
+aforementioned HOP-LQR. This step identifies the optimal
+stopping time T ∗ without requiring a full backward pass for
+each candidate horizon.
+3) Step 3: Truncated Backward Pass: Once T ∗ is known,
+we perform the truncated backward pass, which is executed
+only on the interval [0, T ∗ − 1], rather than the maximum
+possible horizon N . Specifically, we initialize the value function at T ∗ using the terminal cost ϕ(x̄T ∗ ). Then, proceeding
+backward from k = T ∗ −1 to 0, we compute the derivatives of
+Q-matrices and extract the feedback gains as in regular DDP:
+Kk = −Q−1
+uu,k Qux,k ,
+
+κk = −Q−1
+uu,k Qu,k .
+
+(33)
+
+This yields the modification on the current control δuk =
+Kk δxk + κk for the selected horizon T ∗ .
+4) Step 4: Forward Rollout and Update: Finally, we apply
+the computed gains to the original nonlinear system xk+1 =
+f (xk , uk ) to generate a new trajectory. We perform a line
+search on the step size α ∈ Iα to ensure convergence, where
+Iα is a user-specified set of possible step sizes. To generate
+the new trajectory, we compute the new controls as follows.
+unew
+= ūk + Kk (xnew
+k
+k − x̄k ) + ακk .
+
+(34)
+
+Based on the computed new controls, a new state trajectory can
+be rolled out. This rollout terminates at time step T ∗ . While
+the trajectory after T ∗ is useless in the current iteration, it may
+
+Algorithm 2 HOP-DDP Algorithm
+Input: Dynamics f , costs ℓ, ϕ, initial state x0 , initial controls U ,
+horizon bounds [Tmin , Tmax ], time penalty w, N = Tmax
+Output: Optimal trajectory and controls
+repeat
+// Step 1: Linearization and augmentation
+Rollout X using f and U for k = 0 to N − 1 do
+Compute Ak , Bk at (x̄k , ūk )
+Compute derivatives: ℓx,k , ℓu,k , ℓxx,k , ℓux,k , ℓuu,k
+aug
+aug
+Compute Aaug
+k , Bk , Qk , Rk via Eqs. (28)-(30)
+end
+N
+Build {Qaug
+T,t }t=1 from ϕ at x̄t for all candidate horizons
+// Step 2: Horizon selection
+N
+J ← HOP-LQR (Aaug , B aug , Qaug , R, z0 , {Qaug
+T,t }t=1 , N )
+∗
+T ← arg mint∈[Tmin ,Tmax ] J[t]
+// Step 3: Backward pass on [0, T ∗ − 1]
+Vxx [T ∗ ] ← ϕxx , Vx [T ∗ ] ← ϕx , V0 [T ∗ ] ← ϕ(x̄T ∗ )
+for k = T ∗ − 1, T ∗ − 2, · · · , 0 do
+// Compute derivatives (DDP terms in
+parentheses, iLQR ignores them)
+
+⊤
+Qx ← ℓx,k + A⊤
+k Vx,k+1 + Ak Vxx,k+1 ak 
+Qu ← ℓu,k + Bk⊤ Vx,k+1 + Bk⊤ Vxx,k+1 ak
+Pnx (i)
+(i) 
+Qxx ← ℓxx,k + A⊤
+k Vxx,k+1 Ak +
+i=1 Vx,k+1 fxx,k 
+P
+(i)
+(i)
+x
+Qux ← ℓux,k + Bk⊤ Vxx,k+1 Ak + n
+Vx,k+1 fux,k
+Pi=1
+(i)
+(i) 
+nx
+⊤
+Quu ← ℓuu,k + Bk Vxx,k+1 Bk + i=1 Vx,k+1 fuu,k
+Qxu ← Q⊤
+ux
+Quu ← Quu + λI
+// LM regularization
+// Compute gains
+−1
+κk ← −Q−1
+uu Qu , Kk ← −Quu Qux
+// Update value function
+−1
+Vxx,k ← Qxx − Q⊤
+ux Quu Qux
+−1
+Vx,k ← Qx − Q⊤
+Q
+ux uu Qu
+1 ⊤
+V0,k ← V0,k+1 + ℓ(x̄k , ūk ) + w + κ⊤
+k Qu + 2 κk Quu κk
+end
+// Step 4: Forward rollout with line search
+for α ∈ Iα do
+xnew [0] ← x0 , Unew ← Ū
+for k = 0 to T ∗ − 1 do
+δx ← xnew [k] − x̄k
+δu ← Kk δx + ακk
+unew [k] ← ūk + δu
+xnew [k + 1] ← f (xnew [k], unew [k])
+end
+for k = T ∗ to N − 1 do
+xnew [k + 1] ← f (xnew [k], unew [k])
+end
+if J(xnew , unew , T ∗ ) < J(x̄, ū, T ∗ ) then
+(X, U ) ← (Xnew , Unew ) break
+end
+end
+until convergence
+
+be useful in future iterations since T ∗ may vary in different
+iterations. Therefore, if T ∗ < N , the trajectory is extended
+beyond T ∗ using the computed control at time step T ∗ to keep
+a full rollout over the entire horizon N . After the rollout, if
+the total nonlinear cost of the trajectory decreases, the new
+trajectory is accepted as the nominal trajectory for the next
+iteration; Otherwise, following the standard Quu regularization
+used in iLQG/DDP [17] and ALTRO [7], we increase the
+
+regularization parameter. This replaces Quu with Quu + λI,
+improving its conditioning and “the positive definiteness of
+Quu ”, while damping the trajectory update when the current
+local approximation fails to produce a descent rollout.
+VI. E XPERIMENTAL R ESULTS
+We implement our HOP in Python1 and compare it against
+several baselines on four systems including linear and nonlinear dynamics: Double Integrator, Segway Balance, Cartpole
+Swing-Up, and a 12-DOF Quadrotor with 25 cases each. Here,
+Double Integrator and Segway (linearized about the equilibrium) have linear dynamics, while Cartpole and Quadrotor are
+nonlinear. We use three baseline methods for comparison.
+• Baseline-1 (BruteForce, BF) evaluates all horizons via
+backward Riccati recursions to select the horizon.
+• Baseline-2 (OnePass, OP) [16] uses time-invariant LQR
+to approximate nonlinear systems.
+• Baseline-3 (NLP) includes the time horizon as a decision
+variable, uses time-scaled transcription, and solves the
+resulting NLP using IPOPT [19].
+A. Experiment 1: Overall Performance
+a) Runtime and Speedup: Fig. 4(a) reports the runtime
+on log-scale, and Fig. 4(b) shows the corresponding speedup
+relative to Baseline-1 (BF). For all systems, our method consistently runs faster than Baseline-1 (BF): ∼ 9× faster on Double
+Integrator, ∼ 20× faster on Segway Balance, ∼ 5× faster on
+Quadrotor, and ∼ 40× faster on Cartpole. Baseline-2 (OP)
+can be even faster on some tasks (e.g. Cartpole and Segway),
+but at the cost of worse solution quality as explained later.
+Baseline-3 (NLP) usually has a similar runtime to Baseline-1
+(BF), yet runs slower on some systems, which indicates the
+expensive computation of solving a large nonlinear program.
+b) Success Rates: Fig. 4(c) reports success rates, which
+is the percentage of trials where the cost function converges
+and the system’s terminal state is within a small error threshold
+from the goal state, i.e., ∥xT ∗ − xg ∥ ≤ 0.5. All methods
+achieve high success rates on Double Integrator and Segway,
+which are linear systems. For Quadrotor, all methods remain
+above 90% success rates, suggesting that the task is feasible
+for a wide range of horizons and that local optimization is
+relatively stable once a reasonable rollout is found. Cartpole
+here is the most challenging case, and our method and the
+Baseline-1 (BF) succeed for most trials, while Baseline-2 (OP)
+exhibits much lower success rates, due to the mis-selection of
+horizon caused by the time-invariant LQR approximation of
+nonlinear systems. Baseline-3 (NLP) has success rates higher
+than OP yet lower than Ours and Baseline-1 (BF). A possible
+reason is that, the NLP sometimes converges to solutions that
+do not satisfy the terminal success criterion.
+c) Solution Quality: Fig. 4(d) reports the normalized
+cost increase ratio relative to the solution costs found by
+Baseline-1 (BF). Here, Baseline-1 (BF), Baseline-2 (OP) and
+our methods all share the same objective function, while
+1 https://github.com/rap-lab-org/public HOP horizon optimal tutorial
+
+Fig. 4. Experimental results. (a) Comparison of runtime in log scale. Error bars indicate variability across trials. (b) Comparison of speedup relative to
+Baseline-1 (BF) over the four systems. This figure shows the same results in (a) in a different way. (c) Success rates of different algorithms. (d) Comparison
+of solution cost increases relative to Baseline-1 (BF). Our method finds solutions of the better quality than OP and NLP, while enjoying fast running speed.
+
+Baseline-3 (NLP) has slightly different objective functions due
+to the different formulation, and we thus remove it from the
+figure for clarity. As shown in Fig. 4(d), our method always
+finds almost the same solution costs as Baseline-1 (BF) for all
+systems, since the cost increases are 0%. It indicates that the
+fast horizon querying in our method does not compromise the
+final solution quality. In contrast, Baseline-2 (OP) often finds
+more expensive solutions for those nonlinear systems, due to
+the approximation using time-invariant LQR.
+B. Experiment 2: Case Study on Quadrotor
+We then look into a hovering task for Quadrotor. We
+compare the solution costs and breakdown the runtime to
+explain why ours is as accurate as BF and as fast as OP.
+a) Horizon optimality: During the iterations of Alg. 2,
+both ours and Baseline-1 (BF) need to iteratively select a
+horizon T ∗ and optimize trajectories. Fig. 5 shows the cost J
+for all possible horizons during the iteration. Baseline-2 (OP)
+has a different computational process and Fig. 5 only shows
+the costs J of horizons in its last iteration.
+We observe that, our HOP-LQR and Baseline-1 (BF) have
+almost the same cost functions values J for the entire horizon
+range, and select the same optimal horizon T ∗ = 32 whose
+
+ours
+BF
+corresponding optimal costs are J32
+≈ 484.79, J32
+≈
+484.80. In contrast, Baseline-2 (OP) converges to a local
+minimum and selects a longer horizon (T ≈ 74) with higher
+OP
+≈ 513.75), which is about 5.97% higher than the
+cost (J74
+cost returned by Baseline-1 (BF).
+b) Runtime breakdown: We then look at the runtime
+breakdown of the algorithms. Fig. 6 explains why our algorithm runs faster. Baseline-1 (BF) spends most of the runtime
+in selecting the horizon, since it must evaluate many candidate
+horizons via repeated backward Riccati recursions. Baseline2 (OP) runs fast because it avoids the exhaustive horizon
+selection. Similarly, our method can also bypass this expensive
+selection by using HOP-LQR for horizon selection.
+
+VII. C ONCLUSION AND F UTURE W ORK
+This paper develops a new approach HOP for horizonoptimal OC problems with linear and nonlinear dynamics that
+selects an optimal horizon from a set of integer horizons
+bounded by a given maximum horizon N . The key insight is
+to rewrite the Riccati recursion into a LFT form which allows
+computational reuse. For time-varying HO-LQR problems,
+HOP-LQR reduces the runtime complexity from quadratic
+O(N 2 ) to linear O(N ) with respect to the maximum possible
+
+Fig. 5. Cost values for various horizons for the hovering task of Quadrotor.
+Our method and Baseline-1 (BF) both find an optimal horizon T ∗ = 32
+ours ≈ 484.79, J BF ≈ 484.80, while
+whose corresponding optimal costs are J32
+32
+Baseline-2 (OP) converges to a different local minimum with a longer horizon
+OP
+(T ≈ 74) and 5.97% higher cost (J74 ≈ 513.75).
+
+Fig. 6. Runtime breakdown for the hovering task of Quadrotor. Ours and
+Baseline-2 (OP) run faster than Baseline-1 (BF) as they bypass the expensive
+computation for horizon selection.
+
+horizon N . For nonlinear systems, the proposed HOP-DDP
+runs fast while finding high-quality solutions.
+We plan to include more sophisticated constraints such as
+collision avoidance into our HOP in our future work. For
+example, HOP-LQR could be used for horizon selection inside constrained DDP/iLQR frameworks, such as augmentedLagrangian iLQR in ALTRO [7]. We also plan to integrate
+HOP-DDP with existing planning/control pipelines for realrobot execution, as prior work has shown that time-optimal
+quadrotor trajectories can be executed on physical platforms
+[6, 15]. One can also consider extensions of HOP to multirobot systems [14, 13].
+R EFERENCES
+[1] Brian D. O. Anderson and John B. Moore. Optimal
+Control: Linear Quadratic Methods. Prentice Hall, 1990.
+
+[2] John T. Betts. Survey of numerical methods for trajectory
+optimization. Journal of Guidance, Control, and Dynamics, 21(2):193–207, March 1998. doi: 10.2514/2.4231.
+[3] Alberto De Marchi and Matthias Gerdts. Free finite
+horizon lqr: A bilevel perspective and its application
+to model predictive control. Automatica, 100:299–311,
+2019.
+[4] Dayi Ethan Dong, Henry Berger, and Ian Abraham.
+Time-optimal ergodic search: Multiscale coverage in
+minimum time. The International Journal of Robotics
+Research, 44(10-11):1664–1683, 2025.
+[5] N. El Alami, A. Ouansafi, and N. Znaidi. On the discrete
+linear quadratic minimum-time problem. Journal of the
+Franklin Institute, 335(3):525–532, 1998.
+[6] Philipp Foehn, Angel Romero, and Davide Scaramuzza.
+Time-optimal planning for quadrotor waypoint flight.
+Science robotics, 6(56):eabh1221, 2021.
+[7] Taylor A. Howell, Brian E. Jackson, and Zachary Manchester. Altro: A fast solver for constrained trajectory optimization. In 2019 IEEE/RSJ International Conference
+on Intelligent Robots and Systems (IROS), pages 7674–
+7679, 2019.
+[8] David Jacobson and David Mayne. Differential Dynamic
+Programming. American Elsevier Publishing Company,
+1970.
+[9] Kamal Kant and Steven W Zucker. Toward efficient
+trajectory planning: The path-velocity decomposition.
+The international journal of robotics research, 5(3):72–
+89, 1986.
+[10] Scott Kuindersma, Robin Deits, Maurice Fallon, Andrés
+Valenzuela, Hongkai Dai, Frank Permenter, Twan
+Koolen, Pat Marion, and Russ Tedrake. Optimizationbased locomotion planning, estimation, and control design for the atlas humanoid robot. Autonomous Robots,
+40(3):429–455, 2016. doi: 10.1007/s10514-015-9479-3.
+[11] Weiwei Li and Emanuel Todorov.
+Iterative linear
+quadratic regulator design for nonlinear biological movement systems. In Proceedings of the 1st International
+Conference on Informatics in Control, Automation and
+Robotics (ICINCO), pages 222–229, 2004. doi: 10.5220/
+0001143902220229.
+[12] Anil V. Rao. A survey of numerical methods for optimal
+control. Advances in the Astronautical Sciences, 135(1):
+497–528, 2009.
+[13] Zhongqiang Ren, Sivakumar Rathinam, and Howie
+Choset. CBSS: A new approach for multiagent combinatorial path finding. IEEE Transactions on Robotics, 39
+(4):2669–2683, 2023. doi: 10.1109/TRO.2023.3266993.
+[14] Zhongqiang Ren, Allen George Philip, Shizhe Zhao,
+Sivakumar Rathinam, and Howie Choset. Cp-milp:
+Mixed integer linear programming for multi-agent motion planning with linear dynamics. IEEE Robotics and
+Automation Letters, 10(12):12573–12579, 2025. doi:
+10.1109/LRA.2025.3623912.
+[15] Angel Romero, Sihao Sun, Philipp Foehn, and Davide
+Scaramuzza. Model predictive contouring control for
+
+time-optimal quadrotor flight. IEEE Transactions on
+Robotics, 38(6):3340–3356, 2022. doi: 10.1109/TRO.
+2022.3173711.
+[16] Kyle Stachowicz and Evangelos A. Theodorou. Optimalhorizon model predictive control with differential dynamic programming. In 2022 IEEE International Conference on Robotics and Automation (ICRA), pages 1440–
+1446, 2022. doi: 10.1109/ICRA46639.2022.9812036.
+[17] Emanuel Todorov and Weiwei Li. A generalized iterative lqg method for locally-optimal feedback control of
+constrained nonlinear stochastic systems. In Proceedings
+of the American Control Conference (ACC), pages 300–
+306, 2005.
+[18] E. L. Verriest and F. L. Lewis. On the linear quadratic
+minimum-time problem. IEEE Transactions on Automatic Control, 36(7):859–863, July 1991.
+[19] Andreas Wächter. An Interior Point Algorithm for
+Large-Scale Nonlinear Optimization with Applications
+in Process Engineering. PhD thesis, Carnegie Mellon
+University, 2002.
+[20] Zhepei Wang, Xin Zhou, Chao Xu, and Fei Gao. Geometrically constrained trajectory optimization for multicopters. IEEE Transactions on Robotics, 38(5):3259–
+3278, 2022.
+
+

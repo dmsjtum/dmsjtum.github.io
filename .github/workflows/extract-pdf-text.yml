@@ -1,0 +1,57 @@
+# Keeps a .txt beside every .pdf in files/.
+#
+# The site assistant (Info/assistant/worker.js, outside this repo) reads the
+# live site to answer questions, but a Worker cannot parse a PDF — pdf.js is
+# megabytes and the CPU budget is milliseconds. Extracting once here, at push
+# time, costs nothing and means the assistant can quote the actual paper.
+#
+# Drop a new PDF in files/ and it becomes answerable on its own. Nothing to
+# run by hand, nothing to redeploy.
+#
+# The path filter is also the loop guard: this workflow commits .txt files,
+# which do not match *.pdf, so it cannot retrigger itself.
+
+name: Extract PDF text
+
+on:
+  push:
+    paths:
+      - 'files/**.pdf'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install poppler
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+
+      - name: Extract
+        run: |
+          shopt -s nullglob
+          for f in files/*.pdf; do
+            pdftotext "$f" "${f%.pdf}.txt"
+            echo "extracted $f -> ${f%.pdf}.txt ($(wc -c < "${f%.pdf}.txt") bytes)"
+          done
+
+      # Drop the .txt of any PDF that no longer exists, so the assistant is
+      # never answering from a document the site has taken down.
+      - name: Prune orphans
+        run: |
+          shopt -s nullglob
+          for t in files/*.txt; do
+            [ -f "${t%.txt}.pdf" ] || { echo "pruning $t"; git rm -q "$t"; }
+          done
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add files/*.txt 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "Re-extract PDF text for the assistant"
+          git push

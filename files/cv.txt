@@ -1,0 +1,106 @@
+Miaomiao Dai
+
+Ann Arbor, MI · dmmsjtu@umich.edu · Personal website: dmsjtum.github.io
+
+Education
+University of Pennsylvania
+Sep 2026 – present
+M.S.E. in Robotics
+Philadelphia, PA
+University of Michigan
+Aug 2024 – May 2026
+B.S.E. in Computer Science, Summa Cum Laude (SJTU–UMich dual-degree sequence) · GPA 3.8/4.0
+Ann Arbor, MI
+• Coursework: Robot Learning (A+), Algorithmic Robotics (A), Machine Learning (A), Computer Vision (A), Data Structures
+
+& Algorithms (A)
+
+Shanghai Jiao Tong University
+B.E. in Mechanical Engineering, Global College · GPA 3.6/4.0
+
+Aug 2022 – Aug 2024, May 2026 – Aug 2026
+Shanghai, China
+
+Publications
+[1] Miaomiao Dai, Zhongqiang Ren. “HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning.”
+Robotics: Science and Systems (RSS), 2026.
+[2] Miaomiao Dai, Zhongqiang Ren. “AL-HOP: Augmented-Lagrangian Horizon-Optimal Planning for Fast Constrained
+Trajectory Optimization.” Under review, 2026.
+
+Research Experience
+HOP: Horizon-Optimal Trajectory Planning
+Jul 2025 – Feb 2026
+Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · RSS 2026 talk, undergraduate first author
+• Standard trajectory optimizers fix the task duration in advance and re-solve for every candidate; HOP selects the optimal
+
+horizon automatically within a single solve.
+
+• Proposed and proved a closed-form theory that scores every candidate horizon in one backward sweep, cutting horizon
+
+search from O(N 2 ) to O(N ) — up to 40× faster than brute force, with identical selected horizon and cost.
+• Designed and iterated the experimental evaluation across cartpole, Segway, and quadrotor systems.
+
+AL-HOP: Constrained Horizon-Optimal Planning
+Mar 2026 – present
+Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · first-author manuscript under review
+• Extends HOP to hard state–control constraints (obstacles, actuator limits) with an augmented-Lagrangian formulation
+
+that keeps the one-sweep horizon prediction.
+
+• Produced solutions valid under the full nonlinear dynamics on 100/100 benchmark problems across 10 dynamical
+
+systems, vs. 79, 71, and 55 for ALTRO and direct collocation (IPOPT, SNOPT); where both were valid, baselines needed
+1.6–3.1× the solve time.
+
+Touch Without Touch: Measured-Touch Supervision for Visual Representations
+Jun 2026 – present
+Advisors: Prof. Hesheng Wang, IRMV Lab, Shanghai Jiao Tong University · Prof. Lin Shao, RoboScience
+• Asks whether paired, measured touch — pressure, force, contact — can teach an RGB representation physical-interaction
+
+structure that visual self-supervision alone does not; inference stays strictly RGB-only at deployment.
+
+• Preregistered the protocol before training: controlled comparisons isolating pairing correctness, sensor fidelity, and
+
+how touch enters the model, each with falsification criteria frozen in advance and evaluated by zero-shot human-to-robot
+transfer.
+• Built the training stack: JEPA-style latent prediction with an EMA teacher over frozen visual and tactile features; unified
+five heterogeneous touch datasets (human hand pressure, tactile arrays, GelSight imagery, force–torque) into one pipeline
+running across a local RTX 5090 and a multi-GPU A100 server.
+
+Voice-Interactive Closed-Loop VLA Manipulation (B.E. thesis)
+Advisor: Prof. Yunlong Guo, Shanghai Jiao Tong University · group leader, team of 5
+
+Feb 2026 – Aug 2026
+
+• Deployed and fine-tuned the π0.5 VLA policy on a low-cost SO-101 arm with dual-camera observations; the team’s full
+
+system reached 70% end-to-end success (85% pick, 75% placement) with zero safety incidents.
+
+• Built the VLM–policy connection: a grounding gate that verifies spoken objects are actually in view, rewrites commands
+
+into the policy’s training-style phrasing, and blocks motion when evidence is insufficient.
+
+• Designed the user interface for voice interaction and task monitoring.
+
+Honors & Awards
+James B. Angell Scholar, University of Michigan
+University Honors, University of Michigan (3 terms)
+Dean’s List, University of Michigan (3 terms)
+Honorable Mention, Interdisciplinary Contest in Modeling (ICM)
+First Prize, 13th SJTU Liming Cup Mechanical Innovation Competition
+Outstanding Volunteer, Miyuan Volunteer Team
+
+Mar 2026
+Dec 2024 – Dec 2025
+Dec 2024 – Dec 2025
+May 2023
+May 2023
+Mar 2023
+
+Skills
+Methods: trajectory optimization (DDP, augmented-Lagrangian methods), self-supervised representation learning (JEPAstyle latent prediction), VLA fine-tuning & real-robot deployment (π0.5 ), VLM integration
+Languages: Python, C++, C, MATLAB
+ML & robotics: PyTorch, Transformers, OpenCV, NumPy, SciPy, OpenAI Gym, ROS, PyBullet, Gazebo
+Tools: Git, Linux (Ubuntu), Docker, LATEX, SolidWorks
+
+
