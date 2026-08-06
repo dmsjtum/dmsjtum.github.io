@@ -273,7 +273,7 @@
        no chat box, so it stays off until there is something to talk to. */
     var API = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
       ? "http://localhost:8787"
-      : "";                       /* ← paste the workers.dev URL here */
+      : "https://dai-assistant.j2dkm6dkmk.workers.dev";
 
     if (!API) return;
 
