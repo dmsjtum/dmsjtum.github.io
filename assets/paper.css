@@ -1079,6 +1079,22 @@ html[data-motion="on"] .bio__side.is-in {
 .dollar__btn:active { transform: translateY(-1px); }
 .dollar__btn img { width: 100%; }
 
+/* She breathes. It is on the <img> rather than the button because the button's
+   transform is already spoken for by :hover and .is-busy. Origin at her feet,
+   so the squash reads as weight on the desk instead of a pulsing head. */
+.dollar__btn img {
+  transform-origin: 50% 88%;
+  animation: dollar-breathe 3.8s ease-in-out infinite;
+}
+@keyframes dollar-breathe {
+  0%, 100% { transform: scaleY(1) }
+  50%      { transform: scaleY(.972) scaleX(1.01) }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dollar__btn img,
+  .dollar__btn.is-busy { animation: none; }
+}
+
 /* A cat who has been asked a question looks like she is thinking about it. */
 .dollar__btn.is-busy { animation: dollar-bob 1.1s ease-in-out infinite; }
 @keyframes dollar-bob {

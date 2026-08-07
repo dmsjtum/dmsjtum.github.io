@@ -293,7 +293,7 @@
     wrap.innerHTML =
       '<button class="dollar__hint" type="button"></button>' +
       '<button class="dollar__btn" type="button">' +
-        '<img src="assets/dollar-hello.svg" alt="">' +
+        '<img src="assets/dollar-hello.png" alt="">' +
       '</button>';
 
     var panel = document.createElement("div");
@@ -317,6 +317,22 @@
     var btn = wrap.querySelector(".dollar__btn");
     var hint = wrap.querySelector(".dollar__hint");
     var img = btn.querySelector("img");
+    /* She changes pose when you click her, rather than looping on a timer —
+       a cat cycling by herself in the corner of the page is just motion, but
+       reacting to a click is her answering you. All poses are cropped from
+       one box, so only her expression changes; she never shifts position. */
+    var POSES = ["dollar-hello", "dollar-wink", "dollar-curious", "dollar-excited"];
+    var pose = 0;
+    var wearPose = function () { img.src = "assets/" + POSES[pose] + ".png"; };
+    var nextPose = function () {
+      pose = (pose + 1) % POSES.length;
+      if (!busy) wearPose();          // thinking pose outranks it
+    };
+    POSES.concat("dollar-think").forEach(function (n) {
+      var pre = new Image();          // decode up front, or the first swap flickers
+      pre.src = "assets/" + n + ".png";
+    });
+
     var log = panel.querySelector(".chat__log");
     var chips = panel.querySelector(".chat__chips");
     var form = panel.querySelector(".chat__form");
@@ -364,9 +380,10 @@
       }
     };
     btn.addEventListener("click", function () {
+      nextPose();
       open(panel.getAttribute("data-open") !== "1");
     });
-    hint.addEventListener("click", function () { open(true); });
+    hint.addEventListener("click", function () { nextPose(); open(true); });
     panel.querySelector(".chat__close").addEventListener("click", function () { open(false); });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && panel.getAttribute("data-open") === "1") open(false);
@@ -406,14 +423,14 @@
       log.appendChild(dots);
       log.scrollTop = log.scrollHeight;
       btn.classList.add("is-busy");
-      img.src = "assets/dollar-think.svg";
+      img.src = "assets/dollar-think.png";
 
       var done = function () {
         busy = false;
         send.disabled = false;
         dots.remove();
         btn.classList.remove("is-busy");
-        img.src = "assets/dollar-hello.svg";
+        wearPose();   // back to whichever pose your clicks left her in
       };
 
       fetch(API, {
