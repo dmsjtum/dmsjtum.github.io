@@ -366,11 +366,101 @@
       if (e.target.closest("[data-lang-toggle]")) setTimeout(label, 0);
     });
 
+    /* --- dragging ------------------------------------------------------
+       She starts in the top-right corner and can be dragged anywhere. Once
+       moved she is positioned with inline left/top, which beats the CSS
+       corner. Pointer events cover mouse and touch with one code path.
+       -------------------------------------------------------------------- */
+    var PAD = 8;                        // keep this much of her on screen
+    var KEY = "dollar-pos";
+
+    var clamp = function (x, y) {
+      var w = wrap.offsetWidth || 104, h = wrap.offsetHeight || 104;
+      return [Math.min(Math.max(x, PAD), Math.max(PAD, innerWidth - w - PAD)),
+              Math.min(Math.max(y, PAD), Math.max(PAD, innerHeight - h - PAD))];
+    };
+
+    /* The hint flips under her near the top of the window, and the chat panel
+       opens on whichever side of her there is room for. Both are recomputed
+       rather than pinned to a corner, because she is no longer in one. */
+    var place = function () {
+      var r = wrap.getBoundingClientRect();
+      wrap.classList.toggle("dollar--top", r.top < 150);
+      var pw = Math.min(372, innerWidth - 32);
+      var left = Math.min(Math.max(r.right - pw, 16), innerWidth - pw - 16);
+      panel.style.left = left + "px";
+      panel.style.right = "auto";
+      var below = r.bottom + 12;
+      var ph = panel.offsetHeight || 420;
+      if (below + ph <= innerHeight - 16) {
+        panel.style.top = below + "px";
+        panel.style.bottom = "auto";
+      } else {
+        panel.style.top = "auto";
+        panel.style.bottom = Math.max(16, innerHeight - r.top + 12) + "px";
+      }
+    };
+
+    var moveTo = function (x, y) {
+      var p = clamp(x, y);
+      wrap.style.left = p[0] + "px";
+      wrap.style.top = p[1] + "px";
+      wrap.style.right = "auto";
+      wrap.style.bottom = "auto";
+      place();
+    };
+
+    try {
+      var saved = JSON.parse(localStorage.getItem(KEY) || "null");
+      if (saved && typeof saved.x === "number") moveTo(saved.x, saved.y);
+    } catch (e) { /* private mode, or someone put junk in there */ }
+
+    var drag = null, dragged = false;
+    btn.addEventListener("pointerdown", function (e) {
+      if (e.button) return;                       // left button / touch only
+      var r = wrap.getBoundingClientRect();
+      drag = { dx: e.clientX - r.left, dy: e.clientY - r.top, sx: e.clientX, sy: e.clientY };
+      dragged = false;
+      btn.setPointerCapture(e.pointerId);
+    });
+    btn.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      if (!dragged && Math.abs(e.clientX - drag.sx) + Math.abs(e.clientY - drag.sy) < 4) return;
+      dragged = true;                             // past the threshold: a drag, not a click
+      wrap.classList.add("is-dragging");
+      moveTo(e.clientX - drag.dx, e.clientY - drag.dy);
+    });
+    var endDrag = function (e) {
+      if (!drag) return;
+      drag = null;
+      wrap.classList.remove("is-dragging");
+      if (btn.hasPointerCapture && btn.hasPointerCapture(e.pointerId)) btn.releasePointerCapture(e.pointerId);
+      if (!dragged) return;
+      var r = wrap.getBoundingClientRect();
+      try { localStorage.setItem(KEY, JSON.stringify({ x: r.left, y: r.top })); } catch (e2) {}
+    };
+    btn.addEventListener("pointerup", endDrag);
+    btn.addEventListener("pointercancel", endDrag);
+
+    /* A drag ends with a click event on the button; swallow that one so
+       letting go of her does not also open the chat and change her pose. */
+    btn.addEventListener("click", function (e) {
+      if (dragged) { e.stopImmediatePropagation(); e.preventDefault(); dragged = false; }
+    }, true);
+
+    addEventListener("resize", function () {
+      var r = wrap.getBoundingClientRect();
+      if (wrap.style.left) moveTo(r.left, r.top);   // pull her back on screen
+      else place();
+    });
+    place();
+
     /* --- open / close ------------------------------------------------ */
     var open = function (yes) {
       panel.setAttribute("data-open", yes ? "1" : "0");
       wrap.setAttribute("data-open", yes ? "1" : "0");
       if (yes) {
+        place();            // she may have been dragged since it last opened
         wrap.classList.add("is-hushed");
         input.focus();
         if (!log.children.length) {

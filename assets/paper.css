@@ -1052,17 +1052,40 @@ html[data-motion="on"] .bio__side.is-in {
    the one place on this layout that is doing nothing. Below that width there
    is no margin to sit in, so she becomes an ordinary corner button.
    -------------------------------------------------------------------------- */
+/* Top right by default, and draggable from there — paper.js writes left/top
+   inline once she has been moved, and remembers where you left her. No desk
+   margin rule any more: with dragging, a predictable corner beats a clever
+   position that depends on viewport width. */
 .dollar {
   position: fixed;
+  top: 18px;
   right: 20px;
-  bottom: 22px;
   z-index: 60;
   display: flex;
   align-items: flex-end;
   gap: 10px;
 }
-@media (min-width: 1340px) {
-  .dollar { right: calc((100vw - var(--shell)) / 2 - 122px); }
+
+.dollar__btn { cursor: grab; touch-action: none; }
+.dollar.is-dragging { user-select: none; }
+.dollar.is-dragging .dollar__btn {
+  cursor: grabbing;
+  transform: none;              /* the hover lift would fight the drag */
+  transition: none;
+}
+.dollar.is-dragging .dollar__btn img { animation: none; }
+
+/* The hint sits above her by default; when she is near the top of the window
+   there is no room up there, so it goes underneath instead — and its little
+   tail has to move to the other edge and point back up at her. */
+.dollar--top .dollar__hint { top: 136px; bottom: auto; }
+.dollar--top .dollar__hint::after {
+  bottom: auto;
+  top: -5px;
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 1px solid var(--edge);
+  border-top: 1px solid var(--edge);
 }
 
 .dollar__btn {
