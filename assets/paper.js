@@ -343,9 +343,16 @@
        duplicated into .lang-en/.lang-zh spans — this markup is generated, so
        there is no author-facing benefit to the span mechanism here. */
     var label = function () {
-      hint.textContent = t("Ask me about Miaomiao", "问我关于淼淼的事");
+      hint.innerHTML = "";
+      hint.appendChild(document.createTextNode(
+        t("I'm dollar, Miaomiao's cat.", "我是 dollar，淼淼养的猫。")));
+      hint.appendChild(document.createElement("br"));
+      hint.appendChild(document.createTextNode(
+        t("Running DeepSeek V4 Flash — ask me about their work.",
+          "接入了 DeepSeek V4 Flash，问我关于淼淼的事。")));
       btn.setAttribute("aria-label", t("Open the assistant", "打开小助手"));
-      panel.querySelector(".chat__title").textContent = t("Ask dollar", "问问 dollar");
+      panel.querySelector(".chat__title").textContent =
+        t("dollar · Miaomiao's cat", "dollar · 淼淼养的猫");
       input.placeholder = t("Ask about the research…", "问问研究相关的…");
       send.textContent = t("Send", "发送");
       panel.querySelector(".chat__note").textContent =
@@ -415,29 +422,69 @@
       if (saved && typeof saved.x === "number") moveTo(saved.x, saved.y);
     } catch (e) { /* private mode, or someone put junk in there */ }
 
-    var drag = null, dragged = false;
+    /* Smoothness comes from doing no layout work while the pointer moves.
+       Everything the drag needs — her size, the viewport — is measured once
+       on pointerdown; each move only does arithmetic, and the result is
+       painted as a transform (compositor only, no reflow) at most once per
+       frame via rAF. On release the transform is folded back into left/top so
+       the rest of the code keeps dealing in ordinary coordinates. */
+    var drag = null, dragged = false, raf = 0;
+
+    var paint = function () {
+      raf = 0;
+      if (!drag) return;
+      wrap.style.transform = "translate3d(" + drag.tx + "px," + drag.ty + "px,0)";
+      // cheap: derived from cached numbers, not from the DOM
+      wrap.classList.toggle("dollar--top", drag.oy + drag.ty < 150);
+    };
+
     btn.addEventListener("pointerdown", function (e) {
       if (e.button) return;                       // left button / touch only
       var r = wrap.getBoundingClientRect();
-      drag = { dx: e.clientX - r.left, dy: e.clientY - r.top, sx: e.clientX, sy: e.clientY };
+      // pin her to left/top first: she may still be sitting on the CSS
+      // right-corner rule, which a transform would slide relative to
+      wrap.style.left = r.left + "px";
+      wrap.style.top = r.top + "px";
+      wrap.style.right = "auto";
+      wrap.style.bottom = "auto";
+      drag = { ox: r.left, oy: r.top, sx: e.clientX, sy: e.clientY,
+               w: r.width, h: r.height, vw: innerWidth, vh: innerHeight, tx: 0, ty: 0 };
       dragged = false;
       btn.setPointerCapture(e.pointerId);
     });
+
     btn.addEventListener("pointermove", function (e) {
       if (!drag) return;
-      if (!dragged && Math.abs(e.clientX - drag.sx) + Math.abs(e.clientY - drag.sy) < 4) return;
-      dragged = true;                             // past the threshold: a drag, not a click
-      wrap.classList.add("is-dragging");
-      moveTo(e.clientX - drag.dx, e.clientY - drag.dy);
+      var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+      if (!dragged) {
+        if (Math.abs(dx) + Math.abs(dy) < 4) return;   // still a click
+        dragged = true;
+        wrap.classList.add("is-dragging");
+      }
+      var x = Math.min(Math.max(drag.ox + dx, PAD), Math.max(PAD, drag.vw - drag.w - PAD));
+      var y = Math.min(Math.max(drag.oy + dy, PAD), Math.max(PAD, drag.vh - drag.h - PAD));
+      drag.tx = x - drag.ox;
+      drag.ty = y - drag.oy;
+      if (!raf) raf = requestAnimationFrame(paint);
     });
+
     var endDrag = function (e) {
       if (!drag) return;
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+      var d = drag;
       drag = null;
       wrap.classList.remove("is-dragging");
-      if (btn.hasPointerCapture && btn.hasPointerCapture(e.pointerId)) btn.releasePointerCapture(e.pointerId);
+      if (e && btn.hasPointerCapture && btn.hasPointerCapture(e.pointerId)) {
+        btn.releasePointerCapture(e.pointerId);
+      }
+      wrap.style.transform = "";
       if (!dragged) return;
-      var r = wrap.getBoundingClientRect();
-      try { localStorage.setItem(KEY, JSON.stringify({ x: r.left, y: r.top })); } catch (e2) {}
+      wrap.style.left = (d.ox + d.tx) + "px";
+      wrap.style.top = (d.oy + d.ty) + "px";
+      place();
+      try {
+        localStorage.setItem(KEY, JSON.stringify({ x: d.ox + d.tx, y: d.oy + d.ty }));
+      } catch (e2) {}
     };
     btn.addEventListener("pointerup", endDrag);
     btn.addEventListener("pointercancel", endDrag);
@@ -464,8 +511,12 @@
         wrap.classList.add("is-hushed");
         input.focus();
         if (!log.children.length) {
-          say("cat", t("Hi — I'm dollar. Ask me anything about Miaomiao's research, and I'll answer from their CV and papers.",
-                       "你好，我是 dollar。关于淼淼的研究随便问，我依据简历和论文来答。"));
+          say("cat", t("Hi — I'm dollar, the cat Miaomiao keeps, running on DeepSeek V4 Flash. " +
+                       "Ask me anything about their research, papers, or background, and I'll answer from the CV and the papers themselves. " +
+                       "You can drag me anywhere on the page, and click me to change my face.",
+                       "你好，我是 dollar，淼淼养的猫，接入了 DeepSeek V4 Flash。" +
+                       "关于淼淼的研究、论文、经历都可以随便问，我依据简历和论文原文来答。" +
+                       "你可以把我拖到页面上任何地方，点我一下我会换个表情。"));
         }
       }
     };

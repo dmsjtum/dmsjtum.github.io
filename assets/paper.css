@@ -1068,6 +1068,7 @@ html[data-motion="on"] .bio__side.is-in {
 
 .dollar__btn { cursor: grab; touch-action: none; }
 .dollar.is-dragging { user-select: none; }
+.dollar.is-dragging { will-change: transform; }
 .dollar.is-dragging .dollar__btn {
   cursor: grabbing;
   transform: none;              /* the hover lift would fight the drag */
@@ -1134,7 +1135,12 @@ html[data-motion="on"] .bio__side.is-in {
   position: absolute;
   right: 6px;
   bottom: 136px;
-  white-space: nowrap;
+  /* Two lines of introduction now, so it wraps instead of running off the
+     edge — bounded so it never grows wider than a phone screen. */
+  white-space: normal;
+  width: max-content;
+  max-width: min(272px, calc(100vw - 40px));
+  text-align: left;
   font: 400 12px/1.4 var(--mono);
   color: var(--ink);
   background: var(--paper);
