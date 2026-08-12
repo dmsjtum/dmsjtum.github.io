@@ -874,12 +874,20 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
 .rows .when { color: var(--ink-3); white-space: nowrap; }
 .rows .what b { font-weight: 600; }
 .rows .what span { color: var(--ink-2); }
-/* Research rows carry a result line below the advisor line. The numbers are
-   the whole reason that line exists, so bold inside the dimmed text comes back
-   up to full ink — the same move .pub__authors b makes. */
-.rows .res { display: block; margin-top: 6px; max-width: 66ch; }
+/* Research rows turn each compact project summary into three semantic points:
+   method, system, evidence. Native markers preserve the offprint language and
+   make the results easier to scan without turning the section into cards. */
+.rows .res {
+  margin-top: 8px;
+  max-width: 68ch;
+  color: var(--ink-2);
+}
 .rows .res b { color: var(--ink); }
-@media (max-width: 560px) { .rows > li { grid-template-columns: 1fr; } }
+.rows .res-list { margin: 0; padding-left: 1.25em; }
+.rows .res-list li { padding-left: .15em; }
+.rows .res-list li + li { margin-top: 4px; }
+.rows .res-list li::marker { color: var(--ink-3); }
+@media (max-width: 640px) { .rows > li { grid-template-columns: 1fr; } }
 
 /* Latin tracking is far too loose for Chinese, which is already monospaced by
    nature. Wind it back wherever the page sets wide letter-spacing. */

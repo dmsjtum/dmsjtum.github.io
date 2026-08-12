@@ -500,44 +500,67 @@
         </ul>
 
         <h2 class="eyebrow" style="margin-top:44px"><span class="lang-en">Research</span><span class="lang-zh">研究经历</span></h2>
-        <!-- Each row is title / affiliation / one result line. The result line
-             is where the numbers live, and it is the only place on the page
-             that carries the AL-HOP baseline comparison — the strongest single
-             piece of evidence here, so it earns the space. Bold marks the
-             claim a reader should leave with, never a whole clause. -->
+        <!-- Each row is title / affiliation / three evidence-led points. The
+             list is where the numbers live, including the AL-HOP baseline
+             comparison — the strongest single piece of evidence here. Bold
+             marks the claim a reader should leave with, never a whole clause. -->
         <ul class="rows">
           <li>
             <span class="when">2026 —</span>
-            <span class="what">
+            <div class="what">
               <b><span class="lang-en">Measured-touch supervision for visual representations</span><span class="lang-zh">实测触觉监督的视觉表征学习</span></b><br>
               <span><span class="lang-en">Touch Without Touch. Advisors: Prof. Hesheng Wang, SJTU IRMV Lab; Prof. Lin Shao, RoboScience.</span><span class="lang-zh">Touch Without Touch。导师：王贺升 教授（上海交大 IRMV 实验室）、邵林 教授（RoboScience）。</span></span>
-              <span class="res">
-                <span class="lang-en">Supervises a visual encoder with <b>measured pressure, force, and contact</b>, then deploys <b>RGB-only</b> — no tactile sensor at inference. Built the training stack: <b>JEPA-style latent prediction</b> with an EMA teacher over frozen visual and tactile features, unifying <b>five heterogeneous touch datasets</b> into one pipeline. Comparisons and their falsification criteria were <b>preregistered before training</b>.</span>
-                <span class="lang-zh">以<b>实测的压力、力与接触</b>信号监督视觉编码器，部署时<b>只用 RGB</b>，推理端不接任何触觉传感器。搭建了完整训练栈：在冻结的视觉与触觉特征之上做 <b>JEPA 式潜空间预测</b>（EMA teacher），并把<b>五个异构触觉数据集</b>统一进同一条流水线。所有对照与证伪判据均在<b>训练开始前预注册</b>。</span>
-              </span>
-            </span>
+              <div class="res">
+                <ul class="res-list lang-en">
+                  <li><b>Signal.</b> Supervises a visual encoder with measured pressure, force, and contact; inference remains <b>RGB-only</b>, with no tactile sensor.</li>
+                  <li><b>System.</b> Built a <b>JEPA-style latent-prediction</b> pipeline with an EMA teacher over frozen visual and tactile features, unifying <b>five heterogeneous touch datasets</b>.</li>
+                  <li><b>Rigor.</b> Preregistered every comparison and falsification criterion <b>before training</b>.</li>
+                </ul>
+                <ul class="res-list lang-zh">
+                  <li><b>监督信号：</b>以实测的压力、力与接触监督视觉编码器；部署时<b>仅用 RGB</b>，推理端无需触觉传感器。</li>
+                  <li><b>训练系统：</b>在冻结的视觉与触觉特征之上进行 <b>JEPA 式潜空间预测</b>（EMA teacher），并将<b>五个异构触觉数据集</b>统一进同一条流水线。</li>
+                  <li><b>实验严谨性：</b>所有对照与证伪判据均在<b>训练开始前预注册</b>。</li>
+                </ul>
+              </div>
+            </div>
           </li>
           <li>
             <span class="when">2025 — 2026</span>
-            <span class="what">
+            <div class="what">
               <b><span class="lang-en">Horizon-optimal trajectory optimization</span><span class="lang-zh">视界最优轨迹优化</span></b><br>
               <span><span class="lang-en">Advisor: Prof. Zhongqiang Ren, SJTU. First author on both papers: HOP (RSS 2026) and AL-HOP.</span><span class="lang-zh">导师：任中强 教授，上海交大。两篇论文均为第一作者：HOP（RSS 2026）与 AL-HOP。</span></span>
-              <span class="res">
-                <span class="lang-en">Proved a <b>closed-form</b> result that scores every candidate time horizon in a single backward sweep, collapsing horizon search from <b>O(N²) to O(N)</b> — <b>up to 40× faster</b> than brute force, at an identical selected horizon and cost. The constrained extension, AL-HOP, returned solutions valid under the full nonlinear dynamics on <b>100/100</b> benchmark problems across 10 dynamical systems, against <b>79 / 71 / 55</b> for ALTRO and direct collocation (IPOPT, SNOPT), which also needed <b>1.6–3.1× the solve time</b> where both were valid.</span>
-                <span class="lang-zh">证明了一个<b>闭式结果</b>：单次反向扫描即可评估所有候选时间视界，把视界搜索从 <b>O(N²) 降到 O(N)</b>——比暴力搜索<b>快至多 40 倍</b>，且选出的视界与代价完全一致。约束版本 AL-HOP 在 10 类动力学系统的 <b>100/100</b> 个基准问题上给出满足完整非线性动力学的有效解，ALTRO 与直接配点法（IPOPT、SNOPT）分别为 <b>79 / 71 / 55</b>；在双方均有效的问题上，基线还需 <b>1.6–3.1 倍</b>求解时间。</span>
-              </span>
-            </span>
+              <div class="res">
+                <ul class="res-list lang-en">
+                  <li><b>Theory.</b> Proved a closed-form result that scores every candidate horizon in one backward sweep, reducing horizon search from <b>O(N²) to O(N)</b>.</li>
+                  <li><b>Speed.</b> Up to <b>40× faster</b> than brute force, with the identical selected horizon and cost.</li>
+                  <li><b>Constraints.</b> AL-HOP returned full-nonlinear-dynamics-valid solutions on <b>100/100</b> problems across 10 systems, versus <b>79 / 71 / 55</b> for ALTRO / IPOPT / SNOPT; where both were valid, the baselines took <b>1.6–3.1× longer</b>.</li>
+                </ul>
+                <ul class="res-list lang-zh">
+                  <li><b>理论：</b>证明了一个闭式结果：单次反向扫描即可评估所有候选时间视界，将视界搜索从 <b>O(N²) 降到 O(N)</b>。</li>
+                  <li><b>速度：</b>比暴力搜索<b>快至多 40 倍</b>，且选出的视界与代价完全一致。</li>
+                  <li><b>约束：</b>AL-HOP 在 10 类动力学系统的 <b>100/100</b> 个问题上给出满足完整非线性动力学的有效解；ALTRO / IPOPT / SNOPT 分别为 <b>79 / 71 / 55</b>。在双方均有效的问题上，基线耗时仍为 AL-HOP 的 <b>1.6–3.1 倍</b>。</li>
+                </ul>
+              </div>
+            </div>
           </li>
           <li>
             <span class="when">2026</span>
-            <span class="what">
+            <div class="what">
               <b><span class="lang-en">Voice-interactive closed-loop VLA manipulation</span><span class="lang-zh">语音交互式闭环 VLA 操作</span></b><br>
               <span><span class="lang-en">B.E. thesis. Advisor: Prof. Yunlong Guo, SJTU. Group leader, team of five.</span><span class="lang-zh">本科毕业设计。导师：郭云龙 教授，上海交大。五人小组组长。</span></span>
-              <span class="res">
-                <span class="lang-en">Deployed and fine-tuned a π<sub>0.5</sub> VLA policy on a low-cost SO-101 arm, and built the <b>VLM–policy grounding gate</b>: it verifies the spoken object is genuinely in view, rewrites the command into the policy's training-style phrasing, and <b>blocks motion when the evidence is insufficient</b>. The team's full system reached <b>70% end-to-end success</b> (85% pick, 75% placement) with <b>zero safety incidents</b>.</span>
-                <span class="lang-zh">在低成本 SO-101 机械臂上部署并微调 π<sub>0.5</sub> VLA 策略，并搭建了 <b>VLM–策略之间的接地校验</b>：先确认所指物体确实在视野中，把口语指令改写为策略训练时的表述，<b>证据不足则拒绝启动</b>。团队完整系统达到<b>端到端成功率 70%</b>（抓取 85%、放置 75%），<b>全程零安全事故</b>。</span>
-              </span>
-            </span>
+              <div class="res">
+                <ul class="res-list lang-en">
+                  <li><b>Deployment.</b> Deployed and fine-tuned a π<sub>0.5</sub> VLA policy on a low-cost SO-101 arm.</li>
+                  <li><b>Safety gate.</b> Built the <b>VLM–policy grounding gate</b> to verify that the spoken object is visible, rewrite the command into training-style phrasing, and <b>block motion when evidence is insufficient</b>.</li>
+                  <li><b>Results.</b> Reached <b>70% end-to-end success</b> (85% pick, 75% placement) with <b>zero safety incidents</b>.</li>
+                </ul>
+                <ul class="res-list lang-zh">
+                  <li><b>部署：</b>在低成本 SO-101 机械臂上部署并微调 π<sub>0.5</sub> VLA 策略。</li>
+                  <li><b>安全校验：</b>搭建 <b>VLM–策略接地校验</b>：确认所指物体确实在视野中，将口语指令改写为策略训练时的表述，并在<b>证据不足时拒绝启动</b>。</li>
+                  <li><b>结果：</b>端到端成功率达到 <b>70%</b>（抓取 85%、放置 75%），<b>全程零安全事故</b>。</li>
+                </ul>
+              </div>
+            </div>
           </li>
         </ul>
 
