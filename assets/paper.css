@@ -1071,10 +1071,12 @@ html[data-motion="on"] .bio__side.is-in {
 .dollar.is-dragging { will-change: transform; }
 .dollar.is-dragging .dollar__btn {
   cursor: grabbing;
-  transform: none;              /* the hover lift would fight the drag */
+  /* Keep the button's pressed pose stable while its wrapper follows the
+     pointer; only the wrapper owns the drag transform. */
   transition: none;
+  animation-play-state: paused;
 }
-.dollar.is-dragging .dollar__btn img { animation: none; }
+.dollar.is-dragging .dollar__btn img { animation-play-state: paused; }
 
 /* The hint sits above her by default; when she is near the top of the window
    there is no room up there, so it goes underneath instead — and its little
@@ -1094,14 +1096,20 @@ html[data-motion="on"] .bio__side.is-in {
   border: 0;
   background: none;
   padding: 0;
-  cursor: pointer;
+  cursor: grab;
   width: 104px;
   line-height: 0;
   transition: transform .18s cubic-bezier(.22,.61,.36,1);
 }
 .dollar__btn:hover { transform: translateY(-3px) rotate(-2deg); }
 .dollar__btn:active { transform: translateY(-1px); }
-.dollar__btn img { width: 100%; }
+.dollar__btn img {
+  display: block;
+  width: 100%;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
 
 /* She breathes. It is on the <img> rather than the button because the button's
    transform is already spoken for by :hover and .is-busy. Origin at her feet,

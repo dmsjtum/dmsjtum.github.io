@@ -293,7 +293,7 @@
     wrap.innerHTML =
       '<button class="dollar__hint" type="button"></button>' +
       '<button class="dollar__btn" type="button">' +
-        '<img src="assets/dollar-hello.png" alt="">' +
+        '<img src="assets/dollar-hello.png" alt="" draggable="false">' +
       '</button>';
 
     var panel = document.createElement("div");
@@ -428,7 +428,8 @@
        painted as a transform (compositor only, no reflow) at most once per
        frame via rAF. On release the transform is folded back into left/top so
        the rest of the code keeps dealing in ordinary coordinates. */
-    var drag = null, dragged = false, raf = 0;
+    var drag = null, dragged = false, suppressClick = false;
+    var suppressTimer = 0, raf = 0;
 
     var paint = function () {
       raf = 0;
@@ -439,7 +440,9 @@
     };
 
     btn.addEventListener("pointerdown", function (e) {
-      if (e.button) return;                       // left button / touch only
+      // Keep one primary pointer in charge. A second finger must not replace
+      // the origin of a drag that is already under way.
+      if (drag || e.isPrimary === false || e.button !== 0) return;
       var r = wrap.getBoundingClientRect();
       // pin her to left/top first: she may still be sitting on the CSS
       // right-corner rule, which a transform would slide relative to
@@ -447,52 +450,83 @@
       wrap.style.top = r.top + "px";
       wrap.style.right = "auto";
       wrap.style.bottom = "auto";
-      drag = { ox: r.left, oy: r.top, sx: e.clientX, sy: e.clientY,
+      drag = { pointerId: e.pointerId,
+               ox: r.left, oy: r.top, sx: e.clientX, sy: e.clientY,
                w: r.width, h: r.height, vw: innerWidth, vh: innerHeight, tx: 0, ty: 0 };
       dragged = false;
+      suppressClick = false;
+      if (suppressTimer) { clearTimeout(suppressTimer); suppressTimer = 0; }
+      // Promote the wrapper and freeze the cat's decorative motion before
+      // the first moving frame, rather than doing both as she starts to move.
+      wrap.classList.add("is-dragging");
       btn.setPointerCapture(e.pointerId);
     });
 
-    btn.addEventListener("pointermove", function (e) {
-      if (!drag) return;
+    var trackPointer = function (e) {
+      if (!drag || e.pointerId !== drag.pointerId) return;
       var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
       if (!dragged) {
-        if (Math.abs(dx) + Math.abs(dy) < 4) return;   // still a click
+        if (dx * dx + dy * dy < 16) return;       // still a click
         dragged = true;
-        wrap.classList.add("is-dragging");
       }
       var x = Math.min(Math.max(drag.ox + dx, PAD), Math.max(PAD, drag.vw - drag.w - PAD));
       var y = Math.min(Math.max(drag.oy + dy, PAD), Math.max(PAD, drag.vh - drag.h - PAD));
       drag.tx = x - drag.ox;
       drag.ty = y - drag.oy;
       if (!raf) raf = requestAnimationFrame(paint);
+    };
+
+    btn.addEventListener("pointermove", function (e) {
+      trackPointer(e);
     });
 
-    var endDrag = function (e) {
-      if (!drag) return;
+    var endDrag = function (e, cancelled) {
+      if (!drag || (e && e.pointerId !== drag.pointerId)) return;
+      // A pointerup can carry a newer sample than the last pointermove. Fold
+      // it in so a quick release never lands at the previous frame's point.
+      if (!cancelled) trackPointer(e);
       if (raf) { cancelAnimationFrame(raf); raf = 0; }
       var d = drag;
+      var wasDragged = dragged;
       drag = null;
+      dragged = false;
       wrap.classList.remove("is-dragging");
       if (e && btn.hasPointerCapture && btn.hasPointerCapture(e.pointerId)) {
         btn.releasePointerCapture(e.pointerId);
       }
       wrap.style.transform = "";
-      if (!dragged) return;
+      if (!wasDragged) return;
       wrap.style.left = (d.ox + d.tx) + "px";
       wrap.style.top = (d.oy + d.ty) + "px";
       place();
       try {
         localStorage.setItem(KEY, JSON.stringify({ x: d.ox + d.tx, y: d.oy + d.ty }));
       } catch (e2) {}
+      // pointerup is followed by click in the same task. Swallow only that
+      // click. The short fallback window covers touch browsers that dispatch
+      // their compatibility click just after the pointer event task.
+      if (!cancelled) {
+        suppressClick = true;
+        if (suppressTimer) clearTimeout(suppressTimer);
+        suppressTimer = setTimeout(function () {
+          suppressClick = false;
+          suppressTimer = 0;
+        }, 400);
+      }
     };
-    btn.addEventListener("pointerup", endDrag);
-    btn.addEventListener("pointercancel", endDrag);
+    btn.addEventListener("pointerup", function (e) { endDrag(e, false); });
+    btn.addEventListener("pointercancel", function (e) { endDrag(e, true); });
+    btn.addEventListener("lostpointercapture", function (e) { endDrag(e, true); });
 
     /* A drag ends with a click event on the button; swallow that one so
        letting go of her does not also open the chat and change her pose. */
     btn.addEventListener("click", function (e) {
-      if (dragged) { e.stopImmediatePropagation(); e.preventDefault(); dragged = false; }
+      if (suppressClick && e.detail !== 0) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        suppressClick = false;
+        if (suppressTimer) { clearTimeout(suppressTimer); suppressTimer = 0; }
+      }
     }, true);
 
     addEventListener("resize", function () {
