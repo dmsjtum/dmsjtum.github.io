@@ -887,7 +887,31 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
 .rows .res-list li { padding-left: .15em; }
 .rows .res-list li + li { margin-top: 4px; }
 .rows .res-list li::marker { color: var(--ink-3); }
+
+/* Research project headers reuse the lifted news-entry treatment shown above:
+   a compact paper card for identity, followed by quieter evidence bullets. */
+.research-rows > li {
+  display: block;
+  padding: 0;
+  border-bottom: 0;
+}
+.research-rows > li:first-child { border-top: 0; }
+.research-rows > li + li { margin-top: 32px; }
+.research-card .entry__title { flex: 1 1 28ch; min-width: 0; }
+.research-card .entry__date { margin-left: auto; }
+.research-rows .res { margin: 16px 4px 0; }
+.research-rows .res-list li::marker {
+  color: var(--accent);
+  font-size: 1.2em;
+}
+.research-rows .res-list li > b:first-child { color: var(--accent); }
+
 @media (max-width: 640px) { .rows > li { grid-template-columns: 1fr; } }
+@media (max-width: 560px) {
+  .research-card { padding: 12px 14px; }
+  .research-card .entry__head { gap: 2px 12px; }
+  .research-rows > li + li { margin-top: 28px; }
+}
 
 /* Latin tracking is far too loose for Chinese, which is already monospaced by
    nature. Wind it back wherever the page sets wide letter-spacing. */
