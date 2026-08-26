@@ -284,7 +284,21 @@ hr.rule--strong { border-top: 1px solid var(--ink); }
   color: var(--ink-3);
   margin: 0 0 16px;
 }
+/* A short vermilion tick before each sub-heading — the same red that rules
+   the top of every card, so the sections and the cards read as one system. */
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  background: var(--accent);
+  margin-right: 9px;
+  vertical-align: 3px;
+}
 .eyebrow--accent { color: var(--accent); }
+
+/* Even the text selection stays in the palette. */
+::selection { background: color-mix(in srgb, var(--accent) 22%, transparent); }
 
 .h-serif {
   font: 400 clamp(26px, 3.6vw, 32px)/1.2 var(--serif);
@@ -815,8 +829,9 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
   padding: 32px 20px 20px;
   border: 1.5px solid var(--edge);
   background: var(--card-surface);
-  /* A proofreader's rule rather than the Research cards' hard shadow. */
-  box-shadow: inset 0 3px 0 var(--accent);
+  /* The proofreader's rule along the top, plus the same hard offset the
+     lifted news card carries — one card language across the whole page. */
+  box-shadow: inset 0 3px 0 var(--accent), var(--lift-sm);
 }
 .pub:last-child { margin-bottom: 0; }
 .pub::before {
@@ -881,6 +896,22 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
   max-width: 68ch;
 }
 
+/* Point-by-point summary: an accent lead word names what the point proves
+   (idea, theory, result…), bold ink carries the numbers. One or two marks
+   per line — more and none of them would read as emphasis. */
+.pub__points {
+  margin: 0 0 12px;
+  padding-left: 1.15em;
+  font: 400 14px/21px var(--mono);
+  color: var(--ink-2);
+  max-width: 68ch;
+}
+.pub__points li { padding-left: .15em; }
+.pub__points li + li { margin-top: 6px; }
+.pub__points li::marker { color: var(--accent); }
+.pub__points li > b:first-child { color: var(--accent); font-weight: 600; }
+.pub__points b { color: var(--ink); font-weight: 600; }
+
 .pub__links { display: flex; flex-wrap: wrap; gap: 14px; margin: 0; padding: 0; list-style: none; }
 .pub__links a {
   font: 400 13px/18px var(--mono);
@@ -933,6 +964,7 @@ html[data-lang="zh"] .masthead .dim { letter-spacing: 0.04em; }
 html[data-lang="zh"] .entry__title,
 html[data-lang="zh"] .entry__desc,
 html[data-lang="zh"] .pub__desc,
+html[data-lang="zh"] .pub__points,
 html[data-lang="zh"] .rows .what { letter-spacing: 0; }
 
 /* CJK has no interword spaces to break at, so allow breaking anywhere and
@@ -940,7 +972,8 @@ html[data-lang="zh"] .rows .what { letter-spacing: 0; }
 html[data-lang="zh"] .lede,
 html[data-lang="zh"] .entry__desc,
 html[data-lang="zh"] .rows .what,
-html[data-lang="zh"] .pub__desc { line-break: strict; overflow-wrap: anywhere; }
+html[data-lang="zh"] .pub__desc,
+html[data-lang="zh"] .pub__points { line-break: strict; overflow-wrap: anywhere; }
 
 /* Optional line under the name, for the story behind it. Kept quiet so it
    reads as an aside rather than a subtitle. */
@@ -990,17 +1023,12 @@ html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
 .pub--project { grid-template-columns: 1fr; counter-increment: project; }
 .pub--project::before { content: "PR" counter(project, decimal-leading-zero); }
 
-/* The capstone demo reel: three uncut phone clips, portrait as shot. Three
-   across at desktop width lands each near 225px — small for a plot, plenty
-   for watching an arm move. */
-.demo-strip {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-top: 16px;
-}
-.demo-strip figure { margin: 0; }
-.demo-strip video {
+/* The reel variant puts one video player where a paper's figures would go,
+   so the card stays exactly the height of its text. Declared after
+   .pub--project so the two-column template wins on this card. */
+.pub--reel { grid-template-columns: 190px minmax(0, 1fr); }
+
+.demo-player video {
   width: 100%;
   aspect-ratio: 9 / 16;
   object-fit: cover;
@@ -1009,25 +1037,39 @@ html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
   border-radius: var(--radius);
   background: var(--paper-hi);
 }
-.demo-strip figcaption {
+/* Tabs swap the clip. The active one is the page's one allowed use of the
+   accent as a control colour — it doubles as the "this is interactive" cue. */
+.demo-tabs { display: flex; gap: 6px; margin-top: 8px; }
+.demo-tab {
+  flex: 1;
+  font: 600 11px/1 var(--mono);
+  letter-spacing: .1em;
+  text-align: center;
+  padding: 6px 0;
+  border: 1px solid var(--rule-hi);
+  border-radius: var(--radius);
+  background: none;
+  color: var(--ink-3);
+  cursor: pointer;
+}
+.demo-tab:hover { border-color: var(--edge); color: var(--ink); }
+.demo-tab.is-on { border-color: var(--accent); color: var(--accent); }
+.demo-cap {
+  display: none;
   font: 400 11px/16px var(--mono);
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--ink-3);
-  margin-top: 6px;
+  margin: 7px 0 0;
 }
-html[data-lang="zh"] .demo-strip figcaption { letter-spacing: .04em; }
-@media (max-width: 640px) {
-  /* One clip at a time on a phone: the strip becomes a snap-scrolling reel
-     inside its own container, so the page itself never scrolls sideways. */
-  .demo-strip {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 4px;
-  }
-  .demo-strip figure { flex: 0 0 64%; scroll-snap-align: start; }
+.demo-cap.is-on { display: block; }
+html[data-lang="zh"] .demo-cap { letter-spacing: .04em; }
+@media (max-width: 720px) {
+  /* Declared after the base .pub--reel template, so the phone collapse
+     wins the cascade the same way the generic .pub collapse does. */
+  .pub--reel { grid-template-columns: 1fr; }
+  /* Single-column card: keep the clip phone-screen sized, not full-bleed. */
+  .demo-player { max-width: 230px; }
 }
 
 /* --------------------------------------------------------------------------

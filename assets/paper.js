@@ -652,4 +652,27 @@
       btn.textContent = "Press ⌘C";
     });
   });
+
+  /* ---- Capstone demo reel (one player, tabs swap the clip) ------------ */
+  /* Without JS the first clip still plays and its caption shows — the tabs
+     are the only thing that goes quiet. If the visitor was mid-playback,
+     the next clip starts playing too: the swap came from their click, so
+     autoplay is allowed and stopping dead would feel like a bug. */
+  document.querySelectorAll(".demo-player").forEach(function (player) {
+    var video = player.querySelector("video");
+    if (!video) return;
+    player.addEventListener("click", function (e) {
+      var tab = e.target.closest(".demo-tab");
+      if (!tab || tab.classList.contains("is-on")) return;
+      var n = tab.getAttribute("data-demo");
+      var wasPlaying = !video.paused && !video.ended;
+      player.querySelectorAll(".demo-tab, .demo-cap").forEach(function (el) {
+        el.classList.toggle("is-on", el.getAttribute("data-demo") === n);
+      });
+      video.poster = "assets/vla-demo-" + n + "-poster.jpg";
+      video.src = "assets/vla-demo-" + n + ".mp4";
+      video.load();
+      if (wasPlaying) video.play().catch(function () {});
+    });
+  });
 })();
