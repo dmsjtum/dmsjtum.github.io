@@ -25,7 +25,7 @@ Publications
 [1] Miaomiao Dai, Zhongqiang Ren. “HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning.”
 Robotics: Science and Systems (RSS), 2026.
 [2] Miaomiao Dai, Zhongqiang Ren. “AL-HOP: Augmented-Lagrangian Horizon-Optimal Planning for Fast Constrained
-Trajectory Optimization.” Under review, 2026.
+Trajectory Optimization.” In submission to IEEE International Conference on Robotics and Automation (ICRA), 2027.
 
 Research Experience
 HOP: Horizon-Optimal Trajectory Planning
@@ -42,7 +42,7 @@ search from O(N 2 ) to O(N ) — up to 40× faster than brute force, with identi
 
 AL-HOP: Constrained Horizon-Optimal Planning
 Mar 2026 – present
-Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · first-author manuscript under review
+Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · first-author manuscript in submission to ICRA 2027
 • Extends HOP to hard state–control constraints (obstacles, actuator limits) with an augmented-Lagrangian formulation
 
 that keeps the one-sweep horizon prediction.

@@ -919,45 +919,8 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
 .rows .when { color: var(--ink-3); white-space: nowrap; }
 .rows .what b { font-weight: 600; }
 .rows .what span { color: var(--ink-2); }
-/* Research rows turn each compact project summary into three semantic points:
-   method, system, evidence. Native markers preserve the offprint language and
-   make the results easier to scan without turning the section into cards. */
-.rows .res {
-  margin-top: 8px;
-  max-width: 68ch;
-  color: var(--ink-2);
-}
-.rows .res b { color: var(--ink); }
-.rows .res-list { margin: 0; padding-left: 1.25em; }
-.rows .res-list li { padding-left: .15em; }
-.rows .res-list li + li { margin-top: 4px; }
-.rows .res-list li::marker { color: var(--ink-3); }
-
-/* Research project headers reuse the lifted news-entry treatment shown above:
-   a compact paper card for identity, followed by quieter evidence bullets. */
-.research-rows > li {
-  display: block;
-  padding: 0;
-  border-bottom: 0;
-}
-.research-rows > li:first-child { border-top: 0; }
-.research-rows > li + li { margin-top: 32px; }
-.research-card .entry__title { flex: 1 1 28ch; min-width: 0; }
-.research-card .entry__date { margin-left: auto; }
-.research-card { background: var(--card-surface); }
-.research-rows .res { margin: 16px 4px 0; }
-.research-rows .res-list li::marker {
-  color: var(--accent);
-  font-size: 1.2em;
-}
-.research-rows .res-list li > b:first-child { color: var(--accent); }
 
 @media (max-width: 640px) { .rows > li { grid-template-columns: 1fr; } }
-@media (max-width: 560px) {
-  .research-card { padding: 12px 14px; }
-  .research-card .entry__head { gap: 2px 12px; }
-  .research-rows > li + li { margin-top: 28px; }
-}
 
 /* Latin tracking is far too loose for Chinese, which is already monospaced by
    nature. Wind it back wherever the page sets wide letter-spacing. */
@@ -1018,6 +981,53 @@ html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
      two plot thumbnails squeezed into half-columns. */
   .pub__figs { grid-template-columns: 1fr; }
   .pub__figs .pub__thumb:nth-child(n + 2) { display: none; }
+}
+
+/* A project is the same offprint card as a publication, minus the figure
+   column, with its own corner series (PR01, PR02 …). `counter-increment`
+   here replaces the .pub rule's, so projects never advance the paper count. */
+#projects { counter-reset: project; }
+.pub--project { grid-template-columns: 1fr; counter-increment: project; }
+.pub--project::before { content: "PR" counter(project, decimal-leading-zero); }
+
+/* The capstone demo reel: three uncut phone clips, portrait as shot. Three
+   across at desktop width lands each near 225px — small for a plot, plenty
+   for watching an arm move. */
+.demo-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+.demo-strip figure { margin: 0; }
+.demo-strip video {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  display: block;
+  border: 1px solid var(--rule-hi);
+  border-radius: var(--radius);
+  background: var(--paper-hi);
+}
+.demo-strip figcaption {
+  font: 400 11px/16px var(--mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 6px;
+}
+html[data-lang="zh"] .demo-strip figcaption { letter-spacing: .04em; }
+@media (max-width: 640px) {
+  /* One clip at a time on a phone: the strip becomes a snap-scrolling reel
+     inside its own container, so the page itself never scrolls sideways. */
+  .demo-strip {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+  .demo-strip figure { flex: 0 0 64%; scroll-snap-align: start; }
 }
 
 /* --------------------------------------------------------------------------
