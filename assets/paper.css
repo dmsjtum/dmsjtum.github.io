@@ -205,14 +205,20 @@ hr.rule--strong { border-top: 1px solid var(--ink); }
   align-items: start;
 }
 .rail__mark {
-  font: 400 12px/16px var(--mono);
-  letter-spacing: 0.1em;
+  font: 600 18px/20px var(--mono);
+  letter-spacing: 0.06em;
   color: var(--accent);
   padding-top: 6px;
   position: sticky;
   top: 24px;
 }
-.rail__mark > span { display: block; color: var(--ink-3); letter-spacing: 0.14em; margin-top: 6px; }
+.rail__mark > span {
+  display: block;
+  font: 400 13px/18px var(--mono);
+  color: var(--ink-3);
+  letter-spacing: 0.14em;
+  margin-top: 7px;
+}
 
 @media (max-width: 1023px) {
   .rail { grid-template-columns: minmax(0, 1fr); gap: 12px; }
@@ -284,17 +290,9 @@ hr.rule--strong { border-top: 1px solid var(--ink); }
   color: var(--ink-3);
   margin: 0 0 16px;
 }
-/* A short vermilion tick before each sub-heading — the same red that rules
-   the top of every card, so the sections and the cards read as one system. */
-.eyebrow::before {
-  content: "";
-  display: inline-block;
-  width: 14px;
-  height: 2px;
-  background: var(--accent);
-  margin-right: 9px;
-  vertical-align: 3px;
-}
+/* No decorative red lines: coloured rules and ticks were tried on the cards
+   and sub-headings and pulled — the accent stays in text, where it points
+   at something. */
 .eyebrow--accent { color: var(--accent); }
 
 /* Even the text selection stays in the palette. */
@@ -823,15 +821,18 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
   position: relative;
   counter-increment: paper;
   display: grid;
-  grid-template-columns: 190px minmax(0, 1fr);
+  /* 240px: wide enough that a bar chart's numbers survive. The reel card
+     narrows this back to 190px — a phone clip needs less. */
+  grid-template-columns: 240px minmax(0, 1fr);
   gap: 24px;
   margin: 0 0 28px;
   padding: 32px 20px 20px;
   border: 1.5px solid var(--edge);
   background: var(--card-surface);
-  /* The proofreader's rule along the top, plus the same hard offset the
-     lifted news card carries — one card language across the whole page. */
-  box-shadow: inset 0 3px 0 var(--accent), var(--lift-sm);
+  /* Same hard offset as the lifted news card — one card language across
+     the page. The red top rule was tried and pulled: a coloured border on
+     every card stopped reading as emphasis. */
+  box-shadow: var(--lift-sm);
 }
 .pub:last-child { margin-bottom: 0; }
 .pub::before {
@@ -847,8 +848,8 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
 
 .pub__thumb {
   width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
+  height: auto;   /* natural ratio: a cropped-to-fit plot loses its axes */
+  display: block;
   border: 1px solid var(--rule-hi);
   background: var(--paper);
   border-radius: var(--radius);
@@ -1053,7 +1054,8 @@ html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
   cursor: pointer;
 }
 .demo-tab:hover { border-color: var(--edge); color: var(--ink); }
-.demo-tab.is-on { border-color: var(--accent); color: var(--accent); }
+/* Active tab fills solid — no coloured borders on this page. */
+.demo-tab.is-on { border-color: var(--edge); background: var(--edge); color: var(--card-surface); }
 .demo-cap {
   display: none;
   font: 400 11px/16px var(--mono);
