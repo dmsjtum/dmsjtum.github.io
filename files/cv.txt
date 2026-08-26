@@ -68,10 +68,8 @@ five heterogeneous touch datasets (human hand pressure, tactile arrays, GelSight
 running across a local RTX 5090 and a multi-GPU A100 server.
 
 Voice-Interactive Closed-Loop VLA Manipulation (B.E. thesis)
-Advisor: Prof. Yunlong Guo, Shanghai Jiao Tong University · group leader, team of 5
-
 Feb 2026 – Aug 2026
-
+Advisors: Prof. Hesheng Wang & Prof. Yunlong Guo, Shanghai Jiao Tong University · group leader, team of 5
 • Deployed and fine-tuned the π0.5 VLA policy on a low-cost SO-101 arm with dual-camera observations; the team’s full
 
 system reached 70% end-to-end success (85% pick, 75% placement) with zero safety incidents.
