@@ -70,15 +70,16 @@ running across a local RTX 5090 and a multi-GPU A100 server.
 Voice-Interactive Closed-Loop VLA Manipulation (B.E. thesis)
 Feb 2026 – Aug 2026
 Advisors: Prof. Hesheng Wang & Prof. Yunlong Guo, Shanghai Jiao Tong University · group leader, team of 5
-• Deployed and fine-tuned the π0.5 VLA policy on a low-cost SO-101 arm with dual-camera observations; the team’s full
+• Collected and trained on real robot data: teleoperated 316 episodes across 11 tabletop tasks on a low-cost SO-101,
 
-system reached 70% end-to-end success (85% pick, 75% placement) with zero safety incidents.
+then fine-tuned π0.5 on them — LoRA on the 2B vision–language backbone, full training of the 300M action expert.
 
-• Built the VLM–policy connection: a grounding gate that verifies spoken objects are actually in view, rewrites commands
+• Closed the execution loop: a VLA emits open-loop action chunks and never checks the result, so I added a lower-
 
-into the policy’s training-style phrasing, and blocks motion when evidence is insufficient.
-
-• Designed the user interface for voice interaction and task monitoring.
+rate visual supervisor over progress and terminal state that triggers stop, return, re-observation, or a bounded retry
+(terminal-verification F1 0.842).
+• Reached 70% end-to-end success over 11 tasks (85% pick, 75% placement) with zero safety incidents; unseen object–target
+compositions are reported separately as an open condition, and built the voice-interaction and monitoring interface.
 
 Honors & Awards
 James B. Angell Scholar, University of Michigan

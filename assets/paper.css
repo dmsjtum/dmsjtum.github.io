@@ -827,25 +827,36 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
 }
 .pub:last-child { margin-bottom: 0; }
 
+/* The label carries the whole masthead of an entry: title, authors, venue,
+   standing. A grid, not a flex row, so the series tag can sit in its own
+   column beside every line of a wrapping title. */
 .pub__card {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   border: 1.5px solid var(--edge);
   background: var(--card-surface);
   box-shadow: var(--lift-sm);
-  padding: 14px 18px;
+  padding: 15px 18px 14px;
   margin: 0 0 20px;
 }
-/* The series tag rides the right edge of the label, set as a flex item. */
 .pub__card::after {
   content: "P" counter(paper, decimal-leading-zero);
-  font: 600 11px/1 var(--mono);
+  grid-column: 2;
+  grid-row: 1;
+  padding-left: 18px;
+  font: 600 11px/1.7 var(--mono);
   letter-spacing: .12em;
   color: var(--accent);
   white-space: nowrap;
 }
+/* Grid blockifies its children, so the badge would stretch the full column
+   without this — it is a badge, it should be the width of its text. */
+.pub__card > * { grid-column: 1; justify-self: start; }
+/* Authors and venue tighten up inside the label — they are a masthead
+   here, not body copy, so they sit close under the title. */
+.pub__card .pub__authors { margin: 8px 0 0; }
+.pub__card .pub__venue { margin: 5px 0 0; }
+.pub__card .pub__role { margin: 10px 0 0; }
 #publications { counter-reset: paper; }
 
 .pub__body {
@@ -1037,7 +1048,7 @@ html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
 /* The reel variant puts one video player where a paper's figures would go,
    so the body stays exactly the height of its text. Declared after
    .pub--project so the two-column template wins on this card. */
-.pub--reel .pub__body { grid-template-columns: 190px minmax(0, 1fr); }
+.pub--reel .pub__body { grid-template-columns: 150px minmax(0, 1fr); }
 
 .demo-player video {
   width: 100%;
