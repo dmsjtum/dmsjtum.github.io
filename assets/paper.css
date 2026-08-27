@@ -859,13 +859,12 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
 .pub__card .pub__role { margin: 10px 0 0; }
 #publications { counter-reset: paper; }
 
-.pub__body {
-  display: grid;
-  /* 240px: wide enough that a bar chart's numbers survive. The reel body
-     narrows this back to 190px — a phone clip needs less. */
-  grid-template-columns: 240px minmax(0, 1fr);
-  gap: 24px;
-}
+/* Evidence first, figures under it across the full measure. A narrow figure
+   column was tried: two stacked plots stood 310px against 180px of text,
+   so every card ended with a block of dead space beside the lower figure.
+   Full width also buys the plots ~350px each instead of 240px, which is
+   the difference between reading the axis labels and guessing at them. */
+.pub__body { display: block; }
 
 .pub__thumb {
   width: 100%;
@@ -946,7 +945,6 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
 @media (max-width: 720px) {
   .pub { margin-bottom: 36px; }
   .pub__card { padding: 12px 14px; margin-bottom: 16px; }
-  .pub__body { grid-template-columns: 1fr; gap: 16px; }
   .pub__thumb { max-width: none; }
 }
 @media print {
@@ -1023,17 +1021,19 @@ html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
 /* Two figures per publication, stacked in the thumbnail column. Side-by-side
    was tried and rejected: on a 1000px sheet each would land near 90px, too
    small to read a plot. Stacking keeps them legible and the row scannable. */
-.pub__figs { display: grid; gap: 8px; align-content: start; }
-.pub__figs .pub__thumb { margin: 0; }
-@media (max-width: 720px) {
-  .pub__figs { grid-template-columns: 1fr 1fr; }
-  .pub__figs .pub__thumb { max-width: none; }
+.pub__figs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: start;
+  margin-top: 20px;
 }
+.pub__figs .pub__thumb { margin: 0; }
 @media (max-width: 480px) {
-  /* At phone width, one legible lead figure carries more information than
-     two plot thumbnails squeezed into half-columns. */
+  /* Half of a phone screen is not enough for a four-panel plot; stack them
+     and each one gets the full measure. */
   .pub__figs { grid-template-columns: 1fr; }
-  .pub__figs .pub__thumb:nth-child(n + 2) { display: none; }
+  .pub__figs .pub__thumb { max-width: none; }
 }
 
 /* A project is the same title-label-plus-body as a publication, with its
@@ -1042,13 +1042,15 @@ html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
 #projects { counter-reset: project; }
 .pub--project { counter-increment: project; }
 .pub--project .pub__card::after { content: "PR" counter(project, decimal-leading-zero); }
-/* No figure column on a text-only project. */
-.pub--project .pub__body { grid-template-columns: minmax(0, 1fr); }
 
-/* The reel variant puts one video player where a paper's figures would go,
-   so the body stays exactly the height of its text. Declared after
-   .pub--project so the two-column template wins on this card. */
-.pub--reel .pub__body { grid-template-columns: 150px minmax(0, 1fr); }
+/* The reel keeps the beside-the-text arrangement the papers gave up: a
+   9:16 clip run across the full measure would stand over 600px tall, and
+   at 150px it already matches the height of the points next to it. */
+.pub--reel .pub__body {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 24px;
+}
 
 .demo-player video {
   width: 100%;
