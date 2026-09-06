@@ -840,7 +840,7 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
   margin: 0 0 20px;
 }
 .pub__card::after {
-  content: "P" counter(paper, decimal-leading-zero);
+  content: "R" counter(paper, decimal-leading-zero);
   grid-column: 2;
   grid-row: 1;
   padding-left: 18px;

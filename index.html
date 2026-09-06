@@ -57,7 +57,7 @@
     </span>
     <nav class="nav" aria-label="Primary">
       <a href="#news"><span class="lang-en">News</span><span class="lang-zh">近况</span></a>
-      <a href="#publications"><span class="lang-en">Publications</span><span class="lang-zh">论文</span></a>
+      <a href="#publications"><span class="lang-en">Research</span><span class="lang-zh">研究</span></a>
       <a href="#projects"><span class="lang-en">Projects</span><span class="lang-zh">项目</span></a>
       <a href="#experience"><span class="lang-en">Record</span><span class="lang-zh">履历</span></a>
       <a href="files/cv.pdf">CV</a>
@@ -388,10 +388,13 @@
       </div>
     </section>
 
-    <!-- ===== §02 Publications ========================================
-         † equal contribution, * corresponding author. Bold marks me. -->
+    <!-- ===== §02 Research ============================================
+         Published, submitted, and in-progress work, in that order. Bold
+         marks me in an author list. Unpublished entries are deliberately
+         high level: no thresholds, no dataset inventory, no target venue
+         until the paper is out. -->
     <section class="section rail" id="publications">
-      <div class="rail__mark">§02<span><span class="lang-en">Papers</span><span class="lang-zh">论文</span></span></div>
+      <div class="rail__mark">§02<span><span class="lang-en">Research</span><span class="lang-zh">研究</span></span></div>
       <div>
 
         <div class="pub">
@@ -464,18 +467,7 @@
           </div>
         </div>
 
-      </div>
-    </section>
-
-    <!-- ===== §03 Projects ============================================
-         Built systems and research in progress — things that are not
-         (or not yet) papers. The B.E. thesis lives here rather than in
-         Publications: it is a working system with a demo reel. -->
-    <section class="section rail" id="projects">
-      <div class="rail__mark">§03<span><span class="lang-en">Projects</span><span class="lang-zh">项目</span></span></div>
-      <div>
-
-        <div class="pub pub--project">
+        <div class="pub">
           <div class="pub__card">
             <h2 class="pub__title">Touch Without Touch: Measured-Touch Supervision for Visual Representations</h2>
             <p class="pub__authors">
@@ -506,6 +498,49 @@
           </div>
           </div>
         </div>
+
+        <div class="pub">
+          <div class="pub__card">
+            <h2 class="pub__title">STA: Physical Supervision from Human Video for Vision&ndash;Language&ndash;Action Policies</h2>
+            <p class="pub__authors">
+              <span class="lang-en">Advisors: Prof. Hesheng Wang, SJTU IRMV Lab &middot; Prof. Lin Shao, RoboScience</span>
+              <span class="lang-zh">&#23548;&#24072;&#65306;&#29579;&#36154;&#21319; &#25945;&#25480;&#65288;&#19978;&#28023;&#20132;&#22823; IRMV &#23454;&#39564;&#23460;&#65289; &middot; &#37045;&#26519; &#25945;&#25480;&#65288;RoboScience&#65289;</span>
+            </p>
+            <p class="pub__venue">
+              <span class="lang-en">Ongoing research &middot; 2026 &mdash;</span>
+              <span class="lang-zh">&#36827;&#34892;&#20013;&#30340;&#30740;&#31350; &middot; 2026 &mdash;</span>
+            </p>
+            <p class="pub__role">
+              <span class="lang-en">Lead author</span>
+              <span class="lang-zh">&#20027;&#35201;&#36127;&#36131;&#20154;</span>
+            </p>
+          </div>
+          <div class="pub__body">
+          <div>
+            <ul class="pub__points lang-en">
+              <li><b>Question.</b> Human video carries physical structure that robot demonstrations never label &mdash; contact, and how a motion loads over time. Can it supervise a vision&ndash;language&ndash;action policy, with <b>no extra sensor at deployment</b>?</li>
+              <li><b>Design.</b> The physical pathway stays strictly decoupled: it reads only the current image and the raw instruction through a frozen visual encoder, never the policy&rsquo;s own hidden states, and enters the action path as a single gated residual that the robot-only stage then freezes. A gain cannot be the policy re-reading what it already knew.</li>
+              <li><b>Evidence.</b> The two arms run the same modules and differ in <b>one loss term</b> &mdash; same initialization, batches, seeds, schedule, and evaluation. At the current scale the physical term is a <b>clear causal gain</b> over its isomorphic control, and shuffling the target in time or pairing it with the wrong window removes most of the effect. The decisive larger-scale run is pending.</li>
+            </ul>
+            <ul class="pub__points lang-zh">
+              <li><b>&#38382;&#39064;&#65306;</b>&#20154;&#31867;&#35270;&#39057;&#37324;&#24102;&#30528;&#26426;&#22120;&#20154;&#31034;&#33539;&#20174;&#19981;&#26631;&#27880;&#30340;&#29289;&#29702;&#32467;&#26500;&#8212;&#8212;&#25509;&#35302;&#65292;&#20197;&#21450;&#19968;&#27573;&#21160;&#20316;&#22914;&#20309;&#38543;&#26102;&#38388;&#21463;&#21147;&#12290;&#23427;&#33021;&#21542;&#29992;&#26469;&#30417;&#30563;&#35270;&#35273;&#8211;&#35821;&#35328;&#8211;&#21160;&#20316;&#31574;&#30053;&#65292;&#32780;<b>&#37096;&#32626;&#26102;&#19981;&#21152;&#20219;&#20309;&#20256;&#24863;&#22120;</b>&#65311;</li>
+              <li><b>&#35774;&#35745;&#65306;</b>&#29289;&#29702;&#36890;&#36335;&#19982;&#31574;&#30053;&#20005;&#26684;&#35299;&#32780;&#65306;&#21482;&#32463;&#20923;&#32467;&#30340;&#35270;&#35273;&#32534;&#30721;&#22120;&#35835;&#21462;&#24403;&#21069;&#22270;&#20687;&#19982;&#21407;&#22987;&#25351;&#20196;&#65292;&#20174;&#19981;&#25509;&#35302;&#31574;&#30053;&#33258;&#36523;&#30340;&#38544;&#29366;&#24577;&#65292;&#24182;&#20197;&#21333;&#26465;&#38376;&#25511;&#27531;&#24046;&#25509;&#20837;&#21160;&#20316;&#36335;&#24452;&#65292;&#20165;&#26426;&#22120;&#20154;&#30340;&#31532;&#20108;&#38454;&#27573;&#20877;&#23558;&#20854;&#20923;&#32467;&#12290;&#22240;&#27492;&#25910;&#30410;&#19981;&#21487;&#33021;&#26159;&#31574;&#30053;&#22312;&#37325;&#35835;&#33258;&#24049;&#24050;&#30693;&#30340;&#19996;&#35199;&#12290;</li>
+              <li><b>&#35777;&#25454;&#65306;</b>&#20004;&#26465;&#33218;&#36816;&#34892;&#21516;&#19968;&#22871;&#27169;&#22359;&#65292;&#21482;&#24046;<b>&#19968;&#20010;&#25439;&#22833;&#39033;</b>&#8212;&#8212;&#21021;&#22987;&#21270;&#12289;&#25209;&#27425;&#12289;&#38543;&#26426;&#31181;&#23376;&#12289;&#35843;&#24230;&#19982;&#35780;&#27979;&#23436;&#20840;&#19968;&#33268;&#12290;&#24403;&#21069;&#35268;&#27169;&#19979;&#65292;&#29289;&#29702;&#39033;&#30456;&#23545;&#21516;&#26500;&#23545;&#29031;&#26159;<b>&#26126;&#30830;&#30340;&#22240;&#26524;&#22686;&#30410;</b>&#65307;&#25226;&#30446;&#26631;&#22312;&#26102;&#38388;&#19978;&#25171;&#20081;&#12289;&#25110;&#37197;&#38169;&#31383;&#21475;&#65292;&#22686;&#30410;&#23601;&#22522;&#26412;&#28040;&#22833;&#12290;&#20915;&#23450;&#24615;&#30340;&#26356;&#22823;&#35268;&#27169;&#23454;&#39564;&#23578;&#26410;&#24320;&#22987;&#12290;</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== §03 Projects ============================================
+         Built systems, as distinct from the research programme in §02.
+         The B.E. thesis lives here rather than under Research: it is an
+         engineered system with a demo reel, not a paper. -->
+    <section class="section rail" id="projects">
+      <div class="rail__mark">§03<span><span class="lang-en">Projects</span><span class="lang-zh">项目</span></span></div>
+      <div>
 
         <div class="pub pub--project pub--reel">
           <div class="pub__card">

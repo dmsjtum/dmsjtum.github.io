@@ -67,7 +67,22 @@ transfer.
 five heterogeneous touch datasets (human hand pressure, tactile arrays, GelSight imagery, force–torque) into one pipeline
 running across a local RTX 5090 and a multi-GPU A100 server.
 
-Voice-Interactive Closed-Loop VLA Manipulation (B.E. thesis)
+STA: Physical Supervision from Human Video for Vision–Language–Action Policies
+Aug 2026 – present
+Advisors: Prof. Hesheng Wang, IRMV Lab, Shanghai Jiao Tong University · Prof. Lin Shao, RoboScience
+• Tests whether the physical structure carried by human video — contact, and how a motion loads over time — can
+
+supervise a vision–language–action policy, with no extra sensor at deployment.
+
+• Kept the physical pathway strictly decoupled: it reads only the current image and the raw instruction through a frozen
+
+visual encoder, never the policy’s own hidden states, and enters the action path as one gated residual that the robot-only
+stage freezes — so a gain cannot be the policy re-reading what it already knew.
+• The two arms run identical modules and differ in one loss term. At the current scale the physical term is a clear causal
+gain over its isomorphic control, and shuffling the target in time or pairing it with the wrong window removes most of
+the effect; the decisive larger-scale run is pending.
+
+Voice-Interactive Closed-Loop VLA Manipulation (B.E. thesis)
 Feb 2026 – Aug 2026
 Advisors: Prof. Hesheng Wang & Prof. Yunlong Guo, Shanghai Jiao Tong University · group leader, team of 5
 • Collected and trained on real robot data: teleoperated 316 episodes across 11 tabletop tasks on a low-cost SO-101,
@@ -81,7 +96,7 @@ rate visual supervisor over progress and terminal state that triggers stop, retu
 • Reached 70% end-to-end success over 11 tasks (85% pick, 75% placement) with zero safety incidents; unseen object–target
 compositions are reported separately as an open condition, and built the voice-interaction and monitoring interface.
 
-Honors & Awards
+Honors & Awards
 James B. Angell Scholar, University of Michigan
 University Honors, University of Michigan (3 terms)
 Dean’s List, University of Michigan (3 terms)
