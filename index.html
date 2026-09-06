@@ -79,6 +79,14 @@
           <span class="lang-zh">宾夕法尼亚大学 机器人硕士在读</span>
         </p>
 
+        <!-- Contact sits above the prose: it is the thing a reader most often
+             came for, and it should not be at the bottom of two paragraphs. -->
+        <dl class="meta" style="margin:22px 0 26px">
+          <dt>Email</dt>   <dd><a href="mailto:dmmsjtu@umich.edu">dmmsjtu@umich.edu</a></dd>
+          <dt>GitHub</dt>  <dd><a href="https://github.com/dmsjtum">github.com/dmsjtum</a></dd>
+          <dt>CV</dt>      <dd><a href="files/cv.pdf">cv.pdf</a></dd>
+        </dl>
+
         <!-- bio__text marks the paragraph block the entrance types into.
              Both languages carry it; paper.js only ever touches the one
              currently on screen, so toggling shows the other complete. -->
@@ -91,10 +99,11 @@
             rather than wrapping one around the other.
           </p>
           <p class="lede">
-            I also put these policies on real hardware, which is a useful
-            corrective: the distance between a clean theoretical result and an
-            arm that picks up the right object is where most of the interesting
-            problems turn out to live.
+            Two things a robot can have, and rarely has at once: the generality
+            of a learned policy, and the speed and reliability of a controller
+            that knows what it is doing. VLA models and large datasets buy the
+            first. They do not, on their own, buy back the second. I work on
+            the diagonal.
           </p>
         </div>
 
@@ -103,245 +112,240 @@
             我的研究在学习与控制的交界处。学习出来的策略泛化得好，经典控制则快、而且带有保证。真正有用的机器人两者都要——我认为通向它的路，是让控制理论去塑造黑箱学到的东西，而不是把两者互相套一层壳。
           </p>
           <p class="lede">
-            我也把这些策略放到真实硬件上跑。这件事很治人：从一个干净的理论结果，到一条真能把正确物体抓起来的机械臂，中间的距离才是大部分有意思的问题所在。
+            机器人身上有两样东西，眼下很难同时拥有：学习型策略的通用性，和一个「知道自己在做什么」的控制器所具备的速度与可靠性。VLA 与大数据买来了前者，却不会自动换回后者。我做的是那条对角线上的事。
           </p>
         </div>
 
-        <dl class="meta" style="margin-top:28px">
-          <dt>Email</dt>   <dd><a href="mailto:dmmsjtu@umich.edu">dmmsjtu@umich.edu</a></dd>
-          <dt>GitHub</dt>  <dd><a href="https://github.com/dmsjtum">github.com/dmsjtum</a></dd>
-          <dt>CV</dt>      <dd><a href="files/cv.pdf">cv.pdf</a></dd>
-        </dl>
       </div>
 
-      <!-- Right column: portrait, then a drawing of the two systems I
-           actually work on — the arm policies get deployed on, and the
-           quadrotor HOP is validated on. Joint angles are IK-solved so the
-           gripper genuinely meets the cube. -->
+      <!-- Right column: the portrait. The working drawing that used to sit
+           under it now runs beside the direction chart below, where the two
+           figures read as a pair. -->
       <div class="bio__side">
         <img class="bio__portrait" src="assets/portrait.jpg" alt="Miaomiao Dai"
              onerror="this.onerror=null;this.src='data:image/svg+xml;charset=utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E'">
-        <svg class="sketch" viewBox="0 0 200 250" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- One bench, two systems: the arm policies get deployed on, and
-               the quadrotor HOP is validated on. Joint angles are IK-solved
-               (scratchpad/ik.py), and the pose sequence starts and ends on the
-               same pose so the loop seam has nothing to jump across. The flight
-               path is kept above y=112 while the arm tops out near y=156. -->
+      </div>
+    </section>
 
-          <path d="M 6 226 L 194 226" stroke="currentColor" stroke-width="1.1" opacity=".45"/>
+    <!-- ===== The two drawings =======================================
+         A pair, deliberately: the chart says where the field is and which
+         way I am pushing, the drawing says what the pushing is done on.
+         Both draw with currentColor and take their colour from `color` on
+         a group, so dark mode needs no second palette. -->
+    <section class="duo">
+      <figure class="figure duo__fig">
+        <div class="chart-scroll">
+            <svg class="chart" viewBox="0 0 560 300" role="img"
+                 aria-label="Generality on the horizontal axis, throughput on the vertical. Industrial arms sit high and left, today's learned policies low and right, and generally useful robots high and right. A dashed arrow marks the direction of my work, from learned policies toward generally useful.">
 
-          <!-- flight path, entirely in the sky -->
-          <path id="traj" d="M 44 112 C 80 56 130 50 176 84"/>
-          <path d="M 44 112 C 80 56 130 50 176 84"
-                stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
-                stroke-dasharray="0.1 10" opacity=".3">
-            <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.5s" repeatCount="indefinite"/>
-          </path>
+              <g class="c-axis" stroke="currentColor" fill="currentColor">
+                <path d="M 80 235 L 526 235" stroke-width="1.3" fill="none"/>
+                <path d="M 528 235 l -8 -4 l 0 8 z" stroke="none"/>
+                <path d="M 80 235 L 80 36" stroke-width="1.3" fill="none"/>
+                <path d="M 80 34 l -4 8 l 8 0 z" stroke="none"/>
+                <text x="304" y="268" text-anchor="middle" stroke="none">
+                  <tspan class="lang-en">generality / flexibility</tspan><tspan class="lang-zh">通用性 / 灵活性</tspan>
+                </text>
+                <text x="56" y="134" text-anchor="middle" transform="rotate(-90 56 134)" stroke="none">
+                  <tspan class="lang-en">throughput: speed + reliability</tspan><tspan class="lang-zh">吞吐：速度 + 可靠性</tspan>
+                </text>
+              </g>
 
-          <!-- T*: the horizon HOP selects. The one accent in the drawing. -->
-          <g class="accent">
-            <circle cx="176" cy="84" r="4.5" stroke="currentColor" stroke-width="1.5">
-              <animate attributeName="r" values="4.5;7;4.5" dur="2.8s" repeatCount="indefinite"/>
-              <animate attributeName="opacity" values=".95;.4;.95" dur="2.8s" repeatCount="indefinite"/>
-            </circle>
-            <text x="168" y="70" font-family="ui-monospace,SFMono-Regular,Menlo,monospace"
-                  font-size="9" fill="currentColor">T*</text>
-          </g>
+              <g class="c-dim" fill="currentColor">
+                <circle cx="170" cy="88" r="6.5"/>
+                <text x="170" y="66" text-anchor="middle">
+                  <tspan class="lang-en">Industrial arms</tspan><tspan class="lang-zh">工业机械臂</tspan>
+                </text>
+                <circle cx="360" cy="196" r="6.5"/>
+                <text x="360" y="174" text-anchor="middle">
+                  <tspan class="lang-en">Today&rsquo;s learned policies</tspan><tspan class="lang-zh">当前的学习型策略</tspan>
+                </text>
+              </g>
 
-          <!-- quadrotor: out to T*, hold, back again -->
-          <g>
-            <animateMotion dur="9s" repeatCount="indefinite"
-                           keyPoints="0;1;1;0;0" keyTimes="0;0.38;0.50;0.88;1"
-                           calcMode="spline"
-                           keySplines=".45 0 .3 1; 0 0 1 1; .45 0 .3 1; 0 0 1 1">
-              <mpath href="#traj"/>
-            </animateMotion>
-            <g stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
-              <path d="M -10 -2 L 10 -2"/>
-              <path d="M -10 -2 L -10 -6"/>
-              <path d="M  10 -2 L  10 -6"/>
-              <ellipse cx="-10" cy="-7" rx="6.5" ry="1.5">
-                <animate attributeName="rx" values="6.5;2;6.5" dur="0.42s" repeatCount="indefinite"/>
-              </ellipse>
-              <ellipse cx="10" cy="-7" rx="6.5" ry="1.5">
-                <animate attributeName="rx" values="2;6.5;2" dur="0.42s" repeatCount="indefinite"/>
-              </ellipse>
-              <rect x="-4.5" y="-2" width="9" height="5.5" rx="1.5"/>
+              <g class="c-accent" fill="currentColor" stroke="currentColor">
+                <path d="M 372 182 Q 410 148 450 100" fill="none" stroke-width="1.8"
+                      stroke-linecap="round" stroke-dasharray="6 6"/>
+                <path d="M 456 92 l -2 9 l 8 -1.5 z" stroke="none"/>
+                <circle cx="462" cy="80" r="6.5" stroke="none"/>
+                <text x="462" y="58" text-anchor="middle" stroke="none">
+                  <tspan class="lang-en">Generally useful</tspan><tspan class="lang-zh">通用且好用</tspan>
+                </text>
+                <text x="430" y="154" text-anchor="start" stroke="none" class="chart__note">
+                  <tspan class="lang-en">my work</tspan><tspan class="lang-zh">我的方向</tspan>
+                </text>
+              </g>
+            </svg>
+        </div>
+        <figcaption>
+          <span class="lang-en"><b>Where robots sit today.</b> Industrial arms bought throughput by giving up generality; learned policies made the opposite trade. The dashed arrow is the corner I am working toward.</span>
+          <span class="lang-zh"><b>机器人今天所处的位置。</b>工业机械臂用通用性换来了吞吐，学习型策略做的是相反的交易。虚线箭头指向我要去的那个角。</span>
+        </figcaption>
+      </figure>
+
+      <figure class="figure duo__fig duo__fig--draw">
+          <svg class="sketch" viewBox="0 0 200 250" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- One bench, two systems: the arm policies get deployed on, and
+                 the quadrotor HOP is validated on. Joint angles are IK-solved
+                 (scratchpad/ik.py), and the pose sequence starts and ends on the
+                 same pose so the loop seam has nothing to jump across. The flight
+                 path is kept above y=112 while the arm tops out near y=156. -->
+
+            <path d="M 6 226 L 194 226" stroke="currentColor" stroke-width="1.1" opacity=".45"/>
+
+            <!-- flight path, entirely in the sky -->
+            <path id="traj" d="M 44 112 C 80 56 130 50 176 84"/>
+            <path d="M 44 112 C 80 56 130 50 176 84"
+                  stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                  stroke-dasharray="0.1 10" opacity=".3">
+              <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.5s" repeatCount="indefinite"/>
+            </path>
+
+            <!-- T*: the horizon HOP selects. The one accent in the drawing. -->
+            <g class="accent">
+              <circle cx="176" cy="84" r="4.5" stroke="currentColor" stroke-width="1.5">
+                <animate attributeName="r" values="4.5;7;4.5" dur="2.8s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values=".95;.4;.95" dur="2.8s" repeatCount="indefinite"/>
+              </circle>
+              <text x="168" y="70" font-family="ui-monospace,SFMono-Regular,Menlo,monospace"
+                    font-size="9" fill="currentColor">T*</text>
             </g>
-          </g>
 
-          <!-- A hopper on the empty pad under T*. Third morphology on the
-               bench: the arm manipulates, the quadrotor flies, this one only
-               knows how to leave the ground. One hop is 0.9s — exactly a tenth
-               of the 9s master loop, so it lands on the same beat every time
-               the arm sets the cube down. Rise and fall are separate splines
-               fitted to a parabola: slope 2 leaving the ground, 0 at the apex,
-               2 coming back down. Base poses are the standing pose, so it
-               freezes upright rather than mid-crouch under reduced motion. -->
-          <g transform="translate(172 226)" stroke="currentColor"
-             stroke-width="1.4" stroke-linecap="round">
+            <!-- quadrotor: out to T*, hold, back again -->
             <g>
-              <animateTransform attributeName="transform" type="translate"
-                values="0 0; 0 0; 0 -11; 0 0; 0 0"
-                keyTimes="0; 0.10; 0.50; 0.90; 1"
-                dur="0.9s" repeatCount="indefinite" calcMode="spline"
-                keySplines="0 0 1 1; .25 .5 .45 1; .55 0 .75 .5; 0 0 1 1"/>
-
-              <!-- Legs load through the push-off and absorb after touchdown.
-                   Feet splay wider as the hip drops, so the crouch reads as
-                   weight rather than as the whole robot shrinking. -->
-              <path d="M -5.5 0 L -3 0 L -1.4 -6">
-                <animate attributeName="d" dur="0.9s" repeatCount="indefinite"
-                  keyTimes="0; 0.10; 0.90; 0.98; 1"
-                  values="M -6.5 0 L -4 0 L -1.4 -4;
-                          M -5.5 0 L -3 0 L -1.4 -6;
-                          M -5.5 0 L -3 0 L -1.4 -6;
-                          M -6.5 0 L -4 0 L -1.4 -4;
-                          M -6.5 0 L -4 0 L -1.4 -4"/>
-              </path>
-              <path d="M 5.5 0 L 3 0 L 1.4 -6">
-                <animate attributeName="d" dur="0.9s" repeatCount="indefinite"
-                  keyTimes="0; 0.10; 0.90; 0.98; 1"
-                  values="M 6.5 0 L 4 0 L 1.4 -4;
-                          M 5.5 0 L 3 0 L 1.4 -6;
-                          M 5.5 0 L 3 0 L 1.4 -6;
-                          M 6.5 0 L 4 0 L 1.4 -4;
-                          M 6.5 0 L 4 0 L 1.4 -4"/>
-              </path>
-
-              <!-- Body rides the hip down through the crouch: 2px, the same
-                   distance the hip travels, so nothing telescopes. -->
-              <g>
-                <animateTransform attributeName="transform" type="translate"
-                  values="0 2; 0 0; 0 0; 0 2; 0 2"
-                  keyTimes="0; 0.10; 0.90; 0.98; 1"
-                  dur="0.9s" repeatCount="indefinite"/>
-                <rect x="-6" y="-16" width="12" height="10" rx="1.8"/>
-                <circle cx="0" cy="-11" r="2.1"/>
-                <path d="M 0 -16 L 0 -20"/>
-                <circle cx="0" cy="-21.2" r="1.2"/>
+              <animateMotion dur="9s" repeatCount="indefinite"
+                             keyPoints="0;1;1;0;0" keyTimes="0;0.38;0.50;0.88;1"
+                             calcMode="spline"
+                             keySplines=".45 0 .3 1; 0 0 1 1; .45 0 .3 1; 0 0 1 1">
+                <mpath href="#traj"/>
+              </animateMotion>
+              <g stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+                <path d="M -10 -2 L 10 -2"/>
+                <path d="M -10 -2 L -10 -6"/>
+                <path d="M  10 -2 L  10 -6"/>
+                <ellipse cx="-10" cy="-7" rx="6.5" ry="1.5">
+                  <animate attributeName="rx" values="6.5;2;6.5" dur="0.42s" repeatCount="indefinite"/>
+                </ellipse>
+                <ellipse cx="10" cy="-7" rx="6.5" ry="1.5">
+                  <animate attributeName="rx" values="2;6.5;2" dur="0.42s" repeatCount="indefinite"/>
+                </ellipse>
+                <rect x="-4.5" y="-2" width="9" height="5.5" rx="1.5"/>
               </g>
             </g>
-          </g>
 
-          <!-- Arm assembly scaled 1.18x about the bench: translate = (1-s)*anchor. -->
-          <g transform="translate(-8.6 -40.7) scale(1.18)">
-            <rect x="-6" y="-6" width="12" height="12" rx="1.5"
-                  stroke="currentColor" stroke-width="1.4">
-              <animateTransform attributeName="transform" type="translate"
-                values="94 219; 94 172; 22 172; 22 219; 22 219; 22 172; 94 172; 94 219; 94 219"
-                keyTimes="0; 0.10; 0.26; 0.36; 0.46; 0.56; 0.72; 0.82; 1"
-                dur="9s" repeatCount="indefinite" calcMode="spline"
-                keySplines=".4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1; .4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1"/>
-            </rect>
+            <!-- A hopper on the empty pad under T*. Third morphology on the
+                 bench: the arm manipulates, the quadrotor flies, this one only
+                 knows how to leave the ground. One hop is 0.9s — exactly a tenth
+                 of the 9s master loop, so it lands on the same beat every time
+                 the arm sets the cube down. Rise and fall are separate splines
+                 fitted to a parabola: slope 2 leaving the ground, 0 at the apex,
+                 2 coming back down. Base poses are the standing pose, so it
+                 freezes upright rather than mid-crouch under reduced motion. -->
+            <g transform="translate(172 226)" stroke="currentColor"
+               stroke-width="1.4" stroke-linecap="round">
+              <g>
+                <animateTransform attributeName="transform" type="translate"
+                  values="0 0; 0 0; 0 -11; 0 0; 0 0"
+                  keyTimes="0; 0.10; 0.50; 0.90; 1"
+                  dur="0.9s" repeatCount="indefinite" calcMode="spline"
+                  keySplines="0 0 1 1; .25 .5 .45 1; .55 0 .75 .5; 0 0 1 1"/>
 
-            <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-              <path d="M 32 226 L 64 226"/>
-              <path d="M 42 226 L 42 204 L 54 204 L 54 226"/>
+                <!-- Legs load through the push-off and absorb after touchdown.
+                     Feet splay wider as the hip drops, so the crouch reads as
+                     weight rather than as the whole robot shrinking. -->
+                <path d="M -5.5 0 L -3 0 L -1.4 -6">
+                  <animate attributeName="d" dur="0.9s" repeatCount="indefinite"
+                    keyTimes="0; 0.10; 0.90; 0.98; 1"
+                    values="M -6.5 0 L -4 0 L -1.4 -4;
+                            M -5.5 0 L -3 0 L -1.4 -6;
+                            M -5.5 0 L -3 0 L -1.4 -6;
+                            M -6.5 0 L -4 0 L -1.4 -4;
+                            M -6.5 0 L -4 0 L -1.4 -4"/>
+                </path>
+                <path d="M 5.5 0 L 3 0 L 1.4 -6">
+                  <animate attributeName="d" dur="0.9s" repeatCount="indefinite"
+                    keyTimes="0; 0.10; 0.90; 0.98; 1"
+                    values="M 6.5 0 L 4 0 L 1.4 -4;
+                            M 5.5 0 L 3 0 L 1.4 -6;
+                            M 5.5 0 L 3 0 L 1.4 -6;
+                            M 6.5 0 L 4 0 L 1.4 -4;
+                            M 6.5 0 L 4 0 L 1.4 -4"/>
+                </path>
 
-              <g transform="translate(48 200)">
-                <animateTransform attributeName="transform" type="rotate"
-                  values="136.2; 63.1; 4.2; -69.9; -69.9; 4.2; 63.1; 136.2; 136.2"
+                <!-- Body rides the hip down through the crouch: 2px, the same
+                     distance the hip travels, so nothing telescopes. -->
+                <g>
+                  <animateTransform attributeName="transform" type="translate"
+                    values="0 2; 0 0; 0 0; 0 2; 0 2"
+                    keyTimes="0; 0.10; 0.90; 0.98; 1"
+                    dur="0.9s" repeatCount="indefinite"/>
+                  <rect x="-6" y="-16" width="12" height="10" rx="1.8"/>
+                  <circle cx="0" cy="-11" r="2.1"/>
+                  <path d="M 0 -16 L 0 -20"/>
+                  <circle cx="0" cy="-21.2" r="1.2"/>
+                </g>
+              </g>
+            </g>
+
+            <!-- Arm assembly scaled 1.18x about the bench: translate = (1-s)*anchor. -->
+            <g transform="translate(-8.6 -40.7) scale(1.18)">
+              <rect x="-6" y="-6" width="12" height="12" rx="1.5"
+                    stroke="currentColor" stroke-width="1.4">
+                <animateTransform attributeName="transform" type="translate"
+                  values="94 219; 94 172; 22 172; 22 219; 22 219; 22 172; 94 172; 94 219; 94 219"
                   keyTimes="0; 0.10; 0.26; 0.36; 0.46; 0.56; 0.72; 0.82; 1"
-                  dur="9s" repeatCount="indefinite" additive="sum" calcMode="spline"
+                  dur="9s" repeatCount="indefinite" calcMode="spline"
                   keySplines=".4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1; .4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1"/>
-                <path d="M 0 0 L 0 -26"/>
-                <circle cx="0" cy="0" r="2.4"/>
+              </rect>
 
-                <g transform="translate(0 -26)">
+              <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <path d="M 32 226 L 64 226"/>
+                <path d="M 42 226 L 42 204 L 54 204 L 54 226"/>
+
+                <g transform="translate(48 200)">
                   <animateTransform attributeName="transform" type="rotate"
-                    values="-45.7; -8.5; -90.0; -106.9; -106.9; -90.0; -8.5; -45.7; -45.7"
+                    values="136.2; 63.1; 4.2; -69.9; -69.9; 4.2; 63.1; 136.2; 136.2"
                     keyTimes="0; 0.10; 0.26; 0.36; 0.46; 0.56; 0.72; 0.82; 1"
                     dur="9s" repeatCount="indefinite" additive="sum" calcMode="spline"
                     keySplines=".4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1; .4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1"/>
-                  <path d="M 0 0 L 0 -28"/>
-                  <circle cx="0" cy="0" r="2.2"/>
+                  <path d="M 0 0 L 0 -26"/>
+                  <circle cx="0" cy="0" r="2.4"/>
 
-                  <!-- gripper eases open only while the cube rests on the bench -->
-                  <g transform="translate(0 -28)">
-                    <path d="M -5 0 L 5 0"/>
-                    <!-- Base d is the closed pose: reduced motion switches the
-                         <animate> off, and without it the fingers had no d at
-                         all and vanished. -->
-                    <path d="M -3 0 L -3 6.5">
-                      <animate attributeName="d" dur="9s" repeatCount="indefinite"
-                        keyTimes="0; 0.38; 0.42; 0.44; 0.48; 1"
-                        values="M -3 0 L -3 6.5; M -3 0 L -3 6.5; M -6 0 L -6 6.5; M -6 0 L -6 6.5; M -3 0 L -3 6.5; M -3 0 L -3 6.5"/>
-                    </path>
-                    <path d="M 3 0 L 3 6.5">
-                      <animate attributeName="d" dur="9s" repeatCount="indefinite"
-                        keyTimes="0; 0.38; 0.42; 0.44; 0.48; 1"
-                        values="M 3 0 L 3 6.5; M 3 0 L 3 6.5; M 6 0 L 6 6.5; M 6 0 L 6 6.5; M 3 0 L 3 6.5; M 3 0 L 3 6.5"/>
-                    </path>
+                  <g transform="translate(0 -26)">
+                    <animateTransform attributeName="transform" type="rotate"
+                      values="-45.7; -8.5; -90.0; -106.9; -106.9; -90.0; -8.5; -45.7; -45.7"
+                      keyTimes="0; 0.10; 0.26; 0.36; 0.46; 0.56; 0.72; 0.82; 1"
+                      dur="9s" repeatCount="indefinite" additive="sum" calcMode="spline"
+                      keySplines=".4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1; .4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1"/>
+                    <path d="M 0 0 L 0 -28"/>
+                    <circle cx="0" cy="0" r="2.2"/>
+
+                    <!-- gripper eases open only while the cube rests on the bench -->
+                    <g transform="translate(0 -28)">
+                      <path d="M -5 0 L 5 0"/>
+                      <!-- Base d is the closed pose: reduced motion switches the
+                           <animate> off, and without it the fingers had no d at
+                           all and vanished. -->
+                      <path d="M -3 0 L -3 6.5">
+                        <animate attributeName="d" dur="9s" repeatCount="indefinite"
+                          keyTimes="0; 0.38; 0.42; 0.44; 0.48; 1"
+                          values="M -3 0 L -3 6.5; M -3 0 L -3 6.5; M -6 0 L -6 6.5; M -6 0 L -6 6.5; M -3 0 L -3 6.5; M -3 0 L -3 6.5"/>
+                      </path>
+                      <path d="M 3 0 L 3 6.5">
+                        <animate attributeName="d" dur="9s" repeatCount="indefinite"
+                          keyTimes="0; 0.38; 0.42; 0.44; 0.48; 1"
+                          values="M 3 0 L 3 6.5; M 3 0 L 3 6.5; M 6 0 L 6 6.5; M 6 0 L 6 6.5; M 3 0 L 3 6.5; M 3 0 L 3 6.5"/>
+                      </path>
+                    </g>
                   </g>
                 </g>
               </g>
             </g>
-          </g>
-        </svg>
-      </div>
-    </section>
-
-    <!-- ===== Stance =================================================
-         The thesis of the site, as one small figure. Two axes nobody gets
-         both of at once: industrial arms bought throughput by giving up
-         generality, learned policies the other way round. The dashed arrow
-         is the direction; the work itself is introduced in §01, not here.
-         Every mark draws with currentColor and takes its colour from
-         `color` on its group, so dark mode needs no second palette. -->
-    <section class="stance">
-      <div class="chart-scroll">
-        <svg class="chart" viewBox="0 0 560 300" role="img"
-             aria-label="Generality on the horizontal axis, throughput on the vertical. Industrial arms sit high and left, today's learned policies low and right, and generally useful robots high and right. A dashed arrow marks the direction of my work, from learned policies toward generally useful.">
-
-          <g class="c-axis" stroke="currentColor" fill="currentColor">
-            <path d="M 80 235 L 526 235" stroke-width="1.3" fill="none"/>
-            <path d="M 528 235 l -8 -4 l 0 8 z" stroke="none"/>
-            <path d="M 80 235 L 80 36" stroke-width="1.3" fill="none"/>
-            <path d="M 80 34 l -4 8 l 8 0 z" stroke="none"/>
-            <text x="304" y="268" text-anchor="middle" stroke="none">
-              <tspan class="lang-en">generality / flexibility</tspan><tspan class="lang-zh">通用性 / 灵活性</tspan>
-            </text>
-            <text x="56" y="134" text-anchor="middle" transform="rotate(-90 56 134)" stroke="none">
-              <tspan class="lang-en">throughput: speed + reliability</tspan><tspan class="lang-zh">吞吐：速度 + 可靠性</tspan>
-            </text>
-          </g>
-
-          <g class="c-dim" fill="currentColor">
-            <circle cx="170" cy="88" r="6.5"/>
-            <text x="170" y="66" text-anchor="middle">
-              <tspan class="lang-en">Industrial arms</tspan><tspan class="lang-zh">工业机械臂</tspan>
-            </text>
-            <circle cx="360" cy="196" r="6.5"/>
-            <text x="360" y="174" text-anchor="middle">
-              <tspan class="lang-en">Today&rsquo;s learned policies</tspan><tspan class="lang-zh">当前的学习型策略</tspan>
-            </text>
-          </g>
-
-          <g class="c-accent" fill="currentColor" stroke="currentColor">
-            <path d="M 372 182 Q 410 148 450 100" fill="none" stroke-width="1.8"
-                  stroke-linecap="round" stroke-dasharray="6 6"/>
-            <path d="M 456 92 l -2 9 l 8 -1.5 z" stroke="none"/>
-            <circle cx="462" cy="80" r="6.5" stroke="none"/>
-            <text x="462" y="58" text-anchor="middle" stroke="none">
-              <tspan class="lang-en">Generally useful</tspan><tspan class="lang-zh">通用且好用</tspan>
-            </text>
-            <text x="430" y="154" text-anchor="start" stroke="none" class="chart__note">
-              <tspan class="lang-en">my work</tspan><tspan class="lang-zh">我的方向</tspan>
-            </text>
-          </g>
-        </svg>
-      </div>
-
-      <div class="stance__side">
-        <h2 class="stance__label">
-          <span class="lang-en">The direction</span><span class="lang-zh">方向</span>
-        </h2>
-        <p class="stance__note">
-          <span class="lang-en">VLA models and large datasets push robots to the right. They do not, on their own, buy back the speed and reliability that contact demands. I work on the diagonal.</span>
-          <span class="lang-zh">VLA 与大数据主要把机器人往右推，却不会自动换回接触过程中所需的速度与可靠性。我做的是那条对角线上的事。</span>
-        </p>
-      </div>
+          </svg>
+        <figcaption>
+          <span class="lang-en"><b>What it runs on.</b> The arm policies get deployed on, and the quadrotor HOP is validated on. Joint angles are inverse-kinematics solved, so the gripper genuinely meets the cube.</span>
+          <span class="lang-zh"><b>这件事跑在什么上面。</b>策略部署其上的机械臂，以及验证 HOP 的四旋翼。关节角是解逆运动学得到的，所以夹爪是真的碰到方块。</span>
+        </figcaption>
+      </figure>
     </section>
 
     <!-- ===== §01 Research ============================================
