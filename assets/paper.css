@@ -1462,3 +1462,83 @@ html[data-lang="zh"] .chat__title { letter-spacing: .04em; }
   .dollar__btn, .dollar__btn.is-busy { transition: none; animation: none; }
   .chat__dots span { animation: none; opacity: .5; }
 }
+
+/* --------------------------------------------------------------------------
+   26. Stance — the site's thesis, as a figure
+   --------------------------------------------------------------------------
+   Head is a two-column masthead in the manner of the reference figures:
+   short title left, the reading of the chart right. Below it the chart runs
+   the full measure, then the four threads in two columns.
+   -------------------------------------------------------------------------- */
+.stance { margin-top: 72px; }
+
+.stance__head {
+  display: grid;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+  gap: 12px 40px;
+  align-items: start;
+  margin-bottom: 26px;
+}
+.stance__title {
+  font: 400 24px/1.2 var(--serif);
+  letter-spacing: -0.005em;
+  margin: 0;
+}
+.stance__note {
+  font: 400 14px/21px var(--mono);
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 62ch;
+}
+
+/* Every mark in the chart draws with currentColor, and `color` is set per
+   group below — so one palette covers light and dark with no second set of
+   values, exactly as the bio drawing does. */
+.chart { width: 100%; height: auto; display: block; }
+.chart text { font: 400 14px/1 var(--mono); }
+.chart .c-axis  { color: var(--ink-3); }
+.chart .c-axis text { font-size: 12px; letter-spacing: 0.04em; }
+.chart .c-dim   { color: var(--ink-2); }
+.chart .c-accent { color: var(--accent); }
+.chart .chart__note { font-size: 12px; letter-spacing: 0.06em; }
+
+/* Threads: the name in the accent, the claim in prose weight, the work that
+   carries it set quiet at the end of the line. */
+.threads {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 40px;
+  list-style: none;
+  margin: 34px 0 0;
+  padding: 0;
+}
+.threads li {
+  font: 400 14px/21px var(--mono);
+  color: var(--ink-2);
+  border-top: 1px solid var(--rule);
+  padding-top: 12px;
+}
+.threads b { display: block; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+.threads i {
+  display: block;
+  margin-top: 6px;
+  font-style: normal;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+html[data-lang="zh"] .threads li,
+html[data-lang="zh"] .stance__note { letter-spacing: 0; }
+html[data-lang="zh"] .threads li,
+html[data-lang="zh"] .stance__note { line-break: strict; overflow-wrap: anywhere; }
+
+@media (max-width: 720px) {
+  .stance { margin-top: 56px; }
+  .stance__head { grid-template-columns: 1fr; gap: 10px; }
+  /* Two columns of 40-character mono is unreadable on a phone. */
+  .threads { grid-template-columns: 1fr; gap: 18px; margin-top: 28px; }
+  /* The chart's labels are sized for the full measure; below it they would
+     fall under 9px, so let the figure scroll at its own legible width. */
+  .chart { min-width: 620px; }
+  .stance .chart-scroll { overflow-x: auto; }
+}

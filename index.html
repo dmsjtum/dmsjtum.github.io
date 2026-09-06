@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Miaomiao Dai 代淼淼</title>
-<meta name="description" content="MSR student at the University of Pennsylvania. Trajectory optimization and robot learning. RSS 2026.">
+<meta name="description" content="MSR student at the University of Pennsylvania. Robot learning and control: time-optimal control, differentiable planning, closed-loop action heads, tactile representation. RSS 2026.">
 <meta property="og:title" content="Miaomiao Dai 代淼淼">
-<meta property="og:description" content="Trajectory optimization and robot learning. RSS 2026. MSR at Penn.">
+<meta property="og:description" content="Where learning meets control — so robots keep the generality of learning and the agility of control. RSS 2026. MSR at Penn.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://dmsjtum.github.io/">
 <!-- Card art is the bio drawing, frozen. Source: assets/_og-card.html -->
@@ -84,36 +84,26 @@
              currently on screen, so toggling shows the other complete. -->
         <div class="lang-en bio__text">
           <p class="lede">
-            I am a Master of Science in Robotics student at the University of
-            Pennsylvania, interested in the space where optimal control meets
-            robot learning. Much of my work so far is in
-            trajectory optimization, on a question standard planners skip: how
-            long should a motion take? Conventional solvers fix the duration up
-            front and re-solve for every guess. My work makes that choice part
-            of the solve itself.
+            I work where learning meets control. Learned policies generalize;
+            classical control is fast, and it comes with guarantees. A robot
+            that is genuinely useful needs both &mdash; and I think the way
+            there is to let control theory shape what the black box learns,
+            rather than wrapping one around the other.
           </p>
           <p class="lede">
-            I also deploy vision-language-action models on real hardware, which
-            is a useful corrective. The distance between a clean theoretical
-            result and an arm that actually picks up the right object is where
-            most of the interesting problems turn out to live.
-          </p>
-          <p class="lede">
-            My current project asks whether measured touch can teach a visual
-            representation what vision alone does not: the model trains against
-            real pressure and force signals, then deploys with nothing but RGB.
+            I also put these policies on real hardware, which is a useful
+            corrective: the distance between a clean theoretical result and an
+            arm that picks up the right object is where most of the interesting
+            problems turn out to live.
           </p>
         </div>
 
         <div class="lang-zh bio__text">
           <p class="lede">
-            我目前在宾夕法尼亚大学攻读机器人学硕士（MSR），研究兴趣在最优控制与机器人学习的交界处。我目前的多数工作在轨迹优化上，关注的是大多数规划器会跳过的一个问题：一段运动究竟应该持续多久？传统求解器把时长当作提前给定的参数，每换一个猜测就要重解一次。我的工作把这个选择本身变成求解的一部分。
+            我的研究在学习与控制的交界处。学习出来的策略泛化得好，经典控制则快、而且带有保证。真正有用的机器人两者都要——我认为通向它的路，是让控制理论去塑造黑箱学到的东西，而不是把两者互相套一层壳。
           </p>
           <p class="lede">
-            我也在真实硬件上部署视觉-语言-动作模型。这件事很能治人：从一个干净的理论结果，到一条真的能把正确物体抓起来的机械臂，中间的距离才是大部分有意思的问题所在。
-          </p>
-          <p class="lede">
-            我目前的项目在问：实测的触觉能不能教会视觉表征一些仅靠视觉学不到的东西——训练时以真实的压力与力信号为监督，部署时只看 RGB。
+            我也把这些策略放到真实硬件上跑。这件事很治人：从一个干净的理论结果，到一条真能把正确物体抓起来的机械臂，中间的距离才是大部分有意思的问题所在。
           </p>
         </div>
 
@@ -290,6 +280,100 @@
           </g>
         </svg>
       </div>
+    </section>
+
+    <!-- ===== Stance =================================================
+         The thesis of the site, as a figure. Two axes nobody gets both of
+         at once: industrial arms bought throughput by giving up generality,
+         learned policies bought generality by giving up throughput. The
+         dashed arrow is the direction, and the four threads below are the
+         attack on it. Colours come from `color` on a group, so currentColor
+         resolves per group and dark mode needs no second palette. -->
+    <section class="stance">
+      <div class="stance__head">
+        <h2 class="stance__title">
+          <span class="lang-en">The direction</span><span class="lang-zh">方向</span>
+        </h2>
+        <p class="stance__note">
+          <span class="lang-en">VLA models and large datasets push robots to the right. They do not, on their own, buy back the speed and reliability that contact demands. I work on the diagonal.</span>
+          <span class="lang-zh">VLA 与大数据主要把机器人往右推，却不会自动换回接触过程中所需的速度与可靠性。我做的是那条对角线上的事。</span>
+        </p>
+      </div>
+
+      <div class="chart-scroll">
+      <svg class="chart" viewBox="0 0 860 380" role="img"
+           aria-label="Two axes: generality on the horizontal, throughput on the vertical. Industrial robots sit high and left, today's learned policies low and right, and generally useful robots high and right. A dashed arrow marks the direction of my work, from learned policies toward generally useful.">
+
+        <!-- axes -->
+        <g class="c-axis" stroke="currentColor" fill="currentColor">
+          <path d="M 120 300 L 806 300" stroke-width="1.4" fill="none"/>
+          <path d="M 806 300 l -9 -4.5 l 0 9 z" stroke="none"/>
+          <path d="M 120 300 L 120 44" stroke-width="1.4" fill="none"/>
+          <path d="M 120 44 l -4.5 9 l 9 0 z" stroke="none"/>
+          <text x="463" y="336" text-anchor="middle" stroke="none">
+            <tspan class="lang-en">generality / flexibility</tspan><tspan class="lang-zh">通用性 / 灵活性</tspan>
+          </text>
+          <text x="98" y="172" text-anchor="middle" transform="rotate(-90 98 172)" stroke="none">
+            <tspan class="lang-en">throughput: speed + reliability</tspan><tspan class="lang-zh">吞吐：速度 + 可靠性</tspan>
+          </text>
+        </g>
+
+        <!-- where things are today -->
+        <g class="c-dim" fill="currentColor">
+          <circle cx="250" cy="108" r="7.5"/>
+          <text x="250" y="84" text-anchor="middle">
+            <tspan class="lang-en">Industrial arms</tspan><tspan class="lang-zh">工业机械臂</tspan>
+          </text>
+
+          <circle cx="556" cy="248" r="7.5"/>
+          <text x="556" y="224" text-anchor="middle">
+            <tspan class="lang-en">Today&rsquo;s learned policies</tspan><tspan class="lang-zh">当前的学习型策略</tspan>
+          </text>
+        </g>
+
+        <!-- the target, and the way there -->
+        <g class="c-accent" fill="currentColor" stroke="currentColor">
+          <path d="M 566 232 Q 612 186 686 118" fill="none" stroke-width="2"
+                stroke-linecap="round" stroke-dasharray="7 7"/>
+          <path d="M 692 112 l -2.5 10.5 l 9 -2 z" stroke="none"/>
+          <circle cx="700" cy="100" r="7.5" stroke="none"/>
+          <text x="700" y="76" text-anchor="middle" stroke="none">
+            <tspan class="lang-en">Generally useful</tspan><tspan class="lang-zh">通用且好用</tspan>
+          </text>
+          <text x="586" y="170" text-anchor="end" stroke="none" class="chart__note">
+            <tspan class="lang-en">my work</tspan><tspan class="lang-zh">我的方向</tspan>
+          </text>
+        </g>
+      </svg>
+      </div>
+
+      <!-- The four threads, each tied to the work that carries it. -->
+      <ul class="threads">
+        <li>
+          <b><span class="lang-en">Time-optimal control</span><span class="lang-zh">时间最优控制</span></b>
+          <span class="lang-en">How long a motion should take, decided inside the solve rather than tuned by hand.</span>
+          <span class="lang-zh">一段运动该走多久，交给求解本身决定，而不是手工调出来。</span>
+          <i>HOP &middot; AL-HOP</i>
+        </li>
+        <li>
+          <b><span class="lang-en">Differentiable planning</span><span class="lang-zh">可微分规划</span></b>
+          <span class="lang-en">Every candidate horizon scored in one pass, so &ldquo;how far to look&rdquo; becomes something a policy can learn.</span>
+          <span class="lang-zh">一次扫描给出所有候选时域的代价，&ldquo;该看多远&rdquo;因此成为可以学的东西。</span>
+          <i>Diff-HOP</i>
+        </li>
+        <li>
+          <b><span class="lang-en">Closed-loop action heads</span><span class="lang-zh">闭环动作头</span></b>
+          <span class="lang-en">A generated action chunk runs open loop. Give it a reflex: how to recover when it drifts, and when to stop and re-ask.</span>
+          <span class="lang-zh">生成出来的动作块是开环执行的。给它一个反射：偏了怎么回来，偏到什么程度就别硬救、该重新问。</span>
+          <i>Flow2Funnel</i>
+        </li>
+        <li>
+          <b><span class="lang-en">Tactile representation</span><span class="lang-zh">触觉表征</span></b>
+          <span class="lang-en">Contact and load are physical structure vision alone never labels. Learn it from touch, then deploy RGB-only.</span>
+          <span class="lang-zh">接触与受力是仅靠视觉永远不会被标注的物理结构。用触觉学到它，部署时只看 RGB。</span>
+          <i>TWOT &middot; STA</i>
+        </li>
+      </ul>
     </section>
 
     <!-- ===== §01 News ================================================ -->
