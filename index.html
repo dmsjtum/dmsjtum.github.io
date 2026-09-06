@@ -56,10 +56,10 @@
       <span class="lang-en">Philadelphia, PA</span><span class="lang-zh">费城</span>
     </span>
     <nav class="nav" aria-label="Primary">
-      <a href="#news"><span class="lang-en">News</span><span class="lang-zh">近况</span></a>
       <a href="#publications"><span class="lang-en">Research</span><span class="lang-zh">研究</span></a>
       <a href="#projects"><span class="lang-en">Projects</span><span class="lang-zh">项目</span></a>
       <a href="#experience"><span class="lang-en">Record</span><span class="lang-zh">履历</span></a>
+      <a href="#news"><span class="lang-en">News</span><span class="lang-zh">近况</span></a>
       <a href="files/cv.pdf">CV</a>
       <button class="lang-toggle" data-lang-toggle type="button"><b>EN</b> / ZH</button>
     </nav>
@@ -283,15 +283,58 @@
     </section>
 
     <!-- ===== Stance =================================================
-         The thesis of the site, as a figure. Two axes nobody gets both of
-         at once: industrial arms bought throughput by giving up generality,
-         learned policies bought generality by giving up throughput. The
-         dashed arrow is the direction, and the four threads below are the
-         attack on it. Colours come from `color` on a group, so currentColor
-         resolves per group and dark mode needs no second palette. -->
+         The thesis of the site, as one small figure. Two axes nobody gets
+         both of at once: industrial arms bought throughput by giving up
+         generality, learned policies the other way round. The dashed arrow
+         is the direction; the work itself is introduced in §01, not here.
+         Every mark draws with currentColor and takes its colour from
+         `color` on its group, so dark mode needs no second palette. -->
     <section class="stance">
-      <div class="stance__head">
-        <h2 class="stance__title">
+      <div class="chart-scroll">
+        <svg class="chart" viewBox="0 0 560 300" role="img"
+             aria-label="Generality on the horizontal axis, throughput on the vertical. Industrial arms sit high and left, today's learned policies low and right, and generally useful robots high and right. A dashed arrow marks the direction of my work, from learned policies toward generally useful.">
+
+          <g class="c-axis" stroke="currentColor" fill="currentColor">
+            <path d="M 80 235 L 526 235" stroke-width="1.3" fill="none"/>
+            <path d="M 528 235 l -8 -4 l 0 8 z" stroke="none"/>
+            <path d="M 80 235 L 80 36" stroke-width="1.3" fill="none"/>
+            <path d="M 80 34 l -4 8 l 8 0 z" stroke="none"/>
+            <text x="304" y="268" text-anchor="middle" stroke="none">
+              <tspan class="lang-en">generality / flexibility</tspan><tspan class="lang-zh">通用性 / 灵活性</tspan>
+            </text>
+            <text x="56" y="134" text-anchor="middle" transform="rotate(-90 56 134)" stroke="none">
+              <tspan class="lang-en">throughput: speed + reliability</tspan><tspan class="lang-zh">吞吐：速度 + 可靠性</tspan>
+            </text>
+          </g>
+
+          <g class="c-dim" fill="currentColor">
+            <circle cx="170" cy="88" r="6.5"/>
+            <text x="170" y="66" text-anchor="middle">
+              <tspan class="lang-en">Industrial arms</tspan><tspan class="lang-zh">工业机械臂</tspan>
+            </text>
+            <circle cx="360" cy="196" r="6.5"/>
+            <text x="360" y="174" text-anchor="middle">
+              <tspan class="lang-en">Today&rsquo;s learned policies</tspan><tspan class="lang-zh">当前的学习型策略</tspan>
+            </text>
+          </g>
+
+          <g class="c-accent" fill="currentColor" stroke="currentColor">
+            <path d="M 372 182 Q 410 148 450 100" fill="none" stroke-width="1.8"
+                  stroke-linecap="round" stroke-dasharray="6 6"/>
+            <path d="M 456 92 l -2 9 l 8 -1.5 z" stroke="none"/>
+            <circle cx="462" cy="80" r="6.5" stroke="none"/>
+            <text x="462" y="58" text-anchor="middle" stroke="none">
+              <tspan class="lang-en">Generally useful</tspan><tspan class="lang-zh">通用且好用</tspan>
+            </text>
+            <text x="430" y="154" text-anchor="start" stroke="none" class="chart__note">
+              <tspan class="lang-en">my work</tspan><tspan class="lang-zh">我的方向</tspan>
+            </text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="stance__side">
+        <h2 class="stance__label">
           <span class="lang-en">The direction</span><span class="lang-zh">方向</span>
         </h2>
         <p class="stance__note">
@@ -299,187 +342,21 @@
           <span class="lang-zh">VLA 与大数据主要把机器人往右推，却不会自动换回接触过程中所需的速度与可靠性。我做的是那条对角线上的事。</span>
         </p>
       </div>
-
-      <div class="chart-scroll">
-      <svg class="chart" viewBox="0 0 860 380" role="img"
-           aria-label="Two axes: generality on the horizontal, throughput on the vertical. Industrial robots sit high and left, today's learned policies low and right, and generally useful robots high and right. A dashed arrow marks the direction of my work, from learned policies toward generally useful.">
-
-        <!-- axes -->
-        <g class="c-axis" stroke="currentColor" fill="currentColor">
-          <path d="M 120 300 L 806 300" stroke-width="1.4" fill="none"/>
-          <path d="M 806 300 l -9 -4.5 l 0 9 z" stroke="none"/>
-          <path d="M 120 300 L 120 44" stroke-width="1.4" fill="none"/>
-          <path d="M 120 44 l -4.5 9 l 9 0 z" stroke="none"/>
-          <text x="463" y="336" text-anchor="middle" stroke="none">
-            <tspan class="lang-en">generality / flexibility</tspan><tspan class="lang-zh">通用性 / 灵活性</tspan>
-          </text>
-          <text x="98" y="172" text-anchor="middle" transform="rotate(-90 98 172)" stroke="none">
-            <tspan class="lang-en">throughput: speed + reliability</tspan><tspan class="lang-zh">吞吐：速度 + 可靠性</tspan>
-          </text>
-        </g>
-
-        <!-- where things are today -->
-        <g class="c-dim" fill="currentColor">
-          <circle cx="250" cy="108" r="7.5"/>
-          <text x="250" y="84" text-anchor="middle">
-            <tspan class="lang-en">Industrial arms</tspan><tspan class="lang-zh">工业机械臂</tspan>
-          </text>
-
-          <circle cx="556" cy="248" r="7.5"/>
-          <text x="556" y="224" text-anchor="middle">
-            <tspan class="lang-en">Today&rsquo;s learned policies</tspan><tspan class="lang-zh">当前的学习型策略</tspan>
-          </text>
-        </g>
-
-        <!-- the target, and the way there -->
-        <g class="c-accent" fill="currentColor" stroke="currentColor">
-          <path d="M 566 232 Q 612 186 686 118" fill="none" stroke-width="2"
-                stroke-linecap="round" stroke-dasharray="7 7"/>
-          <path d="M 692 112 l -2.5 10.5 l 9 -2 z" stroke="none"/>
-          <circle cx="700" cy="100" r="7.5" stroke="none"/>
-          <text x="700" y="76" text-anchor="middle" stroke="none">
-            <tspan class="lang-en">Generally useful</tspan><tspan class="lang-zh">通用且好用</tspan>
-          </text>
-          <text x="586" y="170" text-anchor="end" stroke="none" class="chart__note">
-            <tspan class="lang-en">my work</tspan><tspan class="lang-zh">我的方向</tspan>
-          </text>
-        </g>
-      </svg>
-      </div>
-
-      <!-- The four threads, each tied to the work that carries it. -->
-      <ul class="threads">
-        <li>
-          <b><span class="lang-en">Time-optimal control</span><span class="lang-zh">时间最优控制</span></b>
-          <span class="lang-en">How long a motion should take, decided inside the solve rather than tuned by hand.</span>
-          <span class="lang-zh">一段运动该走多久，交给求解本身决定，而不是手工调出来。</span>
-          <i>HOP &middot; AL-HOP</i>
-        </li>
-        <li>
-          <b><span class="lang-en">Differentiable planning</span><span class="lang-zh">可微分规划</span></b>
-          <span class="lang-en">Every candidate horizon scored in one pass, so &ldquo;how far to look&rdquo; becomes something a policy can learn.</span>
-          <span class="lang-zh">一次扫描给出所有候选时域的代价，&ldquo;该看多远&rdquo;因此成为可以学的东西。</span>
-          <i>Diff-HOP</i>
-        </li>
-        <li>
-          <b><span class="lang-en">Closed-loop action heads</span><span class="lang-zh">闭环动作头</span></b>
-          <span class="lang-en">A generated action chunk runs open loop. Give it a reflex: how to recover when it drifts, and when to stop and re-ask.</span>
-          <span class="lang-zh">生成出来的动作块是开环执行的。给它一个反射：偏了怎么回来，偏到什么程度就别硬救、该重新问。</span>
-          <i>Flow2Funnel</i>
-        </li>
-        <li>
-          <b><span class="lang-en">Tactile representation</span><span class="lang-zh">触觉表征</span></b>
-          <span class="lang-en">Contact and load are physical structure vision alone never labels. Learn it from touch, then deploy RGB-only.</span>
-          <span class="lang-zh">接触与受力是仅靠视觉永远不会被标注的物理结构。用触觉学到它，部署时只看 RGB。</span>
-          <i>TWOT &middot; STA</i>
-        </li>
-      </ul>
     </section>
 
-    <!-- ===== §01 News ================================================ -->
-    <section class="section rail" id="news">
-      <div class="rail__mark">§01<span><span class="lang-en">News</span><span class="lang-zh">近况</span></span></div>
-      <div>
-        <ul class="timeline">
-
-          <li class="is-marked">
-            <a class="entry entry--lifted" href="project.html">
-              <div class="entry__head">
-                <h2 class="entry__title">
-                  <span class="lang-en">Presented HOP at RSS 2026, Sydney</span>
-                  <span class="lang-zh">在悉尼 RSS 2026 大会作报告</span>
-                </h2>
-                <span class="entry__date">
-                  <span class="lang-en">July 2026</span><span class="lang-zh">2026 年 7 月</span>
-                </span>
-              </div>
-              <p class="entry__desc">
-                <span class="lang-en">Gave the talk as an undergraduate first author.</span>
-                <span class="lang-zh">以本科生第一作者身份完成大会报告。</span>
-              </p>
-            </a>
-          </li>
-
-          <li>
-            <div class="entry">
-              <div class="entry__head">
-                <h2 class="entry__title">
-                  <span class="lang-en">Started the MSR program at Penn</span>
-                  <span class="lang-zh">入学宾夕法尼亚大学 MSR 项目</span>
-                </h2>
-                <span class="entry__date">
-                  <span class="lang-en">August 2026</span><span class="lang-zh">2026 年 8 月</span>
-                </span>
-              </div>
-              <p class="entry__desc">
-                <span class="lang-en">Master of Science in Robotics, Philadelphia.</span>
-                <span class="lang-zh">机器人学硕士，费城。</span>
-              </p>
-            </div>
-          </li>
-
-          <li>
-            <div class="entry">
-              <div class="entry__head">
-                <h2 class="entry__title">
-                  <span class="lang-en">Completed my B.E. thesis at SJTU</span>
-                  <span class="lang-zh">完成上海交大本科毕业设计</span>
-                </h2>
-                <span class="entry__date">
-                  <span class="lang-en">August 2026</span><span class="lang-zh">2026 年 8 月</span>
-                </span>
-              </div>
-              <p class="entry__desc">
-                <span class="lang-en">A voice-interactive closed-loop VLA system. I led a team of five.</span>
-                <span class="lang-zh">语音交互式闭环 VLA 系统，任五人小组组长。</span>
-              </p>
-            </div>
-          </li>
-
-          <li>
-            <div class="entry">
-              <div class="entry__head">
-                <h2 class="entry__title">
-                  <span class="lang-en">Started a new project: Touch Without Touch</span>
-                  <span class="lang-zh">启动新项目 Touch Without Touch</span>
-                </h2>
-                <span class="entry__date">
-                  <span class="lang-en">June 2026</span><span class="lang-zh">2026 年 6 月</span>
-                </span>
-              </div>
-              <p class="entry__desc">
-                <span class="lang-en">A preregistered controlled study of what measured touch can teach visual representations. Inference stays RGB-only.</span>
-                <span class="lang-zh">预注册的受控研究：实测触觉监督能教给视觉表征什么。推理只看 RGB。</span>
-              </p>
-            </div>
-          </li>
-
-          <li>
-            <div class="entry">
-              <div class="entry__head">
-                <h2 class="entry__title">
-                  <span class="lang-en">B.S.E. in Computer Science, University of Michigan</span>
-                  <span class="lang-zh">密歇根大学计算机科学学士毕业</span>
-                </h2>
-                <span class="entry__date">
-                  <span class="lang-en">May 2026</span><span class="lang-zh">2026 年 5 月</span>
-                </span>
-              </div>
-            </div>
-          </li>
-
-        </ul>
-      </div>
-    </section>
-
-    <!-- ===== §02 Research ============================================
+    <!-- ===== §01 Research ============================================
          Published, submitted, and in-progress work, in that order. Bold
          marks me in an author list. Unpublished entries are deliberately
          high level: no thresholds, no dataset inventory, no target venue
          until the paper is out. -->
     <section class="section rail" id="publications">
-      <div class="rail__mark">§02<span><span class="lang-en">Research</span><span class="lang-zh">研究</span></span></div>
+      <div class="rail__mark">§01<span><span class="lang-en">Research</span><span class="lang-zh">研究</span></span></div>
       <div>
+
+        <p class="section-intro">
+          <span class="lang-en">Three threads: how long a motion should take, how a generated action chunk recovers when it drifts, and what touch can teach a representation that vision alone cannot.</span>
+          <span class="lang-zh">三条线索：一段运动该走多久；生成出来的动作块偏了之后怎么回来；触觉能教给表征什么仅靠视觉学不到的东西。</span>
+        </p>
 
         <div class="pub">
           <div class="pub__card">
@@ -615,15 +492,43 @@
           </div>
         </div>
 
+
+        <div class="pub">
+          <div class="pub__card">
+            <h2 class="pub__title"><a href="flow2funnel.html">Flow2Funnel: Feedback-Complete Action Heads for Vision&ndash;Language&ndash;Action Policies</a></h2>
+            <p class="pub__venue">
+              <span class="lang-en">Research proposal &middot; 2026 &mdash;</span>
+              <span class="lang-zh">研究提案 &middot; 2026 &mdash;</span>
+            </p>
+            <p class="pub__role">
+              <span class="lang-en">Solo &middot; looking for an advisor</span>
+              <span class="lang-zh">独立进行 &middot; 正在寻找导师</span>
+            </p>
+          </div>
+          <div class="pub__body">
+          <div>
+            <ul class="pub__points lang-en">
+              <li><b>Question.</b> A policy commits to a whole <b>chunk</b> of actions and runs it blind. What happens in between &mdash; and when is a feedback layer inside the chunk worth anything?</li>
+              <li><b>Approach.</b> A small head compiles the sampled chunk into a <b>feedback funnel</b> &mdash; a control law plus a region it is certified to hold &mdash; on a backbone that stays frozen. It is allowed to decline.</li>
+              <li><b>Rigor.</b> A promising result of mine failed to replicate on the sealed split. <b>Reported as a null; the criterion did not move.</b></li>
+            </ul>
+            <ul class="pub__points lang-zh">
+              <li><b>问题：</b>策略一次定下一整<b>块</b>动作，然后闭着眼睛跑完。中间发生了什么——块内的反馈层，到底什么时候才值一分钱？</li>
+              <li><b>做法：</b>一个很小的头把动作块编译成<b>反馈漏斗</b>——一个控制律，加上一个它被认证能守住的区域——主干始终冻结。它被允许拒绝。</li>
+              <li><b>严谨性：</b>我自己一个看好的结果在封存划分上没有复现。<b>如实报了零结果；判据没有动。</b></li>
+            </ul>
+          </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- ===== §03 Projects ============================================
+    <!-- ===== §02 Projects ============================================
          Built systems, as distinct from the research programme in §02.
          The B.E. thesis lives here rather than under Research: it is an
          engineered system with a demo reel, not a paper. -->
     <section class="section rail" id="projects">
-      <div class="rail__mark">§03<span><span class="lang-en">Projects</span><span class="lang-zh">项目</span></span></div>
+      <div class="rail__mark">§02<span><span class="lang-en">Projects</span><span class="lang-zh">项目</span></span></div>
       <div>
 
         <div class="pub pub--project pub--reel">
@@ -674,9 +579,9 @@
       </div>
     </section>
 
-    <!-- ===== §04 Record ============================================== -->
+    <!-- ===== §03 Record ============================================== -->
     <section class="section rail" id="experience">
-      <div class="rail__mark">§04<span><span class="lang-en">Record</span><span class="lang-zh">履历</span></span></div>
+      <div class="rail__mark">§03<span><span class="lang-en">Record</span><span class="lang-zh">履历</span></span></div>
       <div>
 
         <h2 class="eyebrow"><span class="lang-en">Education</span><span class="lang-zh">教育背景</span></h2>
@@ -731,6 +636,102 @@
           </li>
         </ul>
 
+      </div>
+    </section>
+
+    <!-- ===== §04 News ================================================ -->
+    <section class="section rail" id="news">
+      <div class="rail__mark">§04<span><span class="lang-en">News</span><span class="lang-zh">近况</span></span></div>
+      <div>
+        <ul class="timeline">
+
+          <li class="is-marked">
+            <a class="entry entry--lifted" href="project.html">
+              <div class="entry__head">
+                <h2 class="entry__title">
+                  <span class="lang-en">Presented HOP at RSS 2026, Sydney</span>
+                  <span class="lang-zh">在悉尼 RSS 2026 大会作报告</span>
+                </h2>
+                <span class="entry__date">
+                  <span class="lang-en">July 2026</span><span class="lang-zh">2026 年 7 月</span>
+                </span>
+              </div>
+              <p class="entry__desc">
+                <span class="lang-en">Gave the talk as an undergraduate first author.</span>
+                <span class="lang-zh">以本科生第一作者身份完成大会报告。</span>
+              </p>
+            </a>
+          </li>
+
+          <li>
+            <div class="entry">
+              <div class="entry__head">
+                <h2 class="entry__title">
+                  <span class="lang-en">Started the MSR program at Penn</span>
+                  <span class="lang-zh">入学宾夕法尼亚大学 MSR 项目</span>
+                </h2>
+                <span class="entry__date">
+                  <span class="lang-en">August 2026</span><span class="lang-zh">2026 年 8 月</span>
+                </span>
+              </div>
+              <p class="entry__desc">
+                <span class="lang-en">Master of Science in Robotics, Philadelphia.</span>
+                <span class="lang-zh">机器人学硕士，费城。</span>
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div class="entry">
+              <div class="entry__head">
+                <h2 class="entry__title">
+                  <span class="lang-en">Completed my B.E. thesis at SJTU</span>
+                  <span class="lang-zh">完成上海交大本科毕业设计</span>
+                </h2>
+                <span class="entry__date">
+                  <span class="lang-en">August 2026</span><span class="lang-zh">2026 年 8 月</span>
+                </span>
+              </div>
+              <p class="entry__desc">
+                <span class="lang-en">A voice-interactive closed-loop VLA system. I led a team of five.</span>
+                <span class="lang-zh">语音交互式闭环 VLA 系统，任五人小组组长。</span>
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div class="entry">
+              <div class="entry__head">
+                <h2 class="entry__title">
+                  <span class="lang-en">Started a new project: Touch Without Touch</span>
+                  <span class="lang-zh">启动新项目 Touch Without Touch</span>
+                </h2>
+                <span class="entry__date">
+                  <span class="lang-en">June 2026</span><span class="lang-zh">2026 年 6 月</span>
+                </span>
+              </div>
+              <p class="entry__desc">
+                <span class="lang-en">A preregistered controlled study of what measured touch can teach visual representations. Inference stays RGB-only.</span>
+                <span class="lang-zh">预注册的受控研究：实测触觉监督能教给视觉表征什么。推理只看 RGB。</span>
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div class="entry">
+              <div class="entry__head">
+                <h2 class="entry__title">
+                  <span class="lang-en">B.S.E. in Computer Science, University of Michigan</span>
+                  <span class="lang-zh">密歇根大学计算机科学学士毕业</span>
+                </h2>
+                <span class="entry__date">
+                  <span class="lang-en">May 2026</span><span class="lang-zh">2026 年 5 月</span>
+                </span>
+              </div>
+            </div>
+          </li>
+
+        </ul>
       </div>
     </section>
 
