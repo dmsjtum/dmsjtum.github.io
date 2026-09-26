@@ -396,12 +396,12 @@
     <div>
       <div class="research-summary">
 <ul class="research-points lang-en">
-  <li><b>Idea.</b> Select the horizon while respecting state, control, and obstacle constraints.</li>
+  <li><b>Idea.</b> <b>AL-HOP</b> extends HOP to hard state, control, and obstacle constraints, alternating horizon selection on an augmented-Lagrangian LQ model with trajectory optimization.</li>
   <li><b>Validity.</b> Across 100 problems from 10 systems, each run 5 times, replay pass rates are <b>AL-HOP 100%</b>, ALTRO 79.8%, DIRCOL/IPOPT 79.8%, and DIRCOL/SNOPT 70%.</li>
   <li><b>Speed &amp; quality.</b> Up to <b>4× faster on average</b> than common baselines, while finding trajectories with <b>comparable costs</b>.</li>
 </ul>
 <ul class="research-points lang-zh">
-  <li><b>思路：</b>在满足状态、控制与障碍约束的同时选择视界。</li>
+  <li><b>思路：</b><b>AL-HOP</b> 把 HOP 推广到状态、控制与障碍物硬约束：在增广拉格朗日 LQ 模型上选择视界，并与轨迹优化交替进行。</li>
   <li><b>有效性：</b>10 类系统、100 个问题各运行 5 次，非线性回放通过率为 <b>AL-HOP 100%</b>，ALTRO 79.8%，DIRCOL/IPOPT 79.8%，DIRCOL/SNOPT 70%。</li>
   <li><b>速度与质量：</b>相较常用基线，<b>平均加速比最高达 4 倍</b>，同时获得<b>代价相当的轨迹</b>。</li>
 </ul>
@@ -487,14 +487,14 @@
           </div>
           <div class="pub__body">
             <ul class="pub__points lang-en">
-              <li><b>π<sub>0.5</sub> on real hardware.</b> Collected <b>316 demonstrations</b> across 11 tabletop tasks, fine-tuned π<sub>0.5</sub>, and <b>deployed it on a real SO-101 arm</b>—from data collection to policy execution.</li>
-              <li><b>Speech recognition.</b> Integrated Qwen-Omni ASR with visual grounding to turn <b>spoken requests into task instructions</b> for π<sub>0.5</sub> and the robot arm.</li>
-              <li><b>Toward closed-loop execution.</b> Added <b>visual checks of progress and task completion</b>, with stopping, re-observation, and bounded retries to bring feedback around the policy’s open-loop action chunks.</li>
+              <li><b>π<sub>0.5</sub> on real hardware.</b> Collected <b>316 demonstrations</b> across 11 tabletop tasks, fine-tuned π<sub>0.5</sub> (LoRA on the 2B vision–language backbone, full 300M action expert), and <b>deployed it on a real SO-101 arm</b>.</li>
+              <li><b>Speech recognition.</b> Integrated Qwen-Omni ASR with visual grounding to turn <b>spoken requests into task instructions</b>.</li>
+              <li><b>Toward closed-loop execution.</b> Added <b>visual checks of progress and task completion</b> (terminal-verification F<sub>1</sub> <b>0.842</b>) with stop, re-observation, and bounded retries; the full system reached <b>70%</b> end-to-end success.</li>
             </ul>
             <ul class="pub__points lang-zh">
-              <li><b>π<sub>0.5</sub> 实机部署：</b>采集 11 类桌面任务的 <b>316 条演示</b>，完成 π<sub>0.5</sub> 微调与 <b>SO-101 机械臂实机部署</b>，打通数据采集、训练到策略执行的完整流程。</li>
-              <li><b>语音识别：</b>接入 Qwen-Omni 语音识别，结合现场图像确定操作目标，将<b>口头指令转为 π<sub>0.5</sub> 的任务指令</b>，驱动机械臂执行。</li>
-              <li><b>闭环探索：</b>加入<b>进度与任务完成状态的视觉核验</b>，通过停止、重新观测和有限次重试，为策略的开环动作块补充执行反馈。</li>
+              <li><b>π<sub>0.5</sub> 实机部署：</b>采集 11 类桌面任务的 <b>316 条演示</b>，微调 π<sub>0.5</sub>（2B 视觉–语言主干 LoRA，300M 动作专家全量训练），并<b>部署到真实 SO-101 机械臂</b>。</li>
+              <li><b>语音识别：</b>接入 Qwen-Omni 语音识别并结合视觉定位，把<b>口头请求转成任务指令</b>。</li>
+              <li><b>闭环探索：</b>加入<b>进度与任务完成状态的视觉核验</b>（终态核验 F<sub>1</sub> <b>0.842</b>），支持停止、重新观测与有限次重试；完整系统端到端成功率 <b>70%</b>。</li>
             </ul>
           </div>
         </div>
