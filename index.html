@@ -415,7 +415,10 @@
 </article>
 
 <!-- ICLR 2027 entry, double-blind until the December 2026 decision:
-     descriptive heading and the idea only; no method details. -->
+     descriptive heading, motivation and the three-stage architecture only.
+     No method details (encoders, objectives, training recipe), no title,
+     method name, co-authors or numbers. The figure is the paper's overview
+     with the method-name wordmark removed. -->
 <article class="pub research-preview">
   <div class="pub__card">
     <h2 class="pub__title">Transferring Physical Supervision to Latent-Action VLA Pretraining</h2>
@@ -426,16 +429,23 @@
     <div>
       <div class="research-summary">
 <ul class="research-points lang-en">
-  <li><b>Question.</b> Latent-action pretraining lets a VLA learn from video with no action labels, but its targets come from visual change, so contact and force are supervised only indirectly &mdash; and touch, pressure, and torque sensors cover only a small slice of human and robot video.</li>
-  <li><b>Idea.</b> Learn physical supervision from the <b>small set of interactions recorded with touch, pressure, or torque sensors</b>, then carry it to ordinary human and robot video for pretraining. <b>No tactile or torque sensing at deployment.</b></li>
+  <li><b>Motivation.</b> Latent-action pretraining lets a VLA learn from video without action labels, but its targets come from visual change. Motions that look alike can hide different contact and force, so physical interaction is supervised only indirectly &mdash; and the sensors that measure it directly cover only a <b>small slice of human and robot video</b>.</li>
+  <li><b>Architecture.</b> Three stages. A small set of human and robot interactions recorded with pressure, tactile, and torque sensors defines <b>shared physical targets</b>; a transfer model <b>infers those targets from RGB</b> for ordinary human and robot video; during pretraining, <b>visual prediction and the inferred physical targets supervise the same latent actions</b>. The deployed policy needs no tactile or torque sensing.</li>
   <li><b>Evidence.</b> Outperforms VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and on every SimplerEnv task group; on five real-world manipulation tasks it beats both VLA-JEPA and &pi;<sub>0.5</sub> <b>on every task</b>.</li>
 </ul>
 <ul class="research-points lang-zh">
-  <li><b>问题：</b>隐动作预训练让 VLA 能从没有动作标签的视频里学习，但监督信号来自画面变化，接触与受力只被间接约束；而触觉、压力、力矩传感器只覆盖了人类与机器人视频里很小的一部分。</li>
-  <li><b>思路：</b>从<b>少量带触觉、压力或力矩测量的交互</b>中学到物理监督，再把它迁移到普通的人类与机器人视频上用于预训练。<b>部署时不需要任何触觉或力矩传感。</b></li>
+  <li><b>动机：</b>隐动作预训练让 VLA 能从没有动作标签的视频里学习，但监督信号来自画面变化：看起来相似的动作，接触与受力可能完全不同，物理交互因此只被间接约束；而能直接测量它的传感器，只覆盖了<b>人类与机器人视频里很小的一部分</b>。</li>
+  <li><b>架构：</b>分三步。先用少量带压力、触觉、力矩传感器的人类与机器人交互，定义<b>共享的物理目标</b>；再由迁移模型<b>只凭 RGB 推断</b>这些目标，覆盖普通的人类与机器人视频；预训练时，<b>视觉预测与推断出的物理目标共同监督同一组隐动作</b>。部署时不需要任何触觉或力矩传感。</li>
   <li><b>证据：</b>在 LIBERO 以及 SimplerEnv 的全部任务组上超过所比较的最强隐动作基线 VLA-JEPA；五个真实世界操作任务上，<b>每一项</b>都高于 VLA-JEPA 与 &pi;<sub>0.5</sub>。</li>
 </ul>
 </div>
+      <figure class="figure research-wide">
+        <a href="assets/pub-physical-supervision.png"><img src="assets/pub-physical-supervision.png" alt="Overview: human videos without action labels and robot videos with action labels; a small instrumented set with pressure, tactile, and torque measurements defines shared physical targets; a causal transfer step infers these targets for uninstrumented video; visual prediction and physical supervision jointly ground the latent actions; evaluated in simulation and in the real world with no tactile or torque sensing at deployment." width="1600" height="759" loading="lazy"></a>
+        <figcaption>
+          <span class="lang-en"><b>Architecture.</b> Sensor-instrumented interactions define shared physical targets (top); a transfer model infers them from RGB for video with no sensor data (middle); visual prediction and the inferred targets jointly supervise latent actions during pretraining (bottom).</span>
+          <span class="lang-zh"><b>架构。</b>带传感器的交互定义共享的物理目标（上）；迁移模型只凭 RGB，为没有传感器数据的视频推断这些目标（中）；预训练时，视觉预测与推断出的目标共同监督隐动作（下）。</span>
+        </figcaption>
+      </figure>
     </div>
   </div>
 </article>
@@ -499,30 +509,6 @@
     <section class="section rail" id="proposals">
       <div class="rail__mark">§03<span><span class="lang-en">Proposal Ideas</span><span class="lang-zh">研究构想</span></span></div>
       <div>
-
-        <div class="pub pub--proposal">
-          <div class="pub__card">
-            <h2 class="pub__title">Touch Without Touch: Measured-Touch Supervision for Visual Representations</h2>
-            <p class="pub__venue">
-              <span class="lang-en">Personal research idea · 2026 —</span>
-              <span class="lang-zh">个人研究构想 · 2026 —</span>
-            </p>
-          </div>
-          <div class="pub__body">
-          <div>
-            <ul class="pub__points lang-en">
-              <li><b>Question.</b> Can measured pressure, force, and contact teach a visual representation what visual self-supervision alone does not?</li>
-              <li><b>System.</b> JEPA-style latent prediction over five heterogeneous touch datasets; deployment stays <b>RGB-only</b>, no tactile sensor.</li>
-              <li><b>Rigor.</b> Every comparison and falsification criterion <b>preregistered before training</b>.</li>
-            </ul>
-            <ul class="pub__points lang-zh">
-              <li><b>问题：</b>实测的压力、力与接触，能否教会视觉表征仅靠视觉自监督学不到的东西？</li>
-              <li><b>系统：</b>JEPA 式潜空间预测，统一五个异构触觉数据集；部署时<b>只看 RGB</b>，无需触觉传感器。</li>
-              <li><b>严谨性：</b>所有对照与证伪判据均在<b>训练开始前预注册</b>。</li>
-            </ul>
-          </div>
-          </div>
-        </div>
 
         <div class="pub pub--proposal">
           <div class="pub__card">
@@ -685,24 +671,6 @@
               <p class="entry__desc">
                 <span class="lang-en">A voice-interactive closed-loop VLA system. I led a team of five.</span>
                 <span class="lang-zh">语音交互式闭环 VLA 系统，任五人小组组长。</span>
-              </p>
-            </div>
-          </li>
-
-          <li>
-            <div class="entry">
-              <div class="entry__head">
-                <h2 class="entry__title">
-                  <span class="lang-en">Started a new project: Touch Without Touch</span>
-                  <span class="lang-zh">启动新项目 Touch Without Touch</span>
-                </h2>
-                <span class="entry__date">
-                  <span class="lang-en">June 2026</span><span class="lang-zh">2026 年 6 月</span>
-                </span>
-              </div>
-              <p class="entry__desc">
-                <span class="lang-en">A preregistered controlled study of what measured touch can teach visual representations. Inference stays RGB-only.</span>
-                <span class="lang-zh">预注册的受控研究：实测触觉监督能教给视觉表征什么。推理只看 RGB。</span>
               </p>
             </div>
           </li>

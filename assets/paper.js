@@ -283,7 +283,7 @@
     var CHIPS = [
       ["What is HOP, in one paragraph?", "HOP 用一段话讲是什么？"],
       ["How does AL-HOP compare to ALTRO?", "AL-HOP 和 ALTRO 比结果如何？"],
-      ["What is Touch Without Touch?", "Touch Without Touch 在做什么？"],
+      ["What is the ICLR 2027 paper about?", "ICLR 2027 那篇论文讲什么？"],
       ["What robot learning experience?", "有哪些 robot learning 经历？"]
     ];
 

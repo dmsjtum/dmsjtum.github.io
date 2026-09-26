@@ -51,23 +51,6 @@ that keeps the one-sweep horizon prediction.
 • Produced solutions valid under the full nonlinear dynamics on 100/100 benchmark problems across 10 dynamical
 systems, vs. 79, 71, and 55 for ALTRO and direct collocation (IPOPT, SNOPT); where both were valid, baselines needed
 1.6–3.1× the solve time.
-Touch Without Touch: Measured-Touch Supervision for Visual Representations
-Independent research · personal idea
-
-Jun 2026 – present
-
-• Asks whether paired, measured touch — pressure, force, contact — can teach an RGB representation physical-interaction
-
-structure that visual self-supervision alone does not; inference stays strictly RGB-only at deployment.
-
-• Preregistered the protocol before training: controlled comparisons isolating pairing correctness, sensor fidelity, and
-
-how touch enters the model, each with falsification criteria frozen in advance and evaluated by zero-shot human-to-robot
-transfer.
-• Built the training stack: JEPA-style latent prediction with an EMA teacher over frozen visual and tactile features; unified
-five heterogeneous touch datasets (human hand pressure, tactile arrays, GelSight imagery, force–torque) into one pipeline
-running across a local RTX 5090 and a multi-GPU A100 server.
-
 Transferring Physical Supervision to Latent-Action VLA Pretraining
 Second author · under double-blind review at ICLR 2027
 
@@ -79,8 +62,7 @@ slice of human and robot video. Physical supervision is learned from that small 
 ordinary human and robot video for pretraining — no tactile or torque sensing at deployment.
 • Outperforms VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and every SimplerEnv task group, and
 beats both VLA-JEPA and π0.5 on each of five real-world manipulation tasks.
-
-Voice-Interactive Closed-Loop VLA Manipulation (B.E. thesis)
+Voice-Interactive Closed-Loop VLA Manipulation (B.E. thesis)
 Feb 2026 – Aug 2026
 Advisors: Prof. Hesheng Wang & Prof. Yunlong Guo, Shanghai Jiao Tong University · group leader, team of 5
 • Collected and trained on real robot data: teleoperated 316 episodes across 11 tabletop tasks on a low-cost SO-101,
@@ -94,7 +76,7 @@ rate visual supervisor over progress and terminal state that triggers stop, retu
 • Reached 70% end-to-end success over 11 tasks (85% pick, 75% placement) with zero safety incidents; unseen object–target
 compositions are reported separately as an open condition, and built the voice-interaction and monitoring interface.
 
-Honors & Awards
+Honors & Awards
 James B. Angell Scholar, University of Michigan
 University Honors, University of Michigan (3 terms)
 Dean’s List, University of Michigan (3 terms)
