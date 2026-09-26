@@ -82,8 +82,8 @@
   </tbody>
 </table>
 </div>
-<p class="lang-en"><b>Speed and quality.</b> As summarized in the paper's abstract, AL-HOP runs up to <b>4 times faster on average</b> than popular baselines while finding solutions with <b>similar costs</b>.</p>
-<p class="lang-zh"><b>速度与质量。</b>论文摘要报告，相较常用基线，AL-HOP 的<b>平均加速比最高达 4 倍</b>，同时获得<b>代价相当的解</b>。</p></section><section class="research-section"><h2><span class="lang-en">A local solver, with explicit checks</span><span class="lang-zh">带有显式验证的局部求解器</span></h2>
+<p class="lang-en"><b>Speed and quality.</b> On the problems both methods solve, AL-HOP is <b>2.39×, 4.76×, and 3.34× faster</b> than ALTRO, DIRCOL/IPOPT, and DIRCOL/SNOPT, while finding solutions with <b>similar costs</b>.</p>
+<p class="lang-zh"><b>速度与质量。</b>在双方都有效的问题上，AL-HOP 比 ALTRO、DIRCOL/IPOPT、DIRCOL/SNOPT 分别<b>快 2.39、4.76、3.34 倍</b>，同时获得<b>代价相当的解</b>。</p></section><section class="research-section"><h2><span class="lang-en">A local solver, with explicit checks</span><span class="lang-zh">带有显式验证的局部求解器</span></h2>
 <figure class="figure"><img src="assets/pub-alhop-car-escape.png" alt="Car-escape trajectories from AL-HOP and the comparison solvers" width="2030" height="1800" loading="lazy"><figcaption><span class="lang-en">A car-escape example from the manuscript illustrates horizon selection around obstacles. The repeated benchmark above measures performance across the full task set.</span><span class="lang-zh">论文中的汽车脱困示例展示了障碍环境下的视界选择；上表的重复评测则覆盖完整任务集。</span></figcaption></figure><p class="lang-en">AL-HOP remains a local nonlinear method. Validation checks the discretized trajectory under nonlinear replay, not continuous-time collision freedom between every pair of knots. The measured comparisons concern complete solvers with different discretizations and solver designs; the results should be read within that benchmark scope.</p>
 <p class="lang-zh">AL-HOP 仍是局部非线性方法。验证检查离散轨迹的非线性回放，并不保证任意两个离散节点之间的连续时间无碰撞。对照比较的是采用不同离散化与求解设计的完整求解器，结果应在该基准范围内理解。</p></section></div>
 <p class="research-return"><a href="index.html#publications"><span class="lang-en">← Back to all research</span><span class="lang-zh">← 返回全部研究</span></a></p>

@@ -397,13 +397,13 @@
       <div class="research-summary">
 <ul class="research-points lang-en">
   <li><b>Idea.</b> <b>AL-HOP</b> extends HOP to hard state, control, and obstacle constraints, alternating horizon selection on an augmented-Lagrangian LQ model with trajectory optimization.</li>
-  <li><b>Validity.</b> Across 100 problems from 10 systems, each run 5 times, replay pass rates are <b>AL-HOP 100%</b>, ALTRO 79.8%, DIRCOL/IPOPT 79.8%, and DIRCOL/SNOPT 70%.</li>
-  <li><b>Speed &amp; quality.</b> Up to <b>4× faster on average</b> than common baselines, while finding trajectories with <b>comparable costs</b>.</li>
+  <li><b>Validity.</b> Valid on <b>100%</b> of 500 runs (100 problems, 10 systems, 5 runs each), vs. 79.8% for ALTRO and DIRCOL/IPOPT and 70% for DIRCOL/SNOPT.</li>
+  <li><b>Speed &amp; quality.</b> <b>2.4–4.8× faster</b> than ALTRO, IPOPT, and SNOPT on problems both solve, at <b>comparable cost</b>.</li>
 </ul>
 <ul class="research-points lang-zh">
   <li><b>思路：</b><b>AL-HOP</b> 把 HOP 推广到状态、控制与障碍物硬约束：在增广拉格朗日 LQ 模型上选择视界，并与轨迹优化交替进行。</li>
-  <li><b>有效性：</b>10 类系统、100 个问题各运行 5 次，非线性回放通过率为 <b>AL-HOP 100%</b>，ALTRO 79.8%，DIRCOL/IPOPT 79.8%，DIRCOL/SNOPT 70%。</li>
-  <li><b>速度与质量：</b>相较常用基线，<b>平均加速比最高达 4 倍</b>，同时获得<b>代价相当的轨迹</b>。</li>
+  <li><b>有效性：</b>10 类系统、100 个问题各运行 5 次，500 次<b>全部有效</b>；ALTRO 与 DIRCOL/IPOPT 为 79.8%，DIRCOL/SNOPT 为 70%。</li>
+  <li><b>速度与质量：</b>在双方都有效的问题上，比 ALTRO、IPOPT、SNOPT <b>快 2.4–4.8 倍</b>，<b>代价相当</b>。</li>
 </ul>
 </div>
       <ul class="pub__links"><li><a href="al-hop.html"><span class="lang-en">Read the research →</span><span class="lang-zh">阅读研究详情 →</span></a></li></ul>

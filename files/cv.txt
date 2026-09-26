@@ -46,8 +46,8 @@ Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · first-author man
 • Proposed AL-HOP, extending HOP to hard state, control, and obstacle constraints: it alternates horizon selection on an
 
 augmented-Lagrangian LQ model with trajectory optimization, perturbing the horizon to escape local minima.
-• Returned valid trajectories on 100% of 500 runs (100 problems across 10 systems), vs. 79.8%, 79.8%, and 70% for
-ALTRO and direct collocation with IPOPT and SNOPT; up to 4× faster on average at comparable cost.
+• Valid on 100% of 500 runs (100 problems across 10 systems) vs. 79.8%, 79.8%, and 70% for ALTRO and direct collocation
+with IPOPT and SNOPT, and 2.4–4.8× faster on problems both solved, at comparable cost.
 
 PhysLA: Transferring Physical Supervision to Latent-Action VLA Pretraining
 Researcher, Shanghai Jiao Tong University · second author, under review at ICLR 2027
