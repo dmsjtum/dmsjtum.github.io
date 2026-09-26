@@ -1,6 +1,6 @@
 Miaomiao Dai
 
-Ann Arbor, MI · dmmsjtu@umich.edu · Personal website: dmsjtum.github.io
+Philadelphia, PA · dmmsjtu@engineering.upenn.edu · Personal website: dmsjtum.github.io
 
 Education
 University of Pennsylvania
@@ -26,8 +26,8 @@ Publications
 Robotics: Science and Systems (RSS), 2026.
 [2] Miaomiao Dai, Zhongqiang Ren. “AL-HOP: Augmented-Lagrangian Horizon-Optimal Planning for Fast Constrained
 Trajectory Optimization.” In submission to IEEE International Conference on Robotics and Automation (ICRA), 2027.
-[3] Physical supervision for latent-action VLA pretraining (title and author list withheld during double-blind review). Under
-review at ICLR 2027; second author.
+[3] PhysLA: physical supervision for latent-action VLA pretraining (full title and author list withheld during double-blind
+review). Under review at ICLR 2027; second author.
 
 Research Experience
 HOP: Horizon-Optimal Trajectory Planning
@@ -51,7 +51,7 @@ that keeps the one-sweep horizon prediction.
 • Produced solutions valid under the full nonlinear dynamics on 100/100 benchmark problems across 10 dynamical
 systems, vs. 79, 71, and 55 for ALTRO and direct collocation (IPOPT, SNOPT); where both were valid, baselines needed
 1.6–3.1× the solve time.
-Transferring Physical Supervision to Latent-Action VLA Pretraining
+PhysLA: Transferring Physical Supervision to Latent-Action VLA Pretraining
 Second author · under double-blind review at ICLR 2027
 
 Aug 2026 – present
