@@ -368,14 +368,14 @@
     <div>
       <div class="research-summary">
 <ul class="research-points lang-en">
-  <li><b>Idea.</b> <b>HOP</b>, a new algorithm that gives LQR and DDP a <b>horizon-optimal</b> counterpart: where they fix the planning horizon in advance, HOP optimizes the trajectory and its horizon together.</li>
-  <li><b>Method.</b> Rewriting the Riccati recursion as a <b>linear fractional transformation</b> lets every candidate horizon share one computation, even with time-varying dynamics and costs, cutting horizon evaluation from <b>O(N²) to O(N)</b>. HOP-DDP carries it to nonlinear systems.</li>
-  <li><b>Result.</b> Up to <b>40× faster overall solves</b> than the brute-force baseline in the reported experiments.</li>
+  <li><b>Idea.</b> <b>HOP</b>, a new algorithm that makes LQR and DDP <b>horizon-optimal</b>: it optimizes the trajectory and its horizon together instead of fixing the horizon in advance.</li>
+  <li><b>Method.</b> Recasting the Riccati recursion as a <b>linear fractional transformation</b> lets all candidate horizons share one computation, <b>O(N²) → O(N)</b>, time-varying systems included; HOP-DDP extends it to nonlinear ones.</li>
+  <li><b>Result.</b> Up to <b>40× faster</b> than the brute-force baseline.</li>
 </ul>
 <ul class="research-points lang-zh">
-  <li><b>思路：</b>提出全新算法 <b>HOP</b>，为 LQR 与 DDP 给出<b>视界最优</b>的版本：它们需要预先固定规划视界，HOP 则同时优化轨迹与视界。</li>
-  <li><b>方法：</b>把 Riccati 递推改写为<b>线性分式变换</b>，所有候选视界共享同一次计算，时变动力学与代价同样适用，视界评估由 <b>O(N²) 降至 O(N)</b>；HOP-DDP 再推广到非线性系统。</li>
-  <li><b>结果：</b>论文实验中，相较暴力搜索基线<b>整体求解最高加速 40 倍</b>。</li>
+  <li><b>思路：</b>全新算法 <b>HOP</b> 让 LQR 与 DDP 实现<b>视界最优</b>：同时优化轨迹与视界，而不是预先固定视界。</li>
+  <li><b>方法：</b>把 Riccati 递推改写为<b>线性分式变换</b>，所有候选视界共享一次计算，<b>O(N²) → O(N)</b>，时变系统同样适用；HOP-DDP 再推广到非线性系统。</li>
+  <li><b>结果：</b>比暴力搜索基线<b>最高快 40 倍</b>。</li>
 </ul>
 </div>
       <ul class="pub__links"><li><a href="project.html"><span class="lang-en">Read the research →</span><span class="lang-zh">阅读研究详情 →</span></a></li><li><a href="files/HOP.pdf">Paper (PDF)</a></li></ul>
