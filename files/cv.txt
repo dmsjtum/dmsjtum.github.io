@@ -26,6 +26,8 @@ Publications
 Robotics: Science and Systems (RSS), 2026.
 [2] Miaomiao Dai, Zhongqiang Ren. “AL-HOP: Augmented-Lagrangian Horizon-Optimal Planning for Fast Constrained
 Trajectory Optimization.” In submission to IEEE International Conference on Robotics and Automation (ICRA), 2027.
+[3] Physical supervision for latent-action VLA pretraining (title and author list withheld during double-blind review). Under
+review at ICLR 2027; second author.
 
 Research Experience
 HOP: Horizon-Optimal Trajectory Planning
@@ -46,12 +48,9 @@ Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · first-author man
 • Extends HOP to hard state–control constraints (obstacles, actuator limits) with an augmented-Lagrangian formulation
 
 that keeps the one-sweep horizon prediction.
-
 • Produced solutions valid under the full nonlinear dynamics on 100/100 benchmark problems across 10 dynamical
-
 systems, vs. 79, 71, and 55 for ALTRO and direct collocation (IPOPT, SNOPT); where both were valid, baselines needed
 1.6–3.1× the solve time.
-
 Touch Without Touch: Measured-Touch Supervision for Visual Representations
 Jun 2026 – present
 Advisors: Prof. Hesheng Wang, IRMV Lab, Shanghai Jiao Tong University · Prof. Lin Shao, RoboScience
@@ -67,20 +66,18 @@ transfer.
 five heterogeneous touch datasets (human hand pressure, tactile arrays, GelSight imagery, force–torque) into one pipeline
 running across a local RTX 5090 and a multi-GPU A100 server.
 
-STA: Physical Supervision from Human Video for Vision–Language–Action Policies
+Transferring Physical Supervision to Latent-Action VLA Pretraining
+Second author · under double-blind review at ICLR 2027
+
 Aug 2026 – present
-Advisors: Prof. Hesheng Wang, IRMV Lab, Shanghai Jiao Tong University · Prof. Lin Shao, RoboScience
-• Tests whether the physical structure carried by human video — contact, and how a motion loads over time — can
 
-supervise a vision–language–action policy, with no extra sensor at deployment.
+• Latent-action pretraining supervises contact and force only indirectly, and tactile or torque sensing covers only a small
 
-• Kept the physical pathway strictly decoupled: it reads only the current image and the raw instruction through a frozen
-
-visual encoder, never the policy’s own hidden states, and enters the action path as one gated residual that the robot-only
-stage freezes — so a gain cannot be the policy re-reading what it already knew.
-• The two arms run identical modules and differ in one loss term. At the current scale the physical term is a clear causal
-gain over its isomorphic control, and shuffling the target in time or pairing it with the wrong window removes most of
-the effect; the decisive larger-scale run is pending.
+slice of human and robot video. A shared, horizon-structured representation of pressure, tactile, and torque signals is
+learned where sensors exist, inferred from causal RGB where they do not, and supervises the same latent actions as
+future visual prediction — no tactile or torque sensing at deployment.
+• Outperforms VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and every SimplerEnv task group, and
+beats both VLA-JEPA and π0.5 on each of five real-world manipulation tasks.
 
 Voice-Interactive Closed-Loop VLA Manipulation (B.E. thesis)
 Feb 2026 – Aug 2026
