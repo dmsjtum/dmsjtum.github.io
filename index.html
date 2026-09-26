@@ -368,13 +368,13 @@
     <div>
       <div class="research-summary">
 <ul class="research-points lang-en">
-  <li><b>Idea.</b> Optimize the trajectory and its horizon together.</li>
-  <li><b>Method.</b> Shared LQ computations reduce horizon evaluation from <b>O(N²) to O(N)</b> for a fixed state dimension.</li>
+  <li><b>Idea.</b> <b>HOP</b>, a new algorithm that gives LQR and DDP a <b>horizon-optimal</b> counterpart: where they fix the planning horizon in advance, HOP optimizes the trajectory and its horizon together.</li>
+  <li><b>Method.</b> Rewriting the Riccati recursion as a <b>linear fractional transformation</b> lets every candidate horizon share one computation, even with time-varying dynamics and costs, cutting horizon evaluation from <b>O(N²) to O(N)</b>. HOP-DDP carries it to nonlinear systems.</li>
   <li><b>Result.</b> Up to <b>40× faster overall solves</b> than the brute-force baseline in the reported experiments.</li>
 </ul>
 <ul class="research-points lang-zh">
-  <li><b>思路：</b>同时优化轨迹与运动视界。</li>
-  <li><b>方法：</b>共享线性二次模型的计算；固定状态维度时，视界评估由 <b>O(N²) 降至 O(N)</b>。</li>
+  <li><b>思路：</b>提出全新算法 <b>HOP</b>，为 LQR 与 DDP 给出<b>视界最优</b>的版本：它们需要预先固定规划视界，HOP 则同时优化轨迹与视界。</li>
+  <li><b>方法：</b>把 Riccati 递推改写为<b>线性分式变换</b>，所有候选视界共享同一次计算，时变动力学与代价同样适用，视界评估由 <b>O(N²) 降至 O(N)</b>；HOP-DDP 再推广到非线性系统。</li>
   <li><b>结果：</b>论文实验中，相较暴力搜索基线<b>整体求解最高加速 40 倍</b>。</li>
 </ul>
 </div>
@@ -417,36 +417,33 @@
 <!-- ICLR 2027 entry, double-blind until the December 2026 decision:
      descriptive heading, motivation and the three-stage architecture only.
      No method details (encoders, objectives, training recipe), no title,
-     method name, co-authors or numbers. The figure is the paper's overview
-     with the method-name wordmark removed. -->
+     method name, co-authors or numbers. The side figure is the architecture
+     column of the paper's overview figure (wordmark removed); it opens the
+     full overview. -->
 <article class="pub research-preview">
   <div class="pub__card">
     <h2 class="pub__title">Transferring Physical Supervision to Latent-Action VLA Pretraining</h2>
     <p class="pub__authors"><span class="lang-en"><b>Miaomiao Dai</b> · Second author · Title and author list withheld during double-blind review</span><span class="lang-zh"><b>代淼淼</b> · 第二作者 · 双盲评审期间暂不公开标题与作者名单</span></p>
     <p class="pub__venue"><span class="lang-en">Under double-blind review · ICLR 2027</span><span class="lang-zh">双盲评审中 · ICLR 2027</span></p>
   </div>
-  <div class="research-body research-body--text">
+  <div class="research-body">
     <div>
       <div class="research-summary">
 <ul class="research-points lang-en">
-  <li><b>Motivation.</b> Latent-action pretraining lets a VLA learn from video without action labels, but its targets come from visual change. Motions that look alike can hide different contact and force, so physical interaction is supervised only indirectly &mdash; and the sensors that measure it directly cover only a <b>small slice of human and robot video</b>.</li>
-  <li><b>Architecture.</b> Three stages. A small set of human and robot interactions recorded with pressure, tactile, and torque sensors defines <b>shared physical targets</b>; a transfer model <b>infers those targets from RGB</b> for ordinary human and robot video; during pretraining, <b>visual prediction and the inferred physical targets supervise the same latent actions</b>. The deployed policy needs no tactile or torque sensing.</li>
-  <li><b>Evidence.</b> Outperforms VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and on every SimplerEnv task group; on five real-world manipulation tasks it beats both VLA-JEPA and &pi;<sub>0.5</sub> <b>on every task</b>.</li>
+  <li><b>Motivation.</b> Latent-action pretraining learns from action-free video, but its targets come from visual change: look-alike motions can hide different contact and force, and the sensors that measure them cover only a <b>small slice of video</b>.</li>
+  <li><b>Architecture.</b> Interactions recorded with pressure, tactile, and torque sensors define <b>shared physical targets</b>; a transfer model <b>infers them from RGB</b> for ordinary human and robot video; <b>visual prediction and these targets jointly supervise latent actions</b>. No tactile or torque sensing at deployment.</li>
+  <li><b>Evidence.</b> Beats VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and every SimplerEnv task group, and beats both VLA-JEPA and &pi;<sub>0.5</sub> on <b>each of five real-robot tasks</b>.</li>
 </ul>
 <ul class="research-points lang-zh">
-  <li><b>动机：</b>隐动作预训练让 VLA 能从没有动作标签的视频里学习，但监督信号来自画面变化：看起来相似的动作，接触与受力可能完全不同，物理交互因此只被间接约束；而能直接测量它的传感器，只覆盖了<b>人类与机器人视频里很小的一部分</b>。</li>
-  <li><b>架构：</b>分三步。先用少量带压力、触觉、力矩传感器的人类与机器人交互，定义<b>共享的物理目标</b>；再由迁移模型<b>只凭 RGB 推断</b>这些目标，覆盖普通的人类与机器人视频；预训练时，<b>视觉预测与推断出的物理目标共同监督同一组隐动作</b>。部署时不需要任何触觉或力矩传感。</li>
-  <li><b>证据：</b>在 LIBERO 以及 SimplerEnv 的全部任务组上超过所比较的最强隐动作基线 VLA-JEPA；五个真实世界操作任务上，<b>每一项</b>都高于 VLA-JEPA 与 &pi;<sub>0.5</sub>。</li>
+  <li><b>动机：</b>隐动作预训练能从没有动作标签的视频中学习，但监督来自画面变化：外观相似的动作，接触与受力可能完全不同；而能直接测量它们的传感器只覆盖<b>很小一部分视频</b>。</li>
+  <li><b>架构：</b>带压力、触觉、力矩传感器的交互定义<b>共享物理目标</b>；迁移模型<b>只凭 RGB 推断</b>这些目标，覆盖普通的人类与机器人视频；<b>视觉预测与物理目标共同监督隐动作</b>。部署时无需触觉或力矩传感。</li>
+  <li><b>证据：</b>在 LIBERO 与 SimplerEnv 全部任务组上超过所比较的最强隐动作基线 VLA-JEPA；五个真实机器人任务上，<b>每一项</b>都高于 VLA-JEPA 与 &pi;<sub>0.5</sub>。</li>
 </ul>
 </div>
-      <figure class="figure research-wide">
-        <a href="assets/pub-physical-supervision.png"><img src="assets/pub-physical-supervision.png" alt="Overview: human videos without action labels and robot videos with action labels; a small instrumented set with pressure, tactile, and torque measurements defines shared physical targets; a causal transfer step infers these targets for uninstrumented video; visual prediction and physical supervision jointly ground the latent actions; evaluated in simulation and in the real world with no tactile or torque sensing at deployment." width="1600" height="759" loading="lazy"></a>
-        <figcaption>
-          <span class="lang-en"><b>Architecture.</b> Sensor-instrumented interactions define shared physical targets (top); a transfer model infers them from RGB for video with no sensor data (middle); visual prediction and the inferred targets jointly supervise latent actions during pretraining (bottom).</span>
-          <span class="lang-zh"><b>架构。</b>带传感器的交互定义共享的物理目标（上）；迁移模型只凭 RGB，为没有传感器数据的视频推断这些目标（中）；预训练时，视觉预测与推断出的目标共同监督隐动作（下）。</span>
-        </figcaption>
-      </figure>
     </div>
+    <figure class="research-figure">
+      <a class="research-visual" href="assets/pub-physical-supervision.png" aria-label="Open the full overview figure"><img src="assets/pub-physical-supervision-arch.png" alt="Architecture: pressure, tactile, and torque recordings from human and robot interactions define shared physical targets; a causal transfer step infers these targets from RGB for uninstrumented video; visual prediction and physical supervision jointly ground the latent actions." width="906" height="759" loading="lazy"></a>
+    </figure>
   </div>
 </article>
       </div>

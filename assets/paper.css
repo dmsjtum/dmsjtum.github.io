@@ -849,14 +849,7 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
 .research-points li::marker { color: var(--ink); }
 .research-points b { color: var(--ink); font-weight: 700; }
 .research-points li > b:first-child { color: var(--accent); }
-.research-preview .pub__links { margin-top: 13px; margin-bottom: 0; }
-/* A wide overview figure reads under the points, at full measure, rather
-   than squeezed into the side column. */
-.research-wide { margin: 22px 0 0; }
-.research-wide a { display: block; }
-.research-wide img { display: block; height: auto; background: #fff; }
-.research-wide figcaption { max-width: none; }
-.research-figure { position: relative; min-width: 0; min-height: 0; margin: 0; }
+.research-preview .pub__links { margin-top: 13px; margin-bottom: 0; }.research-figure { position: relative; min-width: 0; min-height: 0; margin: 0; }
 /* The visible language sets the row height. Fit the whole figure to that
    space, preserving its ratio instead of stretching or clipping its axes. */
 .research-visual {
