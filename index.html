@@ -421,23 +421,23 @@
 <article class="pub research-preview">
   <div class="pub__card">
     <h2 class="pub__title">PhysLA: Transferring Physical Supervision to Latent-Action VLA Pretraining</h2>
-    <p class="pub__authors"><span class="lang-en"><b>Miaomiao Dai</b> · Second author · Full title and author list withheld during double-blind review</span><span class="lang-zh"><b>代淼淼</b> · 第二作者 · 双盲评审期间暂不公开完整标题与作者名单</span></p>
+    <p class="pub__authors"><span class="lang-en"><b>Miaomiao Dai</b> · Second author · co-authors withheld during review</span><span class="lang-zh"><b>代淼淼</b> · 第二作者 · 评审期间暂不公开合作者</span></p>
     <p class="pub__venue"><span class="lang-en">Under double-blind review · ICLR 2027</span><span class="lang-zh">双盲评审中 · ICLR 2027</span></p>
   </div>
   <div class="research-body">
     <div>
       <div class="research-summary">
 <ul class="research-points lang-en">
-  <li><b>Motivation.</b> Latent-action pretraining learns from action-free video, but its targets come from visual change: look-alike motions can hide different contact and force, and the sensors that measure them cover only a <b>small slice of video</b>.</li>
-  <li><b>Architecture.</b> <b>(a)</b> learns horizon-structured physical targets from heterogeneous pressure, tactile, and torque measurements; <b>(b)</b> infers those targets from causal RGB, carrying them to human and robot video that has no sensors; <b>(c)</b> uses them alongside visual prediction to supervise latent actions in VLA pretraining. No tactile or torque sensing at deployment.</li>
-  <li><b>My role.</b> Designed the ideas behind <b>(a) physical representation learning</b> and <b>(b) causal physical-supervision transfer</b>.</li>
-  <li><b>Evidence.</b> Beats VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and every SimplerEnv task group, and beats both VLA-JEPA and &pi;<sub>0.5</sub> on <b>each of five real-robot tasks</b>.</li>
+  <li><b>Motivation.</b> Latent actions learned from visual change miss contact and force, yet physical sensors cover only a <b>small slice of video</b>.</li>
+  <li><b>Architecture.</b> <b>(a)</b> Learn physical targets from pressure, tactile, and torque; <b>(b)</b> infer them from RGB for sensor-free video; <b>(c)</b> co-supervise latent actions with visual prediction.</li>
+  <li><b>My role.</b> Designed stages <b>(a)</b> and <b>(b)</b>.</li>
+  <li><b>Evidence.</b> Beats VLA-JEPA and &pi;<sub>0.5</sub> on <b>every real-robot task</b>, with no tactile sensing at deployment.</li>
 </ul>
 <ul class="research-points lang-zh">
-  <li><b>动机：</b>隐动作预训练能从没有动作标签的视频中学习，但监督来自画面变化：外观相似的动作，接触与受力可能完全不同；而能直接测量它们的传感器只覆盖<b>很小一部分视频</b>。</li>
-  <li><b>架构：</b><b>(a)</b> 从压力、触觉、力矩等异构测量中学出按时间视界组织的物理目标；<b>(b)</b> 只凭因果 RGB 推断这些目标，把它们带到没有传感器的人类与机器人视频上；<b>(c)</b> 与视觉预测一起监督 VLA 预训练中的隐动作。部署时无需触觉或力矩传感。</li>
-  <li><b>我的贡献：</b>设计了 <b>(a) 物理表征学习</b>与 <b>(b) 因果物理监督迁移</b>两部分的思路。</li>
-  <li><b>证据：</b>在 LIBERO 与 SimplerEnv 全部任务组上超过所比较的最强隐动作基线 VLA-JEPA；五个真实机器人任务上，<b>每一项</b>都高于 VLA-JEPA 与 &pi;<sub>0.5</sub>。</li>
+  <li><b>动机：</b>从画面变化学到的隐动作捕捉不到接触与受力，而物理传感器只覆盖<b>很小一部分视频</b>。</li>
+  <li><b>架构：</b><b>(a)</b> 从压力、触觉、力矩中学物理目标；<b>(b)</b> 只凭 RGB 为无传感器视频推断这些目标；<b>(c)</b> 与视觉预测共同监督隐动作。</li>
+  <li><b>我的贡献：</b>设计了 <b>(a)</b> 与 <b>(b)</b> 两部分。</li>
+  <li><b>证据：</b>五个真实机器人任务上<b>每一项</b>都超过 VLA-JEPA 与 &pi;<sub>0.5</sub>，部署时无需触觉传感。</li>
 </ul>
 </div>
     </div>
