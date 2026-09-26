@@ -809,6 +809,10 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
   box-shadow: var(--lift);
   background: var(--paper-hi);
 }
+.bio__interests { margin-top: 22px; }
+.bio__interests h2 { margin: 0 0 8px; font: 600 14px/1.5 var(--mono); color: var(--accent); }
+.bio__interests ul { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 0; list-style: none; }
+.bio__interests li { font: 400 14px/1.5 var(--mono); color: var(--ink-2); }
 @media (max-width: 720px) {
   .bio { grid-template-columns: 1fr; gap: 28px; }
   .bio__portrait { max-width: 180px; }
@@ -826,6 +830,77 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
   margin: 0 0 44px;
 }
 .pub:last-child { margin-bottom: 0; }
+
+/* Reuse the publication title card, then pair bullet points with a figure. */
+.research-preview { margin-bottom: 44px; }
+.research-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 36%);
+  align-items: stretch;
+  gap: 26px;
+}
+.research-body > div { min-width: 0; }
+.research-body--text { grid-template-columns: minmax(0, 1fr); }
+.research-hero .is-accepted { color: var(--accent); font-weight: 600; }
+.research-preview .pub__authors b { color: var(--ink); font-weight: 700; }
+.research-summary { margin: 0; font: 400 16px/1.55 var(--sans); color: var(--ink); }
+.research-points { margin: 0; padding-left: 1.1em; list-style-type: disc; }
+.research-points li + li { margin-top: 8px; }
+.research-points li::marker { color: var(--ink); }
+.research-points b { color: var(--ink); font-weight: 700; }
+.research-points li > b:first-child { color: var(--accent); }
+.research-preview .pub__links { margin-top: 13px; margin-bottom: 0; }
+.research-figure { position: relative; min-width: 0; min-height: 0; margin: 0; }
+/* The visible language sets the row height. Fit the whole figure to that
+   space, preserving its ratio instead of stretching or clipping its axes. */
+.research-visual {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  color: var(--ink);
+  text-decoration: none;
+}
+.research-visual > img, .research-visual > svg {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border: 1px solid var(--rule-hi);
+  border-radius: var(--radius);
+}
+.research-visual:hover { outline: 1px solid var(--accent); outline-offset: 4px; }
+.research-visual svg { background: var(--paper-hi); }
+.research-visual svg text { font-family: var(--sans); fill: currentColor; }
+
+/* Illustrated research articles share one reading measure. */
+.research-page { max-width: var(--measure); margin-inline: auto; }
+.research-hero { padding-top: 56px; }
+.research-hero .display { font-size: clamp(30px, 4.5vw, 44px); line-height: 1.15; }
+.research-hero .hero__sub { line-height: 1.65; }
+.research-hero .linkrow { margin-top: 24px; }
+.research-lead { font: 400 20px/1.5 var(--sans); margin: 22px 0 0; color: var(--ink-2); }
+.research-article { margin-top: 42px; }
+.research-section + .research-section { margin-top: 48px; }
+.research-section h2 { margin: 0 0 16px; font: 400 28px/1.2 var(--serif); }
+.research-section p { font: 400 17px/1.65 var(--sans); margin: 0 0 16px; }
+.research-section .figure { margin: 28px 0; }
+.research-section .figure figcaption { max-width: none; }
+.research-section .figure img { background: #fff; }
+.research-diagram { display: block; width: 100%; height: auto; background: var(--paper-hi); border: 1px solid var(--rule); border-radius: var(--radius); color: var(--ink); }
+.research-diagram text { font-family: var(--sans); fill: currentColor; }
+.research-diagram .diagram-muted { color: var(--ink-3); }
+.research-diagram .diagram-accent { color: var(--accent); }
+.research-return { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--rule); font: 400 14px/1.5 var(--mono); }
+@media (max-width: 640px) {
+  .research-body { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .research-visual { position: static; display: block; width: min(100%, 360px); }
+  .research-visual > img, .research-visual > svg { width: 100%; max-height: none; }
+  .research-hero { padding-top: 36px; }
+}
 
 /* The label carries the whole masthead of an entry: title, authors, venue,
    standing. A grid, not a flex row, so the series tag can sit in its own
@@ -852,6 +927,11 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
 /* Grid blockifies its children, so the badge would stretch the full column
    without this — it is a badge, it should be the width of its text. */
 .pub__card > * { grid-column: 1; justify-self: start; }
+/* Only the title shares a row with the index. Let the remaining lines use
+   the full card width so names and dates are not stranded beneath it. */
+.pub__card .pub__authors,
+.pub__card .pub__venue,
+.pub__card .pub__role { grid-column: 1 / -1; }
 /* Authors and venue tighten up inside the label — they are a masthead
    here, not body copy, so they sit close under the title. */
 .pub__card .pub__authors { margin: 8px 0 0; }
@@ -885,6 +965,7 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
   font: 400 20px/1.3 var(--serif);
   letter-spacing: -0.005em;
   margin: 0;
+  text-wrap: pretty;
 }
 .pub__title a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--rule-hi); }
 .pub__title a:hover { border-bottom-color: var(--ink); }
@@ -894,6 +975,7 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
   font: 400 13px/19px var(--mono);
   color: var(--ink-2);
   margin: 0 0 6px;
+  text-wrap: pretty;
 }
 .pub__authors b { font-weight: 600; color: var(--ink); }
 
@@ -901,6 +983,7 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
   font: 400 12px/16px var(--mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  text-wrap: pretty;
   color: var(--ink-3);
   margin: 0 0 10px;
 }
@@ -1036,6 +1119,11 @@ html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
   .pub__figs .pub__thumb { max-width: none; }
 }
 
+/* Proposal ideas have their own series within the same card layout. */
+#proposals { counter-reset: proposal; }
+.pub--proposal { counter-increment: proposal; }
+.pub--proposal .pub__card::after { content: "P" counter(proposal, decimal-leading-zero); }
+
 /* A project is the same title-label-plus-body as a publication, with its
    own series (PR01, PR02 …). `counter-increment` here replaces the .pub
    rule's, so projects never advance the paper count. */
@@ -1043,19 +1131,25 @@ html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
 .pub--project { counter-increment: project; }
 .pub--project .pub__card::after { content: "PR" counter(project, decimal-leading-zero); }
 
-/* The reel keeps the beside-the-text arrangement the papers gave up: a
-   9:16 clip run across the full measure would stand over 600px tall, and
-   at 150px it already matches the height of the points next to it. */
-.pub--reel .pub__body {
+/* Give the portrait reel the whole left column, starting at the title.
+   The title and summary share the wider column on its right. */
+.pub--reel {
   display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
-  gap: 24px;
+  grid-template-columns: minmax(180px, 30%) minmax(0, 1fr);
+  grid-template-areas: "video title" "video summary";
+  column-gap: 20px;
+  row-gap: 20px;
+  align-items: start;
 }
+.pub--reel > .pub__card { grid-area: title; min-width: 0; margin: 0; }
+.pub--reel > .pub__body { grid-area: summary; min-width: 0; }
+.pub--reel > .demo-player { grid-area: video; min-width: 0; }
+.pub--reel .pub__points:last-child { margin-bottom: 0; }
 
 .demo-player video {
   width: 100%;
   aspect-ratio: 9 / 16;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   border: 1px solid var(--rule-hi);
   border-radius: var(--radius);
@@ -1090,20 +1184,21 @@ html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
 .demo-cap.is-on { display: block; }
 html[data-lang="zh"] .demo-cap { letter-spacing: .04em; }
 @media (max-width: 720px) {
-  /* Declared after the base .pub--reel template, so the phone collapse
-     wins the cascade the same way the generic body collapse does. */
-  .pub--reel .pub__body { grid-template-columns: 1fr; }
-  /* Single-column body: keep the clip phone-screen sized, not full-bleed. */
-  .demo-player { max-width: 230px; }
+  .pub--reel {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "title" "video" "summary";
+  }
+  .pub--reel > .demo-player { width: min(100%, 230px); }
 }
 
 /* --------------------------------------------------------------------------
-   24. Bio side column — the portrait
+   24. Bio side column — portrait and decorative illustration
    --------------------------------------------------------------------------
-   The working drawing used to live here under the portrait; it now runs
-   beside the direction chart in §26, so this column carries one thing.
+   Keep the robot drawing directly under the portrait at a smaller size.
    -------------------------------------------------------------------------- */
-.bio__side { display: grid; gap: 22px; align-content: start; }
+.bio__side { display: grid; gap: 12px; align-content: start; width: 100%; max-width: 200px; }
+.bio__illustration { width: 190px; max-width: 100%; margin: 0; justify-self: center; }
+.bio__illustration .sketch { opacity: 1; }
 
 /* The two systems, drawn in the same line weight as everything else. Purely
    decorative to a screen reader — aria-hidden on the <svg>. */
@@ -1127,9 +1222,8 @@ html[data-lang="zh"] .demo-cap { letter-spacing: .04em; }
   .sketch animateMotion { display: none; }
 }
 @media (max-width: 720px) {
-  /* One item in the column now, so it is sized rather than stretched: a
-     full-bleed portrait on a phone reads as a hero image, which it is not. */
-  .bio__side { justify-items: start; }
+  /* Preserve the portrait-and-illustration stack on narrow screens. */
+  .bio__side { max-width: 180px; justify-items: start; }
   .bio__portrait { max-width: 180px; }
 }
 
@@ -1468,24 +1562,28 @@ html[data-lang="zh"] .chat__title { letter-spacing: .04em; }
 }
 
 /* --------------------------------------------------------------------------
-   26. The two drawings — direction chart beside the working drawing
+   26. Research chart with its caption on the right
    --------------------------------------------------------------------------
-   Columns are proportioned to the two viewBoxes (560x300 landscape against
-   200x250 portrait) so the pair lands within ~20px of the same height
-   without either being cropped or scaled past legibility.
+   Keep the caption alongside the chart on desktop, and below it on phones.
    -------------------------------------------------------------------------- */
 .duo {
-  display: grid;
-  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
-  gap: 40px;
-  align-items: start;
-  margin-top: 56px;
+  max-width: 780px;
+  margin: 24px auto 0;
 }
+.duo + #publications { margin-top: 36px; }
 /* min-width:0 is load-bearing: a grid item defaults to min-width:auto, which
    lets the figure grow to the chart's min-width and takes the whole page
    sideways with it instead of letting .chart-scroll do its job. */
-.duo__fig { margin: 0; min-width: 0; }
-.duo__fig figcaption { max-width: none; }
+.duo__fig {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: 32px;
+  align-items: center;
+  margin: 0;
+  min-width: 0;
+}
+.chart-scroll { min-width: 0; }
+.duo__fig figcaption { max-width: none; margin: 0; text-align: left; font: 400 16px/1.6 var(--sans); }
 
 /* Every mark draws with currentColor, and `color` is set per group — so one
    palette covers light and dark with no second set of values. */
@@ -1495,10 +1593,8 @@ html[data-lang="zh"] .chat__title { letter-spacing: .04em; }
 .chart .c-axis text { font-size: 11px; letter-spacing: 0.04em; }
 .chart .c-dim   { color: var(--ink-2); }
 .chart .c-accent { color: var(--accent); }
-.chart .chart__note { font-size: 11px; letter-spacing: 0.06em; }
-
-/* The drawing is a figure in its own right here, not a marginal sketch. */
-.duo__fig--draw .sketch { opacity: 1; }
+.chart .chart__detail { font-size: 12px; }
+.chart .chart__goal { font-weight: 600; }
 
 /* A line under a section head, framing the entries below it. */
 .section-intro {
@@ -1511,10 +1607,7 @@ html[data-lang="zh"] .section-intro,
 html[data-lang="zh"] .duo__fig figcaption { letter-spacing: 0; line-break: strict; overflow-wrap: anywhere; }
 
 @media (max-width: 720px) {
-  /* Stacked, and the drawing keeps a sensible width rather than filling the
-     screen — it is a diagram, not a hero image. */
-  .duo { grid-template-columns: minmax(0, 1fr); gap: 34px; margin-top: 44px; }
-  .duo__fig--draw { max-width: 220px; }
+  .duo__fig { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   /* Below ~500px the chart's labels fall under 10px, so it keeps its own
      legible width and scrolls inside its container; the page never does. */
   .chart { min-width: 500px; }

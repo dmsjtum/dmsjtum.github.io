@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HOP: Horizon-Optimal Trajectory Planning — Miaomiao Dai</title>
-<meta name="description" content="A closed-form result that scores every candidate time horizon in a single backward sweep. RSS 2026.">
-<meta property="og:title" content="HOP: Fast DDP for Horizon-Optimal Trajectory Planning">
-<meta property="og:description" content="Horizon search from O(N²) to O(N), up to 40× faster than brute force. RSS 2026.">
+<title>HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning — Miaomiao Dai</title>
+<meta name="description" content="Selecting a motion horizon through shared linear-quadratic computations inside nonlinear trajectory optimization. RSS 2026.">
+<meta property="og:title" content="HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning">
+<meta property="og:description" content="Selecting a motion horizon through shared linear-quadratic computations inside nonlinear trajectory optimization. RSS 2026.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://dmsjtum.github.io/project.html">
 <!-- Shares the site card for now; a HOP-specific one would be better. -->
@@ -46,114 +46,42 @@
       <a href="index.html"><span class="lang-en">Home</span><span class="lang-zh">首页</span></a>
       <a href="index.html#publications"><span class="lang-en">Research</span><span class="lang-zh">研究</span></a>
       <a href="index.html#projects"><span class="lang-en">Projects</span><span class="lang-zh">项目</span></a>
+      <a href="index.html#proposals"><span class="lang-en">Ideas</span><span class="lang-zh">构想</span></a>
       <a href="index.html#experience"><span class="lang-en">Record</span><span class="lang-zh">履历</span></a>
       <a href="files/cv.pdf">CV</a>
+      <a href="mailto:dmmsjtu@engineering.upenn.edu">Email</a>
       <button class="lang-toggle" data-lang-toggle type="button"><b>EN</b> / ZH</button>
     </nav>
   </header>
 
-  <main>
-
-    <!-- Centered hero: breadcrumb, title, then one row of links.
-         Use this layout OR the left-aligned rail — never both on a page. -->
-    <section class="hero hero--center">
-      <ol class="crumbs">
-        <li><a href="index.html"><span class="lang-en">Home</span><span class="lang-zh">首页</span></a></li>
-        <li><a href="index.html#publications"><span class="lang-en">Research</span><span class="lang-zh">研究</span></a></li>
-        <li>HOP</li>
-      </ol>
-      <h1 class="display">HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning</h1>
-      <p class="hero__sub"><b>Miaomiao Dai</b>, Zhongqiang Ren</p>
-      <p class="pub__role" style="margin-top:14px"><span class="lang-en">Undergraduate first author · presented the talk</span><span class="lang-zh">本科生第一作者 · 本人作大会报告</span></p>
-      <ul class="linkrow">
-        <li><a class="btn" href="files/HOP.pdf">Paper (PDF)</a></li>
-        <!-- Add these once they exist:
-        <li><a class="btn" href="https://arxiv.org/abs/…">arXiv</a></li>
-        <li><a class="btn" href="https://github.com/dmsjtum/…">Code</a></li> -->
-      </ul>
-    </section>
-
-    <dl class="meta" style="margin:56px auto 0;max-width:var(--measure)">
-      <dt>Venue</dt>     <dd>Robotics: Science and Systems (RSS), 2026 &middot; Sydney</dd>
-      <dt>Advisor</dt>   <dd>Prof. Zhongqiang Ren, Shanghai Jiao Tong University</dd>
-      <dt>Systems</dt>   <dd>Cartpole, Segway, quadrotor</dd>
-    </dl>
-
-    <figure class="figure" style="max-width:var(--measure);margin:48px auto 0">
-      <img src="assets/hop-talk.jpg"
-           alt="Presenting HOP on stage at RSS 2026, ICC Sydney">
-      <figcaption>
-        <span class="lang-en"><b>Presenting HOP at RSS 2026</b>, ICC Sydney, July 2026.</span>
-        <span class="lang-zh"><b>在 RSS 2026 作报告</b>，悉尼国际会议中心，2026 年 7 月。</span>
-      </figcaption>
-    </figure>
-
-    <section class="section">
-      <div class="prose" style="margin-inline:auto">
-
-        <h2><span class="lang-en">The horizon is part of the problem</span><span class="lang-zh">视界本身就是问题的一部分</span></h2>
-        <p class="lang-en">
-          A trajectory optimizer is usually handed three things: a system, a
-          cost, and a duration. The first two are genuinely part of the problem.
-          The third — how many timesteps the motion should take — is almost
-          always a number someone tuned by hand until the results looked
-          reasonable.
-        </p>
-        <p class="lang-zh">轨迹优化器通常拿到三样东西：一个系统、一个代价函数、一个时长。前两者确实属于问题本身；第三个——这段运动该走多少步——却几乎总是有人手工调到看起来合理为止。</p>
-        <p class="lang-en">
-          That matters more than it sounds. Pick a horizon that is too short and
-          the task is infeasible. Too long and the robot dawdles, and the solver
-          spends its effort on timesteps that do nothing. The standard fix is to
-          try many horizons and keep the best, which means solving the whole
-          problem once per candidate.
-        </p>
-        <p class="lang-zh">这件事比听上去要紧。视界取短了任务不可行；取长了机器人磨蹭，求解器还要把力气花在什么都不做的时间步上。标准做法是多试几个视界取最好的，也就是每换一个候选就把整个问题重解一遍。</p>
-
-        <h2><span class="lang-en">Scoring every horizon at once</span><span class="lang-zh">一次性评估所有候选视界</span></h2>
-        <p class="lang-en">
-          The contribution of this paper is a closed-form result: the cost of
-          <em>every</em> candidate horizon can be recovered from a single
-          backward pass, rather than one solve per candidate. Because the
-          intermediate value functions a DDP sweep already computes carry the
-          information needed to evaluate stopping at each step, the search
-          collapses from quadratic to linear in the number of candidates.
-        </p>
-        <p class="lang-zh">本文的贡献是一个闭式结果：所有候选视界的代价都能从单次反向扫描中恢复，而不必逐个求解。因为 DDP 扫描本身已经算出的中间值函数，恰好携带了在每一步停止所需的信息，视界搜索因此从平方降到线性。</p>
-        <p class="lang-en">
-          In practice this is up to <b>40× faster</b> than brute-force horizon
-          search, and it returns the same selected horizon and the same cost —
-          it is an exact acceleration, not an approximation.
-        </p>
-        <p class="lang-zh">实测比暴力视界搜索快至多 40 倍，并且返回相同的选定视界与相同的代价——这是精确加速，不是近似。</p>
-
-        <h2><span class="lang-en">What comes next</span><span class="lang-zh">接下来</span></h2>
-        <p class="lang-en">
-          HOP assumes an unconstrained problem. Most useful robots are not
-          unconstrained: they have joint limits, actuator saturation, and
-          obstacles to avoid. AL-HOP extends the same one-sweep idea to hard
-          state and control constraints through an augmented-Lagrangian
-          formulation, and is in submission to ICRA 2027.
-        </p>
-        <p class="lang-zh">HOP 假设问题无约束，而大多数有用的机器人并非如此：它们有关节限位、执行器饱和、需要避开的障碍。AL-HOP 用增广拉格朗日形式把同样的单次扫描思想推广到硬状态与控制约束，正在投稿 ICRA 2027。</p>
-      </div>
-    </section>
-
-    <section class="section">
-      <div style="max-width:var(--measure);margin-inline:auto">
-        <h2 class="eyebrow">Cite</h2>
-        <div class="codeblock">
-          <button class="copy" type="button">Copy</button>
-<pre>@inproceedings{dai2026hop,
-  title     = {HOP: Fast Differential Dynamic Programming for
-               Horizon-Optimal Trajectory Planning},
-  author    = {Dai, Miaomiao and Ren, Zhongqiang},
+  <main class="research-page">
+<section class="research-hero">
+<ol class="crumbs"><li><a href="index.html"><span class="lang-en">Home</span><span class="lang-zh">首页</span></a></li><li><a href="index.html#publications"><span class="lang-en">Research</span><span class="lang-zh">研究</span></a></li><li>HOP</li></ol>
+<p class="eyebrow"><span class="lang-en is-accepted">Accepted · RSS 2026 · <b>First author as an undergraduate</b></span><span class="lang-zh is-accepted">已录用 · RSS 2026 · <b>本科期间第一作者</b></span></p>
+<h1 class="display">HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning</h1>
+<p class="hero__sub"><span class="lang-en"><b>Miaomiao Dai</b>, Zhongqiang Ren · Shanghai Jiao Tong University</span><span class="lang-zh"><b>代淼淼</b>，Zhongqiang Ren · 上海交通大学</span></p>
+<div class="research-lead"><span class="lang-en">Optimize how long the motion takes, together with how the robot moves.</span><span class="lang-zh">让运动持续多久，与机器人如何运动，一起成为优化的对象。</span></div>
+<ul class="linkrow"><li><a class="btn" href="files/HOP.pdf">Paper (PDF)</a></li></ul>
+</section>
+<div class="research-article"><section class="research-section"><h2><span class="lang-en">The horizon is a decision</span><span class="lang-zh">把视界作为决策变量</span></h2>
+<p class="lang-en">How long should a motion take? A fixed horizon answers that question before optimization even begins. HOP instead chooses an integer terminal index together with the control sequence, balancing the motion cost against a duration penalty.</p>
+<p class="lang-zh">一段运动应该持续多久？固定视界的规划器在开始优化前就给出了答案。HOP 则把整数终止时刻与控制序列一起选择，在运动代价与时长惩罚之间权衡。</p><p class="lang-en">Trying every candidate separately repeats much of the same computation. The key is to share that work across horizons while still accounting for the terminal cost at each possible endpoint.</p>
+<p class="lang-zh">逐个尝试候选视界会重复大量计算。关键是跨视界复用这些计算，同时正确处理每个候选终点对应的终端代价。</p></section><section class="research-section"><h2><span class="lang-en">Compose once, query every horizon</span><span class="lang-zh">一次组合，查询全部视界</span></h2>
+<figure class="figure"><svg class="research-diagram" viewBox="0 0 760 270" role="img" aria-label="HOP method: local linear-quadratic model, one forward composition sweep, all-horizon queries, then a DDP update and nonlinear rollout.">
+<defs><marker id="diagram-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 8 4 L 0 8" fill="currentColor"/></marker></defs>
+<text class="lang-en" x="28" y="35" text-anchor="start" font-size="18" >Within one HOP-DDP iteration</text><text class="lang-zh" x="28" y="35" text-anchor="start" font-size="18" >一次 HOP-DDP 迭代</text><g class=""><rect x="28" y="65" width="200" height="84" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/><text class="lang-en" x="128.0" y="99" text-anchor="middle" font-size="20" >Local LQ</text><text class="lang-zh" x="128.0" y="99" text-anchor="middle" font-size="20" >局部线性二次</text><text class="lang-en" x="128.0" y="125" text-anchor="middle" font-size="20" >model</text><text class="lang-zh" x="128.0" y="125" text-anchor="middle" font-size="20" >模型</text></g><g class="diagram-accent"><rect x="280" y="65" width="200" height="84" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/><text class="lang-en" x="380.0" y="99" text-anchor="middle" font-size="20" >Compose once</text><text class="lang-zh" x="380.0" y="99" text-anchor="middle" font-size="20" >一次组合</text><text class="lang-en" x="380.0" y="125" text-anchor="middle" font-size="20" >forward sweep</text><text class="lang-zh" x="380.0" y="125" text-anchor="middle" font-size="20" >前向扫描</text></g><g class=""><rect x="532" y="65" width="200" height="84" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/><text class="lang-en" x="632.0" y="99" text-anchor="middle" font-size="20" >Query every</text><text class="lang-zh" x="632.0" y="99" text-anchor="middle" font-size="20" >查询全部</text><text class="lang-en" x="632.0" y="125" text-anchor="middle" font-size="20" >candidate horizon</text><text class="lang-zh" x="632.0" y="125" text-anchor="middle" font-size="20" >候选视界</text></g><path d="M 230 107 L 275 107" stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#diagram-arrow)" /><path d="M 482 107 L 527 107" stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#diagram-arrow)" /><text class="lang-en" x="380" y="197" text-anchor="middle" font-size="21" >Choose a horizon → DDP update → nonlinear rollout</text><text class="lang-zh" x="380" y="197" text-anchor="middle" font-size="21" >选择视界 → DDP 更新 → 非线性前向模拟</text><text class="lang-en diagram-muted" x="380" y="236" text-anchor="middle" font-size="18">Shared LQ horizon evaluation: O(N²) → O(N)</text><text class="lang-zh diagram-muted" x="380" y="236" text-anchor="middle" font-size="18">共享计算：LQ 视界评估由 O(N²) 降到 O(N)</text></svg><figcaption><span class="lang-en">Method schematic. Horizon queries use a shared time-varying linear-quadratic model; nonlinear optimization still proceeds iteratively.</span><span class="lang-zh">方法示意。候选视界共享时变线性二次模型的计算，非线性轨迹仍通过迭代优化。</span></figcaption></figure><p class="lang-en">HOP rewrites the Riccati recursion as a composition of linear fractional maps. A forward sweep builds the compositions; inexpensive queries then evaluate all candidate horizons. For a fixed state dimension, this reduces the horizon-evaluation cost from <b>O(N²) to O(N)</b>.</p>
+<p class="lang-zh">HOP 将 Riccati 递推改写为线性分式映射的组合。前向扫描构建这些组合，再以低开销查询评估所有候选视界。对固定状态维度，视界评估的复杂度由 <b>O(N²) 降为 O(N)</b>。</p><p class="lang-en">For nonlinear systems, HOP-DDP forms a local linear-quadratic model, predicts a horizon, and performs the DDP update and nonlinear rollout at that horizon. The next iteration refines both the trajectory and the duration.</p>
+<p class="lang-zh">面对非线性系统，HOP-DDP 先建立局部线性二次模型并预测视界，再在选定视界上进行 DDP 更新与非线性前向模拟。后续迭代继续改进轨迹与运动时长。</p></section><section class="research-section"><h2><span class="lang-en">What changes in practice</span><span class="lang-zh">实际带来了什么</span></h2>
+<p class="lang-en">The paper evaluates four systems: a double integrator, a linearized Segway, a nonlinear cartpole, and a quadrotor. Across the reported comparisons, HOP runs up to <b>40× faster than the brute-force baseline</b>, with closely matching final objective values.</p>
+<p class="lang-zh">论文在双积分器、线性化 Segway、非线性倒立摆与四旋翼四类系统上评估。在报告的对照中，HOP 相较暴力搜索基线整体求解最高<b>加速 40 倍</b>，最终目标函数值接近。</p><figure class="figure"><img src="assets/pub-hop.jpg" alt="HOP paper Figure 1: quadrotor trajectories for HOP, OP and NLP, and their solve times" width="622" height="498" loading="lazy"><figcaption><span class="lang-en">A quadrotor example from the RSS paper, Fig. 1. HOP solves in 2.9 s, versus 3.8 s for OP and 71.8 s for NLP. The 1.30 s label in the trajectory panel is the motion duration, not solver runtime.</span><span class="lang-zh">RSS 论文图 1 的四旋翼示例。HOP 求解耗时 2.9 秒，OP 为 3.8 秒，NLP 为 71.8 秒。轨迹图中的 1.30 秒指运动时长，不是求解耗时。</span></figcaption></figure></section><section class="research-section"><h2><span class="lang-en">What the result guarantees</span><span class="lang-zh">结论适用于哪里</span></h2>
+<p class="lang-en">The exact result concerns horizon evaluation for the linear-quadratic problem under the paper’s assumptions. Nonlinear HOP-DDP remains a local method; it is not a global optimality or universal feasibility guarantee. General hard path constraints are the motivation for <a href="al-hop.html">AL-HOP</a>.</p>
+<p class="lang-zh">精确性结论针对论文假设下的线性二次视界评估。非线性 HOP-DDP 仍是局部方法，不代表全局最优或所有问题都可行。一般硬路径约束正是后续 <a href="al-hop.html">AL-HOP</a> 要处理的问题。</p><figure class="figure"><img src="assets/hop-talk.jpg" alt="Miaomiao Dai presenting HOP at RSS 2026 in Sydney" width="1280" height="720" loading="lazy"><figcaption><span class="lang-en">Presenting HOP at Robotics: Science and Systems 2026, Sydney.</span><span class="lang-zh">在悉尼 Robotics: Science and Systems 2026 大会报告 HOP。</span></figcaption></figure><h3 class="eyebrow"><span class="lang-en">Citation</span><span class="lang-zh">引用</span></h3><div class="codeblock"><button class="copy" type="button">Copy</button><pre>@inproceedings{dai2026hop,
+  title = {HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning},
+  author = {Dai, Miaomiao and Ren, Zhongqiang},
   booktitle = {Robotics: Science and Systems (RSS)},
-  year      = {2026}
-}</pre>
-        </div>
-      </div>
-    </section>
-
+  year = {2026}
+}</pre></div></section></div>
+<p class="research-return"><a href="index.html#publications"><span class="lang-en">← Back to all research</span><span class="lang-zh">← 返回全部研究</span></a></p>
   </main>
 
   <footer class="footer">

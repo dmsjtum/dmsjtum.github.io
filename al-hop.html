@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AL-HOP: Augmented-Lagrangian Horizon-Optimal Planning for Fast Constrained Trajectory Optimization — Miaomiao Dai</title>
+<meta name="description" content="Horizon selection with state, control and obstacle constraints, backed by nonlinear replay validation.">
+<meta property="og:title" content="AL-HOP: Augmented-Lagrangian Horizon-Optimal Planning for Fast Constrained Trajectory Optimization">
+<meta property="og:description" content="Horizon selection with state, control and obstacle constraints, backed by nonlinear replay validation.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dmsjtum.github.io/al-hop.html">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Source+Sans+3:wght@200..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/paper.css">
+
+<!-- Same entrance gate as index.html; see the comment there. This page has no
+     bio to type, so it gets only the scroll unfold. -->
+<script>
+  (function () {
+    var el = document.documentElement;
+    try {
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    } catch (e) { return; }
+    el.setAttribute("data-motion", "on");
+    setTimeout(function () {
+      if (!window.__paperEntrance) el.removeAttribute("data-motion");
+    }, 2500);
+  })();
+</script>
+</head>
+<body>
+
+<div class="shell">
+
+  <header class="masthead">
+    <a class="wordmark" href="index.html">Miaomiao Dai <span class="accent">(τ)</span></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html"><span class="lang-en">Home</span><span class="lang-zh">首页</span></a>
+      <a href="index.html#publications"><span class="lang-en">Research</span><span class="lang-zh">研究</span></a>
+      <a href="index.html#projects"><span class="lang-en">Projects</span><span class="lang-zh">项目</span></a>
+      <a href="index.html#proposals"><span class="lang-en">Ideas</span><span class="lang-zh">构想</span></a>
+      <a href="index.html#experience"><span class="lang-en">Record</span><span class="lang-zh">履历</span></a>
+      <a href="files/cv.pdf">CV</a>
+      <a href="mailto:dmmsjtu@engineering.upenn.edu">Email</a>
+      <button class="lang-toggle" data-lang-toggle type="button"><b>EN</b> / ZH</button>
+    </nav>
+  </header>
+
+  <main class="research-page">
+<section class="research-hero">
+<ol class="crumbs"><li><a href="index.html"><span class="lang-en">Home</span><span class="lang-zh">首页</span></a></li><li><a href="index.html#publications"><span class="lang-en">Research</span><span class="lang-zh">研究</span></a></li><li>AL-HOP</li></ol>
+<p class="eyebrow"><span class="lang-en">In submission · ICRA 2027</span><span class="lang-zh">投稿中 · ICRA 2027</span></p>
+<h1 class="display">AL-HOP: Augmented-Lagrangian Horizon-Optimal Planning for Fast Constrained Trajectory Optimization</h1>
+<p class="hero__sub"><span class="lang-en"><b>Miaomiao Dai</b>, Zhongqiang Ren · Shanghai Jiao Tong University</span><span class="lang-zh"><b>代淼淼</b>，Zhongqiang Ren · 上海交通大学</span></p>
+<div class="research-lead"><span class="lang-en">Choose the duration while respecting the constraints that make a trajectory usable.</span><span class="lang-zh">在选择运动时长的同时，满足让轨迹真正可用的约束。</span></div>
+<ul class="linkrow"><li><a class="btn" href="mailto:dmmsjtu@engineering.upenn.edu"><span class="lang-en">Discuss this research</span><span class="lang-zh">交流这项研究</span></a></li></ul>
+</section>
+<div class="research-article"><section class="research-section"><h2><span class="lang-en">Duration matters under constraints</span><span class="lang-zh">约束下，时长同样重要</span></h2>
+<p class="lang-en">A useful trajectory must do more than reach a goal quickly. It must respect actuator limits, state bounds, and obstacles. AL-HOP extends horizon selection to this constrained setting, optimizing the motion and its integer terminal index under a common cost.</p>
+<p class="lang-zh">一条可用轨迹不仅要尽快抵达目标，还必须满足执行器限制、状态边界和障碍约束。AL-HOP 将视界选择扩展到这一场景，在统一代价下优化运动及其整数终止时刻。</p><p class="lang-en">Changing the horizon also changes which constraints matter. A promising prediction from a local model therefore needs to be solved and checked under the original nonlinear dynamics.</p>
+<p class="lang-zh">视界改变时，起作用的约束也可能改变。因此，局部模型给出的有希望的预测，还需要在原始非线性动力学下求解并验证。</p></section><section class="research-section"><h2><span class="lang-en">Predict, solve, verify</span><span class="lang-zh">预测、求解、验证</span></h2>
+<figure class="figure"><svg class="research-diagram" viewBox="0 0 760 270" role="img" aria-label="AL-HOP proposes a horizon using a local augmented model, optimizes it under nonlinear dynamics, and accepts only a feasible candidate with lower original cost.">
+<defs><marker id="diagram-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 8 4 L 0 8" fill="currentColor"/></marker></defs>
+<text class="lang-en" x="28" y="35" text-anchor="start" font-size="18" >From a local prediction to a verified candidate</text><text class="lang-zh" x="28" y="35" text-anchor="start" font-size="18" >从局部预测到验证后的候选解</text><g class=""><rect x="28" y="65" width="200" height="84" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/><text class="lang-en" x="128.0" y="99" text-anchor="middle" font-size="20" >Propose a horizon</text><text class="lang-zh" x="128.0" y="99" text-anchor="middle" font-size="20" >提出候选视界</text><text class="lang-en" x="128.0" y="125" text-anchor="middle" font-size="20" >augmented LQ model</text><text class="lang-zh" x="128.0" y="125" text-anchor="middle" font-size="20" >增广线性二次模型</text></g><g class="diagram-accent"><rect x="280" y="65" width="200" height="84" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/><text class="lang-en" x="380.0" y="99" text-anchor="middle" font-size="20" >Constrained solve</text><text class="lang-zh" x="380.0" y="99" text-anchor="middle" font-size="20" >约束优化</text><text class="lang-en" x="380.0" y="125" text-anchor="middle" font-size="20" >nonlinear dynamics</text><text class="lang-zh" x="380.0" y="125" text-anchor="middle" font-size="20" >非线性动力学</text></g><g class=""><rect x="532" y="65" width="200" height="84" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/><text class="lang-en" x="632.0" y="99" text-anchor="middle" font-size="20" >Accept or reject</text><text class="lang-zh" x="632.0" y="99" text-anchor="middle" font-size="20" >接受或拒绝</text><text class="lang-en" x="632.0" y="125" text-anchor="middle" font-size="20" >feasibility + cost</text><text class="lang-zh" x="632.0" y="125" text-anchor="middle" font-size="20" >可行性与原始代价</text></g><path d="M 230 107 L 275 107" stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#diagram-arrow)" /><path d="M 482 107 L 527 107" stroke="currentColor" stroke-width="1.6" fill="none" marker-end="url(#diagram-arrow)" /><path d="M 632 160 V 215 H 128 V 160" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 5" marker-end="url(#diagram-arrow)"/><text class="lang-en diagram-muted" x="380" y="245" text-anchor="middle" font-size="18">Iterate; a horizon prediction is not a feasibility certificate.</text><text class="lang-zh diagram-muted" x="380" y="245" text-anchor="middle" font-size="18">迭代求解；视界预测本身不代表约束已满足。</text></svg><figcaption><span class="lang-en">Method schematic. Shared horizon prediction proposes a candidate; the constrained solver and feasibility checks decide whether to keep it.</span><span class="lang-zh">方法示意。共享视界预测提出候选，约束求解与可行性检查决定是否保留。</span></figcaption></figure><p class="lang-en">An augmented-Lagrangian formulation adds constraint information to the local costs while preserving the structure needed for HOP’s shared horizon evaluation. AL-HOP limits the proposed horizon change and runs a constrained nonlinear optimization at that candidate.</p>
+<p class="lang-zh">增广拉格朗日形式将约束信息纳入局部代价，同时保留 HOP 共享视界评估所需的结构。AL-HOP 控制候选视界的调整幅度，并在该视界上进行约束非线性优化。</p><p class="lang-en">A candidate is retained only when it is feasible and improves the original objective. This acceptance step is central: a fast horizon score alone is not evidence that a trajectory satisfies the constraints.</p>
+<p class="lang-zh">只有可行且改善原始目标函数的候选才会被保留。这个接受步骤很关键：快速得到一个视界评分，并不意味着轨迹已经满足约束。</p></section><section class="research-section"><h2><span class="lang-en">Reliability and speed, measured separately</span><span class="lang-zh">分别看有效性与速度</span></h2>
+<!-- Current paper result_numbers.tex; repeated four-solver benchmark, 100 problems x 5 runs. -->
+<p class="lang-en">The benchmark covers <b>100 problems across 10 systems, with 5 runs per problem and method</b>. Every returned trajectory is checked against the same terminal-error, dynamics, and knot-constraint tolerances; timeouts count as failed attempts.</p>
+<p class="lang-zh">基准覆盖 <b>10 类系统、100 个问题，每个方法对每题运行 5 次</b>。返回轨迹采用相同的终端误差、动力学与节点约束容差进行后验检查，超时调用计为未通过。</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="AL-HOP repeated benchmark validity comparison">
+<table class="data">
+  <caption><span class="lang-en">Call-level pass rates use 500 attempts per method. The final column counts problems that passed all 5 runs.</span><span class="lang-zh">调用通过率以每个方法的 500 次运行统计；最后一列统计 5 次均通过的问题数。</span></caption>
+  <thead><tr><th scope="col"><span class="lang-en">Method</span><span class="lang-zh">方法</span></th><th scope="col"><span class="lang-en">Valid calls</span><span class="lang-zh">通过调用数</span></th><th scope="col"><span class="lang-en">Pass rate</span><span class="lang-zh">通过率</span></th><th scope="col"><span class="lang-en">All 5 runs pass</span><span class="lang-zh">5 次均通过</span></th></tr></thead>
+  <tbody>
+    <tr class="is-ours"><td>AL-HOP</td><td>500/500</td><td>100%</td><td>100/100</td></tr>
+    <tr><td>ALTRO</td><td>399/500</td><td>79.8%</td><td>79/100</td></tr>
+    <tr><td>DIRCOL/IPOPT</td><td>399/500</td><td>79.8%</td><td>77/100</td></tr>
+    <tr><td>DIRCOL/SNOPT</td><td>350/500</td><td>70%</td><td>70/100</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="lang-en"><b>Speed and quality.</b> As summarized in the paper's abstract, AL-HOP runs up to <b>4 times faster on average</b> than popular baselines while finding solutions with <b>similar costs</b>.</p>
+<p class="lang-zh"><b>速度与质量。</b>论文摘要报告，相较常用基线，AL-HOP 的<b>平均加速比最高达 4 倍</b>，同时获得<b>代价相当的解</b>。</p></section><section class="research-section"><h2><span class="lang-en">A local solver, with explicit checks</span><span class="lang-zh">带有显式验证的局部求解器</span></h2>
+<figure class="figure"><img src="assets/pub-alhop-car-escape.png" alt="Car-escape trajectories from AL-HOP and the comparison solvers" width="2030" height="1800" loading="lazy"><figcaption><span class="lang-en">A car-escape example from the manuscript illustrates horizon selection around obstacles. The repeated benchmark above measures performance across the full task set.</span><span class="lang-zh">论文中的汽车脱困示例展示了障碍环境下的视界选择；上表的重复评测则覆盖完整任务集。</span></figcaption></figure><p class="lang-en">AL-HOP remains a local nonlinear method. Validation checks the discretized trajectory under nonlinear replay, not continuous-time collision freedom between every pair of knots. The measured comparisons concern complete solvers with different discretizations and solver designs; the results should be read within that benchmark scope.</p>
+<p class="lang-zh">AL-HOP 仍是局部非线性方法。验证检查离散轨迹的非线性回放，并不保证任意两个离散节点之间的连续时间无碰撞。对照比较的是采用不同离散化与求解设计的完整求解器，结果应在该基准范围内理解。</p></section></div>
+<p class="research-return"><a href="index.html#publications"><span class="lang-en">← Back to all research</span><span class="lang-zh">← 返回全部研究</span></a></p>
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 Miaomiao Dai</span>
+    <span><button class="theme-toggle" data-theme-toggle type="button">Dark</button></span>
+  </footer>
+
+</div>
+
+<script src="assets/paper.js"></script>
+</body>
+</html>

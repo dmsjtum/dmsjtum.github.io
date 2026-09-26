@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Miaomiao Dai 代淼淼</title>
-<meta name="description" content="MSR student at the University of Pennsylvania. Robot learning and control: time-optimal control, differentiable planning, closed-loop action heads, tactile representation. RSS 2026.">
+<meta name="description" content="MSR student at the University of Pennsylvania, working where robot learning meets control: time-optimal trajectory planning and physical supervision for vision-language-action policies. RSS 2026.">
 <meta property="og:title" content="Miaomiao Dai 代淼淼">
 <meta property="og:description" content="Where learning meets control — so robots keep the generality of learning and the agility of control. RSS 2026. MSR at Penn.">
 <meta property="og:type" content="website">
@@ -58,9 +58,11 @@
     <nav class="nav" aria-label="Primary">
       <a href="#publications"><span class="lang-en">Research</span><span class="lang-zh">研究</span></a>
       <a href="#projects"><span class="lang-en">Projects</span><span class="lang-zh">项目</span></a>
+      <a href="#proposals"><span class="lang-en">Ideas</span><span class="lang-zh">构想</span></a>
       <a href="#experience"><span class="lang-en">Record</span><span class="lang-zh">履历</span></a>
       <a href="#news"><span class="lang-en">News</span><span class="lang-zh">近况</span></a>
       <a href="files/cv.pdf">CV</a>
+      <a href="mailto:dmmsjtu@engineering.upenn.edu">Email</a>
       <button class="lang-toggle" data-lang-toggle type="button"><b>EN</b> / ZH</button>
     </nav>
   </header>
@@ -79,64 +81,218 @@
           <span class="lang-zh">宾夕法尼亚大学 机器人硕士在读</span>
         </p>
 
-        <!-- Contact sits above the prose: it is the thing a reader most often
-             came for, and it should not be at the bottom of two paragraphs. -->
-        <dl class="meta" style="margin:22px 0 26px">
-          <dt>Email</dt>   <dd><a href="mailto:dmmsjtu@umich.edu">dmmsjtu@umich.edu</a></dd>
-          <dt>GitHub</dt>  <dd><a href="https://github.com/dmsjtum">github.com/dmsjtum</a></dd>
-          <dt>CV</dt>      <dd><a href="files/cv.pdf">cv.pdf</a></dd>
-        </dl>
-
         <!-- bio__text marks the paragraph block the entrance types into.
              Both languages carry it; paper.js only ever touches the one
              currently on screen, so toggling shows the other complete. -->
         <div class="lang-en bio__text">
           <p class="lede">
-            I work where learning meets control. Learned policies generalize;
-            classical control is fast, and it comes with guarantees. A robot
-            that is genuinely useful needs both &mdash; and I think the way
-            there is to let control theory shape what the black box learns,
-            rather than wrapping one around the other.
+            I earned dual degrees in Mechanical Engineering at Shanghai Jiao
+            Tong University and Computer Science at the University of Michigan,
+            Ann Arbor. Now a Robotics master&rsquo;s student at Penn, I bring
+            research foundations in both learning and control.
           </p>
           <p class="lede">
-            Two things a robot can have, and rarely has at once: the generality
-            of a learned policy, and the speed and reliability of a controller
-            that knows what it is doing. VLA models and large datasets buy the
-            first. They do not, on their own, buy back the second. I work on
-            the diagonal.
+            My current research connects learning and control. Working with both
+            has shown me that adaptability alone does not ensure reliable
+            execution, while precise control often needs task-specific design.
+            I want robots to adapt broadly and act quickly and reliably.
           </p>
         </div>
 
         <div class="lang-zh bio__text">
           <p class="lede">
-            我的研究在学习与控制的交界处。学习出来的策略泛化得好，经典控制则快、而且带有保证。真正有用的机器人两者都要——我认为通向它的路，是让控制理论去塑造黑箱学到的东西，而不是把两者互相套一层壳。
+            我本科获上海交通大学机械工程、密歇根大学安娜堡分校计算机科学双学位，现于宾夕法尼亚大学攻读机器人学硕士，具备学习与控制两方面的研究基础。
           </p>
           <p class="lede">
-            机器人身上有两样东西，眼下很难同时拥有：学习型策略的通用性，和一个「知道自己在做什么」的控制器所具备的速度与可靠性。VLA 与大数据买来了前者，却不会自动换回后者。我做的是那条对角线上的事。
+            我目前研究学习与控制的结合。两方面的研究让我看到：学习的适应性并不等于执行可靠，精确控制又常依赖任务设计。我希望让机器人既能适应变化，也能快速、可靠地执行。
           </p>
+        </div>
+
+        <div class="bio__interests">
+          <h2>Interests<span class="lang-zh"> / 研究兴趣</span></h2>
+          <ul>
+            <li><span class="lang-en">Robot Learning</span><span class="lang-zh">机器人学习</span></li>
+            <li><span class="lang-en">Optimal Control</span><span class="lang-zh">最优控制</span></li>
+            <li><span class="lang-en">Learning &amp; Control</span><span class="lang-zh">学习与控制融合</span></li>
+          </ul>
         </div>
 
       </div>
 
-      <!-- Right column: the portrait. The working drawing that used to sit
-           under it now runs beside the direction chart below, where the two
-           figures read as a pair. -->
+      <!-- Portrait with the decorative robot illustration underneath. -->
       <div class="bio__side">
         <img class="bio__portrait" src="assets/portrait.jpg" alt="Miaomiao Dai"
              onerror="this.onerror=null;this.src='data:image/svg+xml;charset=utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E'">
+        <figure class="bio__illustration" aria-hidden="true">
+            <svg class="sketch" viewBox="0 32 200 205" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <!-- One bench, two systems: the arm policies get deployed on, and
+                   the quadrotor HOP is validated on. Joint angles are IK-solved
+                   (scratchpad/ik.py), and the pose sequence starts and ends on the
+                   same pose so the loop seam has nothing to jump across. The flight
+                   path is kept above y=112 while the arm tops out near y=156. -->
+
+              <path d="M 6 226 L 194 226" stroke="currentColor" stroke-width="1.1" opacity=".45"/>
+
+              <!-- flight path, entirely in the sky -->
+              <path id="traj" d="M 44 112 C 80 56 130 50 176 84"/>
+              <path d="M 44 112 C 80 56 130 50 176 84"
+                    stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                    stroke-dasharray="0.1 10" opacity=".3">
+                <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.5s" repeatCount="indefinite"/>
+              </path>
+
+              <!-- T*: the horizon HOP selects. The one accent in the drawing. -->
+              <g class="accent">
+                <circle cx="176" cy="84" r="4.5" stroke="currentColor" stroke-width="1.5">
+                  <animate attributeName="r" values="4.5;7;4.5" dur="2.8s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values=".95;.4;.95" dur="2.8s" repeatCount="indefinite"/>
+                </circle>
+                <text x="168" y="70" font-family="ui-monospace,SFMono-Regular,Menlo,monospace"
+                      font-size="9" fill="currentColor">T*</text>
+              </g>
+
+              <!-- quadrotor: out to T*, hold, back again -->
+              <g>
+                <animateMotion dur="9s" repeatCount="indefinite"
+                               keyPoints="0;1;1;0;0" keyTimes="0;0.38;0.50;0.88;1"
+                               calcMode="spline"
+                               keySplines=".45 0 .3 1; 0 0 1 1; .45 0 .3 1; 0 0 1 1">
+                  <mpath href="#traj"/>
+                </animateMotion>
+                <g stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+                  <path d="M -10 -2 L 10 -2"/>
+                  <path d="M -10 -2 L -10 -6"/>
+                  <path d="M  10 -2 L  10 -6"/>
+                  <ellipse cx="-10" cy="-7" rx="6.5" ry="1.5">
+                    <animate attributeName="rx" values="6.5;2;6.5" dur="0.42s" repeatCount="indefinite"/>
+                  </ellipse>
+                  <ellipse cx="10" cy="-7" rx="6.5" ry="1.5">
+                    <animate attributeName="rx" values="2;6.5;2" dur="0.42s" repeatCount="indefinite"/>
+                  </ellipse>
+                  <rect x="-4.5" y="-2" width="9" height="5.5" rx="1.5"/>
+                </g>
+              </g>
+
+              <!-- A hopper on the empty pad under T*. Third morphology on the
+                   bench: the arm manipulates, the quadrotor flies, this one only
+                   knows how to leave the ground. One hop is 0.9s — exactly a tenth
+                   of the 9s master loop, so it lands on the same beat every time
+                   the arm sets the cube down. Rise and fall are separate splines
+                   fitted to a parabola: slope 2 leaving the ground, 0 at the apex,
+                   2 coming back down. Base poses are the standing pose, so it
+                   freezes upright rather than mid-crouch under reduced motion. -->
+              <g transform="translate(172 226)" stroke="currentColor"
+                 stroke-width="1.4" stroke-linecap="round">
+                <g>
+                  <animateTransform attributeName="transform" type="translate"
+                    values="0 0; 0 0; 0 -11; 0 0; 0 0"
+                    keyTimes="0; 0.10; 0.50; 0.90; 1"
+                    dur="0.9s" repeatCount="indefinite" calcMode="spline"
+                    keySplines="0 0 1 1; .25 .5 .45 1; .55 0 .75 .5; 0 0 1 1"/>
+
+                  <!-- Legs load through the push-off and absorb after touchdown.
+                       Feet splay wider as the hip drops, so the crouch reads as
+                       weight rather than as the whole robot shrinking. -->
+                  <path d="M -5.5 0 L -3 0 L -1.4 -6">
+                    <animate attributeName="d" dur="0.9s" repeatCount="indefinite"
+                      keyTimes="0; 0.10; 0.90; 0.98; 1"
+                      values="M -6.5 0 L -4 0 L -1.4 -4;
+                              M -5.5 0 L -3 0 L -1.4 -6;
+                              M -5.5 0 L -3 0 L -1.4 -6;
+                              M -6.5 0 L -4 0 L -1.4 -4;
+                              M -6.5 0 L -4 0 L -1.4 -4"/>
+                  </path>
+                  <path d="M 5.5 0 L 3 0 L 1.4 -6">
+                    <animate attributeName="d" dur="0.9s" repeatCount="indefinite"
+                      keyTimes="0; 0.10; 0.90; 0.98; 1"
+                      values="M 6.5 0 L 4 0 L 1.4 -4;
+                              M 5.5 0 L 3 0 L 1.4 -6;
+                              M 5.5 0 L 3 0 L 1.4 -6;
+                              M 6.5 0 L 4 0 L 1.4 -4;
+                              M 6.5 0 L 4 0 L 1.4 -4"/>
+                  </path>
+
+                  <!-- Body rides the hip down through the crouch: 2px, the same
+                       distance the hip travels, so nothing telescopes. -->
+                  <g>
+                    <animateTransform attributeName="transform" type="translate"
+                      values="0 2; 0 0; 0 0; 0 2; 0 2"
+                      keyTimes="0; 0.10; 0.90; 0.98; 1"
+                      dur="0.9s" repeatCount="indefinite"/>
+                    <rect x="-6" y="-16" width="12" height="10" rx="1.8"/>
+                    <circle cx="0" cy="-11" r="2.1"/>
+                    <path d="M 0 -16 L 0 -20"/>
+                    <circle cx="0" cy="-21.2" r="1.2"/>
+                  </g>
+                </g>
+              </g>
+
+              <!-- Arm assembly scaled 1.18x about the bench: translate = (1-s)*anchor. -->
+              <g transform="translate(-8.6 -40.7) scale(1.18)">
+                <rect x="-6" y="-6" width="12" height="12" rx="1.5"
+                      stroke="currentColor" stroke-width="1.4">
+                  <animateTransform attributeName="transform" type="translate"
+                    values="94 219; 94 172; 22 172; 22 219; 22 219; 22 172; 94 172; 94 219; 94 219"
+                    keyTimes="0; 0.10; 0.26; 0.36; 0.46; 0.56; 0.72; 0.82; 1"
+                    dur="9s" repeatCount="indefinite" calcMode="spline"
+                    keySplines=".4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1; .4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1"/>
+                </rect>
+
+                <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                  <path d="M 32 226 L 64 226"/>
+                  <path d="M 42 226 L 42 204 L 54 204 L 54 226"/>
+
+                  <g transform="translate(48 200)">
+                    <animateTransform attributeName="transform" type="rotate"
+                      values="136.2; 63.1; 4.2; -69.9; -69.9; 4.2; 63.1; 136.2; 136.2"
+                      keyTimes="0; 0.10; 0.26; 0.36; 0.46; 0.56; 0.72; 0.82; 1"
+                      dur="9s" repeatCount="indefinite" additive="sum" calcMode="spline"
+                      keySplines=".4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1; .4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1"/>
+                    <path d="M 0 0 L 0 -26"/>
+                    <circle cx="0" cy="0" r="2.4"/>
+
+                    <g transform="translate(0 -26)">
+                      <animateTransform attributeName="transform" type="rotate"
+                        values="-45.7; -8.5; -90.0; -106.9; -106.9; -90.0; -8.5; -45.7; -45.7"
+                        keyTimes="0; 0.10; 0.26; 0.36; 0.46; 0.56; 0.72; 0.82; 1"
+                        dur="9s" repeatCount="indefinite" additive="sum" calcMode="spline"
+                        keySplines=".4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1; .4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1"/>
+                      <path d="M 0 0 L 0 -28"/>
+                      <circle cx="0" cy="0" r="2.2"/>
+
+                      <!-- gripper eases open only while the cube rests on the bench -->
+                      <g transform="translate(0 -28)">
+                        <path d="M -5 0 L 5 0"/>
+                        <!-- Base d is the closed pose: reduced motion switches the
+                             <animate> off, and without it the fingers had no d at
+                             all and vanished. -->
+                        <path d="M -3 0 L -3 6.5">
+                          <animate attributeName="d" dur="9s" repeatCount="indefinite"
+                            keyTimes="0; 0.38; 0.42; 0.44; 0.48; 1"
+                            values="M -3 0 L -3 6.5; M -3 0 L -3 6.5; M -6 0 L -6 6.5; M -6 0 L -6 6.5; M -3 0 L -3 6.5; M -3 0 L -3 6.5"/>
+                        </path>
+                        <path d="M 3 0 L 3 6.5">
+                          <animate attributeName="d" dur="9s" repeatCount="indefinite"
+                            keyTimes="0; 0.38; 0.42; 0.44; 0.48; 1"
+                            values="M 3 0 L 3 6.5; M 3 0 L 3 6.5; M 6 0 L 6 6.5; M 6 0 L 6 6.5; M 3 0 L 3 6.5; M 3 0 L 3 6.5"/>
+                        </path>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </svg>
+        </figure>
       </div>
     </section>
 
-    <!-- ===== The two drawings =======================================
-         A pair, deliberately: the chart says where the field is and which
-         way I am pushing, the drawing says what the pushing is done on.
-         Both draw with currentColor and take their colour from `color` on
-         a group, so dark mode needs no second palette. -->
+    <!-- ===== Research direction =====================================
+         The chart and its caption sit side by side. -->
     <section class="duo">
       <figure class="figure duo__fig">
         <div class="chart-scroll">
-            <svg class="chart" viewBox="0 0 560 300" role="img"
-                 aria-label="Generality on the horizontal axis, throughput on the vertical. Industrial arms sit high and left, today's learned policies low and right, and generally useful robots high and right. A dashed arrow marks the direction of my work, from learned policies toward generally useful.">
+            <svg class="chart" viewBox="0 0 560 286" role="img"
+                 aria-label="Conceptual illustration of my current research directions, not measured performance. Task adaptability is on the horizontal axis, speed and reliability on the vertical. HOP and AL-HOP represent optimal control; latent-action pretraining and VLA systems represent robot learning. Dashed arrows from both strands point toward my research goal of adaptable, reliable robots.">
 
               <g class="c-axis" stroke="currentColor" fill="currentColor">
                 <path d="M 80 235 L 526 235" stroke-width="1.3" fill="none"/>
@@ -144,206 +300,46 @@
                 <path d="M 80 235 L 80 36" stroke-width="1.3" fill="none"/>
                 <path d="M 80 34 l -4 8 l 8 0 z" stroke="none"/>
                 <text x="304" y="268" text-anchor="middle" stroke="none">
-                  <tspan class="lang-en">generality / flexibility</tspan><tspan class="lang-zh">通用性 / 灵活性</tspan>
+                  <tspan class="lang-en">task adaptability</tspan><tspan class="lang-zh">任务适应能力</tspan>
                 </text>
                 <text x="56" y="134" text-anchor="middle" transform="rotate(-90 56 134)" stroke="none">
-                  <tspan class="lang-en">throughput: speed + reliability</tspan><tspan class="lang-zh">吞吐：速度 + 可靠性</tspan>
+                  <tspan class="lang-en">speed &amp; reliability</tspan><tspan class="lang-zh">速度与可靠性</tspan>
                 </text>
               </g>
 
               <g class="c-dim" fill="currentColor">
                 <circle cx="170" cy="88" r="6.5"/>
                 <text x="170" y="66" text-anchor="middle">
-                  <tspan class="lang-en">Industrial arms</tspan><tspan class="lang-zh">工业机械臂</tspan>
+                  <tspan class="lang-en">Optimal control</tspan><tspan class="lang-zh">最优控制</tspan>
                 </text>
+                <text x="170" y="112" text-anchor="middle" class="chart__detail">HOP · AL-HOP</text>
                 <circle cx="360" cy="196" r="6.5"/>
-                <text x="360" y="174" text-anchor="middle">
-                  <tspan class="lang-en">Today&rsquo;s learned policies</tspan><tspan class="lang-zh">当前的学习型策略</tspan>
+                <text x="340" y="191" text-anchor="end">
+                  <tspan class="lang-en">Robot learning</tspan><tspan class="lang-zh">机器人学习</tspan>
                 </text>
+                <text x="340" y="211" text-anchor="end" class="chart__detail">Latent actions · VLA</text>
               </g>
 
               <g class="c-accent" fill="currentColor" stroke="currentColor">
+                <path d="M 187 88 Q 316 108 444 84" fill="none" stroke-width="1.8"
+                      stroke-linecap="round" stroke-dasharray="6 6"/>
+                <path d="M 452 82 l -9 -3 l 1.5 8 z" stroke="none"/>
                 <path d="M 372 182 Q 410 148 450 100" fill="none" stroke-width="1.8"
                       stroke-linecap="round" stroke-dasharray="6 6"/>
                 <path d="M 456 92 l -2 9 l 8 -1.5 z" stroke="none"/>
-                <circle cx="462" cy="80" r="6.5" stroke="none"/>
-                <text x="462" y="58" text-anchor="middle" stroke="none">
-                  <tspan class="lang-en">Generally useful</tspan><tspan class="lang-zh">通用且好用</tspan>
+                <circle cx="462" cy="80" r="7" fill="none" stroke-width="1.8"/>
+                <text x="462" y="42" text-anchor="middle" stroke="none" class="chart__goal">
+                  <tspan class="lang-en">My research goal</tspan><tspan class="lang-zh">我的研究目标</tspan>
                 </text>
-                <text x="430" y="154" text-anchor="start" stroke="none" class="chart__note">
-                  <tspan class="lang-en">my work</tspan><tspan class="lang-zh">我的方向</tspan>
+                <text x="462" y="61" text-anchor="middle" stroke="none" class="chart__detail">
+                  <tspan class="lang-en">Adaptable &amp; reliable</tspan><tspan class="lang-zh">灵活适应，可靠执行</tspan>
                 </text>
               </g>
             </svg>
         </div>
         <figcaption>
-          <span class="lang-en"><b>Where robots sit today.</b> Industrial arms bought throughput by giving up generality; learned policies made the opposite trade. The dashed arrow is the corner I am working toward.</span>
-          <span class="lang-zh"><b>机器人今天所处的位置。</b>工业机械臂用通用性换来了吞吐，学习型策略做的是相反的交易。虚线箭头指向我要去的那个角。</span>
-        </figcaption>
-      </figure>
-
-      <figure class="figure duo__fig duo__fig--draw">
-          <svg class="sketch" viewBox="0 0 200 250" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <!-- One bench, two systems: the arm policies get deployed on, and
-                 the quadrotor HOP is validated on. Joint angles are IK-solved
-                 (scratchpad/ik.py), and the pose sequence starts and ends on the
-                 same pose so the loop seam has nothing to jump across. The flight
-                 path is kept above y=112 while the arm tops out near y=156. -->
-
-            <path d="M 6 226 L 194 226" stroke="currentColor" stroke-width="1.1" opacity=".45"/>
-
-            <!-- flight path, entirely in the sky -->
-            <path id="traj" d="M 44 112 C 80 56 130 50 176 84"/>
-            <path d="M 44 112 C 80 56 130 50 176 84"
-                  stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
-                  stroke-dasharray="0.1 10" opacity=".3">
-              <animate attributeName="stroke-dashoffset" values="0;-10" dur="1.5s" repeatCount="indefinite"/>
-            </path>
-
-            <!-- T*: the horizon HOP selects. The one accent in the drawing. -->
-            <g class="accent">
-              <circle cx="176" cy="84" r="4.5" stroke="currentColor" stroke-width="1.5">
-                <animate attributeName="r" values="4.5;7;4.5" dur="2.8s" repeatCount="indefinite"/>
-                <animate attributeName="opacity" values=".95;.4;.95" dur="2.8s" repeatCount="indefinite"/>
-              </circle>
-              <text x="168" y="70" font-family="ui-monospace,SFMono-Regular,Menlo,monospace"
-                    font-size="9" fill="currentColor">T*</text>
-            </g>
-
-            <!-- quadrotor: out to T*, hold, back again -->
-            <g>
-              <animateMotion dur="9s" repeatCount="indefinite"
-                             keyPoints="0;1;1;0;0" keyTimes="0;0.38;0.50;0.88;1"
-                             calcMode="spline"
-                             keySplines=".45 0 .3 1; 0 0 1 1; .45 0 .3 1; 0 0 1 1">
-                <mpath href="#traj"/>
-              </animateMotion>
-              <g stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
-                <path d="M -10 -2 L 10 -2"/>
-                <path d="M -10 -2 L -10 -6"/>
-                <path d="M  10 -2 L  10 -6"/>
-                <ellipse cx="-10" cy="-7" rx="6.5" ry="1.5">
-                  <animate attributeName="rx" values="6.5;2;6.5" dur="0.42s" repeatCount="indefinite"/>
-                </ellipse>
-                <ellipse cx="10" cy="-7" rx="6.5" ry="1.5">
-                  <animate attributeName="rx" values="2;6.5;2" dur="0.42s" repeatCount="indefinite"/>
-                </ellipse>
-                <rect x="-4.5" y="-2" width="9" height="5.5" rx="1.5"/>
-              </g>
-            </g>
-
-            <!-- A hopper on the empty pad under T*. Third morphology on the
-                 bench: the arm manipulates, the quadrotor flies, this one only
-                 knows how to leave the ground. One hop is 0.9s — exactly a tenth
-                 of the 9s master loop, so it lands on the same beat every time
-                 the arm sets the cube down. Rise and fall are separate splines
-                 fitted to a parabola: slope 2 leaving the ground, 0 at the apex,
-                 2 coming back down. Base poses are the standing pose, so it
-                 freezes upright rather than mid-crouch under reduced motion. -->
-            <g transform="translate(172 226)" stroke="currentColor"
-               stroke-width="1.4" stroke-linecap="round">
-              <g>
-                <animateTransform attributeName="transform" type="translate"
-                  values="0 0; 0 0; 0 -11; 0 0; 0 0"
-                  keyTimes="0; 0.10; 0.50; 0.90; 1"
-                  dur="0.9s" repeatCount="indefinite" calcMode="spline"
-                  keySplines="0 0 1 1; .25 .5 .45 1; .55 0 .75 .5; 0 0 1 1"/>
-
-                <!-- Legs load through the push-off and absorb after touchdown.
-                     Feet splay wider as the hip drops, so the crouch reads as
-                     weight rather than as the whole robot shrinking. -->
-                <path d="M -5.5 0 L -3 0 L -1.4 -6">
-                  <animate attributeName="d" dur="0.9s" repeatCount="indefinite"
-                    keyTimes="0; 0.10; 0.90; 0.98; 1"
-                    values="M -6.5 0 L -4 0 L -1.4 -4;
-                            M -5.5 0 L -3 0 L -1.4 -6;
-                            M -5.5 0 L -3 0 L -1.4 -6;
-                            M -6.5 0 L -4 0 L -1.4 -4;
-                            M -6.5 0 L -4 0 L -1.4 -4"/>
-                </path>
-                <path d="M 5.5 0 L 3 0 L 1.4 -6">
-                  <animate attributeName="d" dur="0.9s" repeatCount="indefinite"
-                    keyTimes="0; 0.10; 0.90; 0.98; 1"
-                    values="M 6.5 0 L 4 0 L 1.4 -4;
-                            M 5.5 0 L 3 0 L 1.4 -6;
-                            M 5.5 0 L 3 0 L 1.4 -6;
-                            M 6.5 0 L 4 0 L 1.4 -4;
-                            M 6.5 0 L 4 0 L 1.4 -4"/>
-                </path>
-
-                <!-- Body rides the hip down through the crouch: 2px, the same
-                     distance the hip travels, so nothing telescopes. -->
-                <g>
-                  <animateTransform attributeName="transform" type="translate"
-                    values="0 2; 0 0; 0 0; 0 2; 0 2"
-                    keyTimes="0; 0.10; 0.90; 0.98; 1"
-                    dur="0.9s" repeatCount="indefinite"/>
-                  <rect x="-6" y="-16" width="12" height="10" rx="1.8"/>
-                  <circle cx="0" cy="-11" r="2.1"/>
-                  <path d="M 0 -16 L 0 -20"/>
-                  <circle cx="0" cy="-21.2" r="1.2"/>
-                </g>
-              </g>
-            </g>
-
-            <!-- Arm assembly scaled 1.18x about the bench: translate = (1-s)*anchor. -->
-            <g transform="translate(-8.6 -40.7) scale(1.18)">
-              <rect x="-6" y="-6" width="12" height="12" rx="1.5"
-                    stroke="currentColor" stroke-width="1.4">
-                <animateTransform attributeName="transform" type="translate"
-                  values="94 219; 94 172; 22 172; 22 219; 22 219; 22 172; 94 172; 94 219; 94 219"
-                  keyTimes="0; 0.10; 0.26; 0.36; 0.46; 0.56; 0.72; 0.82; 1"
-                  dur="9s" repeatCount="indefinite" calcMode="spline"
-                  keySplines=".4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1; .4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1"/>
-              </rect>
-
-              <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-                <path d="M 32 226 L 64 226"/>
-                <path d="M 42 226 L 42 204 L 54 204 L 54 226"/>
-
-                <g transform="translate(48 200)">
-                  <animateTransform attributeName="transform" type="rotate"
-                    values="136.2; 63.1; 4.2; -69.9; -69.9; 4.2; 63.1; 136.2; 136.2"
-                    keyTimes="0; 0.10; 0.26; 0.36; 0.46; 0.56; 0.72; 0.82; 1"
-                    dur="9s" repeatCount="indefinite" additive="sum" calcMode="spline"
-                    keySplines=".4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1; .4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1"/>
-                  <path d="M 0 0 L 0 -26"/>
-                  <circle cx="0" cy="0" r="2.4"/>
-
-                  <g transform="translate(0 -26)">
-                    <animateTransform attributeName="transform" type="rotate"
-                      values="-45.7; -8.5; -90.0; -106.9; -106.9; -90.0; -8.5; -45.7; -45.7"
-                      keyTimes="0; 0.10; 0.26; 0.36; 0.46; 0.56; 0.72; 0.82; 1"
-                      dur="9s" repeatCount="indefinite" additive="sum" calcMode="spline"
-                      keySplines=".4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1; .4 0 .2 1; .4 0 .2 1; .4 0 .2 1; 0 0 1 1"/>
-                    <path d="M 0 0 L 0 -28"/>
-                    <circle cx="0" cy="0" r="2.2"/>
-
-                    <!-- gripper eases open only while the cube rests on the bench -->
-                    <g transform="translate(0 -28)">
-                      <path d="M -5 0 L 5 0"/>
-                      <!-- Base d is the closed pose: reduced motion switches the
-                           <animate> off, and without it the fingers had no d at
-                           all and vanished. -->
-                      <path d="M -3 0 L -3 6.5">
-                        <animate attributeName="d" dur="9s" repeatCount="indefinite"
-                          keyTimes="0; 0.38; 0.42; 0.44; 0.48; 1"
-                          values="M -3 0 L -3 6.5; M -3 0 L -3 6.5; M -6 0 L -6 6.5; M -6 0 L -6 6.5; M -3 0 L -3 6.5; M -3 0 L -3 6.5"/>
-                      </path>
-                      <path d="M 3 0 L 3 6.5">
-                        <animate attributeName="d" dur="9s" repeatCount="indefinite"
-                          keyTimes="0; 0.38; 0.42; 0.44; 0.48; 1"
-                          values="M 3 0 L 3 6.5; M 3 0 L 3 6.5; M 6 0 L 6 6.5; M 6 0 L 6 6.5; M 3 0 L 3 6.5; M 3 0 L 3 6.5"/>
-                      </path>
-                    </g>
-                  </g>
-                </g>
-              </g>
-            </g>
-          </svg>
-        <figcaption>
-          <span class="lang-en"><b>What it runs on.</b> The arm policies get deployed on, and the quadrotor HOP is validated on. Joint angles are inverse-kinematics solved, so the gripper genuinely meets the cube.</span>
-          <span class="lang-zh"><b>这件事跑在什么上面。</b>策略部署其上的机械臂，以及验证 HOP 的四旋翼。关节角是解逆运动学得到的，所以夹爪是真的碰到方块。</span>
+          <span class="lang-en">Learning&rsquo;s adaptability, control&rsquo;s speed and reliability.</span>
+          <span class="lang-zh">学习的适应性，控制的速度与可靠性。</span>
         </figcaption>
       </figure>
     </section>
@@ -352,183 +348,102 @@
          Published, submitted, and in-progress work, in that order. Bold
          marks me in an author list. Unpublished entries are deliberately
          high level: no thresholds, no dataset inventory, no target venue
-         until the paper is out. The ICLR 2027 entry is under double-blind
-         review: no title, method name, co-authors, numbers, figures, PDF or
-         videos until the December 2026 decision. -->
+         until the paper is out. -->
     <section class="section rail" id="publications">
       <div class="rail__mark">§01<span><span class="lang-en">Research</span><span class="lang-zh">研究</span></span></div>
       <div>
 
         <p class="section-intro">
-          <span class="lang-en">Three threads: how long a motion should take, how a generated action chunk recovers when it drifts, and what touch can teach a representation that vision alone cannot.</span>
-          <span class="lang-zh">三条线索：一段运动该走多久；生成出来的动作块偏了之后怎么回来；触觉能教给表征什么仅靠视觉学不到的东西。</span>
+          <span class="lang-en">Time-optimal trajectory planning and physical supervision for vision&ndash;language&ndash;action policies.</span>
+          <span class="lang-zh">时间最优轨迹规划，以及视觉–语言–动作策略的物理监督。</span>
         </p>
 
-        <div class="pub">
-          <div class="pub__card">
-            <h2 class="pub__title"><a href="project.html">HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning</a></h2>
-            <p class="pub__authors"><b>Miaomiao Dai</b>, Zhongqiang Ren<span class="lang-en"> (advisor), SJTU</span><span class="lang-zh">（导师），上海交大</span></p>
-            <p class="pub__venue"><span class="is-accepted">RSS 2026</span> · Robotics: Science and Systems</p>
-            <p class="pub__role">
-              <span class="lang-en">Undergraduate first author · presented the talk</span>
-              <span class="lang-zh">本科生第一作者 · 本人作大会报告</span>
-            </p>
-          </div>
-          <div class="pub__body">
-          <div>
-            <ul class="pub__points lang-en">
-              <li><b>Idea.</b> Standard planners fix the task duration up front; HOP selects the optimal horizon inside a single solve.</li>
-              <li><b>Theory.</b> A closed-form result, proved, scores every candidate horizon in one backward sweep — horizon search drops from <b>O(N²) to O(N)</b>.</li>
-              <li><b>Result.</b> Up to <b>40× faster</b> than brute-force search, with the identical selected horizon and cost.</li>
-            </ul>
-            <ul class="pub__points lang-zh">
-              <li><b>思路：</b>标准规划器把任务时长当作提前给定；HOP 在单次求解内直接选出最优视界。</li>
-              <li><b>理论：</b>提出并证明了一个闭式结果：单次反向扫描评估所有候选视界，视界搜索由 <b>O(N²) 降到 O(N)</b>。</li>
-              <li><b>结果：</b>比暴力搜索<b>快至多 40 倍</b>，且选出的视界与代价完全一致。</li>
-            </ul>
-            <ul class="pub__links">
-              <li><a href="project.html"><span class="lang-en">Details</span><span class="lang-zh">详情</span></a></li>
-              <li><a href="files/HOP.pdf">Paper</a></li>
-            </ul>
-          </div>
-          <div class="pub__figs">
-            <img class="pub__thumb" alt="HOP versus NLP quadrotor trajectories and runtime comparison"
-               src="assets/pub-hop.jpg"
-               onerror="this.onerror=null;this.src='data:image/svg+xml;charset=utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E'">
-            <img class="pub__thumb" alt="Presenting HOP on stage at RSS 2026, Sydney" src="assets/pub-hop-2.jpg" onerror="this.onerror=null;this.remove()">
-          </div>
-          </div>
-        </div>
+<article class="pub research-preview">
+  <div class="pub__card">
+    <h2 class="pub__title"><a href="project.html">HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning</a></h2>
+    <p class="pub__authors"><b>Miaomiao Dai</b>, Zhongqiang Ren</p>
+    <p class="pub__venue"><span class="lang-en is-accepted">Accepted · RSS 2026 · <b>First author as an undergraduate</b></span><span class="lang-zh is-accepted">已录用 · RSS 2026 · <b>本科期间第一作者</b></span></p>
+  </div>
+  <div class="research-body">
+    <div>
+      <div class="research-summary">
+<ul class="research-points lang-en">
+  <li><b>Idea.</b> Optimize the trajectory and its horizon together.</li>
+  <li><b>Method.</b> Shared LQ computations reduce horizon evaluation from <b>O(N²) to O(N)</b> for a fixed state dimension.</li>
+  <li><b>Result.</b> Up to <b>40× faster overall solves</b> than the brute-force baseline in the reported experiments.</li>
+</ul>
+<ul class="research-points lang-zh">
+  <li><b>思路：</b>同时优化轨迹与运动视界。</li>
+  <li><b>方法：</b>共享线性二次模型的计算；固定状态维度时，视界评估由 <b>O(N²) 降至 O(N)</b>。</li>
+  <li><b>结果：</b>论文实验中，相较暴力搜索基线<b>整体求解最高加速 40 倍</b>。</li>
+</ul>
+</div>
+      <ul class="pub__links"><li><a href="project.html"><span class="lang-en">Read the research →</span><span class="lang-zh">阅读研究详情 →</span></a></li><li><a href="files/HOP.pdf">Paper (PDF)</a></li></ul>
+    </div>
+    <figure class="research-figure">
+      <a class="research-visual" href="project.html" aria-label="Read more about HOP"><img src="assets/pub-hop-fig1.png" alt="HOP quadrotor trajectories and solve-time comparison with NLP and OP" width="634" height="533" loading="lazy"></a>
+    </figure>
+  </div>
+</article>
 
-        <div class="pub">
-          <div class="pub__card">
-            <h2 class="pub__title">AL-HOP: Augmented-Lagrangian Horizon-Optimal Planning for Fast Constrained Trajectory Optimization</h2>
-            <p class="pub__authors"><b>Miaomiao Dai</b>, Zhongqiang Ren<span class="lang-en"> (advisor), SJTU</span><span class="lang-zh">（导师），上海交大</span></p>
-            <p class="pub__venue">
-              <span class="lang-en">In submission · ICRA 2027</span><span class="lang-zh">投稿中 · ICRA 2027</span>
-            </p>
-            <p class="pub__role">
-              <span class="lang-en">First author</span>
-              <span class="lang-zh">第一作者</span>
-            </p>
-          </div>
-          <div class="pub__body">
-          <div>
-            <ul class="pub__points lang-en">
-              <li><b>Idea.</b> Extends HOP to hard state and control constraints — obstacles, actuator limits — while keeping the one-sweep horizon prediction.</li>
-              <li><b>Validity.</b> Solutions valid under the full nonlinear dynamics on <b>100/100</b> benchmarks across 10 systems, versus <b>79 / 71 / 55</b> for ALTRO, IPOPT, and SNOPT.</li>
-              <li><b>Speed.</b> Where both were valid, the baselines took <b>1.6–3.1×</b> the solve time.</li>
-            </ul>
-            <ul class="pub__points lang-zh">
-              <li><b>思路：</b>将 HOP 推广到硬状态与控制约束（障碍物、执行器极限），同时保留单次扫描的视界预测。</li>
-              <li><b>有效性：</b>在 10 类动力学系统的 <b>100/100</b> 个基准问题上给出满足完整非线性动力学的有效解；ALTRO / IPOPT / SNOPT 分别为 <b>79 / 71 / 55</b>。</li>
-              <li><b>速度：</b>在双方均有效的问题上，基线耗时为 AL-HOP 的 <b>1.6–3.1 倍</b>。</li>
-            </ul>
-          </div>
-          <div class="pub__figs">
-            <img class="pub__thumb" alt="AL-HOP results summary: solve time, constraint validity, solution quality, task duration"
-               src="assets/pub-alhop.jpg"
-               onerror="this.onerror=null;this.src='data:image/svg+xml;charset=utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22/%3E'">
-            <img class="pub__thumb" alt="AL-HOP solution quality and task duration" src="assets/pub-alhop-2.jpg" onerror="this.onerror=null;this.remove()">
-          </div>
-          </div>
-        </div>
+<article class="pub research-preview">
+  <div class="pub__card">
+    <h2 class="pub__title"><a href="al-hop.html">AL-HOP: Augmented-Lagrangian Horizon-Optimal Planning for Fast Constrained Trajectory Optimization</a></h2>
+    <p class="pub__authors"><span class="lang-en"><b>Miaomiao Dai</b> · First author · Advisor: Zhongqiang Ren</span><span class="lang-zh"><b>代淼淼</b> · 第一作者 · 导师：Zhongqiang Ren</span></p>
+    <p class="pub__venue"><span class="lang-en">In submission · ICRA 2027</span><span class="lang-zh">投稿中 · ICRA 2027</span></p>
+  </div>
+  <div class="research-body">
+    <div>
+      <div class="research-summary">
+<ul class="research-points lang-en">
+  <li><b>Idea.</b> Select the horizon while respecting state, control, and obstacle constraints.</li>
+  <li><b>Validity.</b> Across 100 problems from 10 systems, each run 5 times, replay pass rates are <b>AL-HOP 100%</b>, ALTRO 79.8%, DIRCOL/IPOPT 79.8%, and DIRCOL/SNOPT 70%.</li>
+  <li><b>Speed &amp; quality.</b> Up to <b>4× faster on average</b> than common baselines, while finding trajectories with <b>comparable costs</b>.</li>
+</ul>
+<ul class="research-points lang-zh">
+  <li><b>思路：</b>在满足状态、控制与障碍约束的同时选择视界。</li>
+  <li><b>有效性：</b>10 类系统、100 个问题各运行 5 次，非线性回放通过率为 <b>AL-HOP 100%</b>，ALTRO 79.8%，DIRCOL/IPOPT 79.8%，DIRCOL/SNOPT 70%。</li>
+  <li><b>速度与质量：</b>相较常用基线，<b>平均加速比最高达 4 倍</b>，同时获得<b>代价相当的轨迹</b>。</li>
+</ul>
+</div>
+      <ul class="pub__links"><li><a href="al-hop.html"><span class="lang-en">Read the research →</span><span class="lang-zh">阅读研究详情 →</span></a></li></ul>
+    </div>
+    <figure class="research-figure">
+      <a class="research-visual" href="al-hop.html" aria-label="Read more about AL-HOP"><img src="assets/pub-alhop-car-escape.png" alt="AL-HOP car escape example: obstacle-avoiding trajectories and solve-time comparison with ALTRO, IPOPT, and SNOPT" width="2030" height="1800" loading="lazy"></a>
+    </figure>
+  </div>
+</article>
 
-        <div class="pub">
-          <div class="pub__card">
-            <h2 class="pub__title">Transferring Physical Supervision to Latent-Action VLA Pretraining</h2>
-            <p class="pub__authors">
-              <span class="lang-en">Title and author list withheld during double-blind review</span>
-              <span class="lang-zh">双盲评审期间暂不公开论文标题与作者名单</span>
-            </p>
-            <p class="pub__venue">
-              <span class="lang-en">Under double-blind review &middot; ICLR 2027</span><span class="lang-zh">双盲评审中 &middot; ICLR 2027</span>
-            </p>
-            <p class="pub__role">
-              <span class="lang-en">Second author</span>
-              <span class="lang-zh">第二作者</span>
-            </p>
-          </div>
-          <div class="pub__body">
-          <div>
-            <ul class="pub__points lang-en">
-              <li><b>Question.</b> Latent-action pretraining lets a VLA learn from video with no action labels, but its targets come from visual change, so contact and force are supervised only indirectly &mdash; and touch, pressure, and torque sensors cover only a small slice of human and robot video.</li>
-              <li><b>Idea.</b> Learn physical supervision where sensors exist, then carry it to where they don&rsquo;t: one <b>shared, horizon-structured representation</b> of pressure maps, tactile marker motion, and joint torque, <b>inferred from causal RGB</b>, supervises the same latent actions as future visual prediction, across human and robot video. <b>No tactile or torque sensing at deployment.</b></li>
-              <li><b>Evidence.</b> Outperforms VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and on every SimplerEnv task group; on five real-world manipulation tasks it beats both VLA-JEPA and &pi;<sub>0.5</sub> <b>on every task</b>.</li>
-            </ul>
-            <ul class="pub__points lang-zh">
-              <li><b>问题：</b>隐动作预训练让 VLA 能从没有动作标签的视频里学习，但监督信号来自画面变化，接触与受力只被间接约束；而触觉、压力、力矩传感器只覆盖了人类与机器人视频里很小的一部分。</li>
-              <li><b>思路：</b>在有传感器的地方学到物理监督，再把它带到没有传感器的地方：由压力分布、触觉标记点位移与关节力矩学出<b>共享的、按时间视界组织的物理表征</b>，<b>只凭因果 RGB 推断</b>，与未来视觉预测一起监督同一组隐动作，覆盖人类与机器人视频。<b>部署时不需要任何触觉或力矩传感。</b></li>
-              <li><b>证据：</b>在 LIBERO 以及 SimplerEnv 的全部任务组上超过所比较的最强隐动作基线 VLA-JEPA；五个真实世界操作任务上，<b>每一项</b>都高于 VLA-JEPA 与 &pi;<sub>0.5</sub>。</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-
-        <div class="pub">
-          <div class="pub__card">
-            <h2 class="pub__title">Touch Without Touch: Measured-Touch Supervision for Visual Representations</h2>
-            <p class="pub__authors">
-              <span class="lang-en">Advisors: Prof. Hesheng Wang, SJTU IRMV Lab · Prof. Lin Shao, RoboScience</span>
-              <span class="lang-zh">导师：王贺升 教授（上海交大 IRMV 实验室）· 邵林 教授（RoboScience）</span>
-            </p>
-            <p class="pub__venue">
-              <span class="lang-en">Ongoing research · 2026 —</span>
-              <span class="lang-zh">进行中的研究 · 2026 —</span>
-            </p>
-            <p class="pub__role">
-              <span class="lang-en">Lead author</span>
-              <span class="lang-zh">主要负责人</span>
-            </p>
-          </div>
-          <div class="pub__body">
-          <div>
-            <ul class="pub__points lang-en">
-              <li><b>Question.</b> Can measured pressure, force, and contact teach a visual representation what visual self-supervision alone does not?</li>
-              <li><b>System.</b> JEPA-style latent prediction over five heterogeneous touch datasets; deployment stays <b>RGB-only</b>, no tactile sensor.</li>
-              <li><b>Rigor.</b> Every comparison and falsification criterion <b>preregistered before training</b>.</li>
-            </ul>
-            <ul class="pub__points lang-zh">
-              <li><b>问题：</b>实测的压力、力与接触，能否教会视觉表征仅靠视觉自监督学不到的东西？</li>
-              <li><b>系统：</b>JEPA 式潜空间预测，统一五个异构触觉数据集；部署时<b>只看 RGB</b>，无需触觉传感器。</li>
-              <li><b>严谨性：</b>所有对照与证伪判据均在<b>训练开始前预注册</b>。</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-
-        <div class="pub">
-          <div class="pub__card">
-            <h2 class="pub__title"><a href="flow2funnel.html">Flow2Funnel: Feedback-Complete Action Heads for Vision&ndash;Language&ndash;Action Policies</a></h2>
-            <p class="pub__venue">
-              <span class="lang-en">Research proposal &middot; 2026 &mdash;</span>
-              <span class="lang-zh">研究提案 &middot; 2026 &mdash;</span>
-            </p>
-            <p class="pub__role">
-              <span class="lang-en">Solo &middot; looking for an advisor</span>
-              <span class="lang-zh">独立进行 &middot; 正在寻找导师</span>
-            </p>
-          </div>
-          <div class="pub__body">
-          <div>
-            <ul class="pub__points lang-en">
-              <li><b>Question.</b> A policy commits to a whole <b>chunk</b> of actions and runs it blind. What happens in between &mdash; and when is a feedback layer inside the chunk worth anything?</li>
-              <li><b>Approach.</b> A small head compiles the sampled chunk into a <b>feedback funnel</b> &mdash; a control law plus a region it is certified to hold &mdash; on a backbone that stays frozen. It is allowed to decline.</li>
-              <li><b>Rigor.</b> A promising result of mine failed to replicate on the sealed split. <b>Reported as a null; the criterion did not move.</b></li>
-            </ul>
-            <ul class="pub__points lang-zh">
-              <li><b>问题：</b>策略一次定下一整<b>块</b>动作，然后闭着眼睛跑完。中间发生了什么——块内的反馈层，到底什么时候才值一分钱？</li>
-              <li><b>做法：</b>一个很小的头把动作块编译成<b>反馈漏斗</b>——一个控制律，加上一个它被认证能守住的区域——主干始终冻结。它被允许拒绝。</li>
-              <li><b>严谨性：</b>我自己一个看好的结果在封存划分上没有复现。<b>如实报了零结果；判据没有动。</b></li>
-            </ul>
-          </div>
-          </div>
-        </div>
+<!-- ICLR 2027 entry, double-blind until the December 2026 decision:
+     descriptive heading and the idea only; no method details. -->
+<article class="pub research-preview">
+  <div class="pub__card">
+    <h2 class="pub__title">Transferring Physical Supervision to Latent-Action VLA Pretraining</h2>
+    <p class="pub__authors"><span class="lang-en"><b>Miaomiao Dai</b> · Second author · Title and author list withheld during double-blind review</span><span class="lang-zh"><b>代淼淼</b> · 第二作者 · 双盲评审期间暂不公开标题与作者名单</span></p>
+    <p class="pub__venue"><span class="lang-en">Under double-blind review · ICLR 2027</span><span class="lang-zh">双盲评审中 · ICLR 2027</span></p>
+  </div>
+  <div class="research-body research-body--text">
+    <div>
+      <div class="research-summary">
+<ul class="research-points lang-en">
+  <li><b>Question.</b> Latent-action pretraining lets a VLA learn from video with no action labels, but its targets come from visual change, so contact and force are supervised only indirectly &mdash; and touch, pressure, and torque sensors cover only a small slice of human and robot video.</li>
+  <li><b>Idea.</b> Learn physical supervision from the <b>small set of interactions recorded with touch, pressure, or torque sensors</b>, then carry it to ordinary human and robot video for pretraining. <b>No tactile or torque sensing at deployment.</b></li>
+  <li><b>Evidence.</b> Outperforms VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and on every SimplerEnv task group; on five real-world manipulation tasks it beats both VLA-JEPA and &pi;<sub>0.5</sub> <b>on every task</b>.</li>
+</ul>
+<ul class="research-points lang-zh">
+  <li><b>问题：</b>隐动作预训练让 VLA 能从没有动作标签的视频里学习，但监督信号来自画面变化，接触与受力只被间接约束；而触觉、压力、力矩传感器只覆盖了人类与机器人视频里很小的一部分。</li>
+  <li><b>思路：</b>从<b>少量带触觉、压力或力矩测量的交互</b>中学到物理监督，再把它迁移到普通的人类与机器人视频上用于预训练。<b>部署时不需要任何触觉或力矩传感。</b></li>
+  <li><b>证据：</b>在 LIBERO 以及 SimplerEnv 的全部任务组上超过所比较的最强隐动作基线 VLA-JEPA；五个真实世界操作任务上，<b>每一项</b>都高于 VLA-JEPA 与 &pi;<sub>0.5</sub>。</li>
+</ul>
+</div>
+    </div>
+  </div>
+</article>
       </div>
     </section>
 
     <!-- ===== §02 Projects ============================================
-         Built systems, as distinct from the research programme in §02.
+         Built systems, as distinct from the research programme in §01.
          The B.E. thesis lives here rather than under Research: it is an
          engineered system with a demo reel, not a paper. -->
     <section class="section rail" id="projects">
@@ -548,10 +463,8 @@
               <span class="lang-zh">项目负责人 · 五人团队</span>
             </p>
           </div>
-          <div class="pub__body">
-          <!-- One player, three uncut phone clips. The tabs swap the source
-               so the reel sits in the same narrow column a paper's figures
-               would — the body stays the height of its text. -->
+          <!-- The video spans the left column beside both the title and
+               the summary; all three clips keep the same player. -->
           <div class="demo-player">
             <video controls preload="metadata" playsinline
                    poster="assets/vla-demo-1-poster.jpg"
@@ -565,16 +478,71 @@
             <p class="demo-cap" data-demo="2"><span class="lang-en">Pen into the holder</span><span class="lang-zh">笔插进笔筒</span></p>
             <p class="demo-cap" data-demo="3"><span class="lang-en">Block into the box</span><span class="lang-zh">方块放进盒子</span></p>
           </div>
-          <div>
+          <div class="pub__body">
             <ul class="pub__points lang-en">
-              <li><b>Data and policy.</b> Teleoperated <b>316 episodes</b> across 11 tabletop tasks on a low-cost SO-101, then fine-tuned π<sub>0.5</sub> on them — LoRA on the 2B vision-language backbone, full training of the 300M action expert.</li>
-              <li><b>Closing the loop.</b> A VLA emits open-loop action chunks and never checks the result. A lower-rate visual supervisor watches progress and terminal state, and triggers stop, return, re-observation, or a bounded retry — <b>F1 0.842</b> on terminal verification.</li>
-              <li><b>Evaluation.</b> <b>70%</b> end-to-end over 11 tasks (85% pick, 75% placement). Unseen object–target compositions are reported separately as an open condition, not as success.</li>
+              <li><b>π<sub>0.5</sub> on real hardware.</b> Collected <b>316 demonstrations</b> across 11 tabletop tasks, fine-tuned π<sub>0.5</sub>, and <b>deployed it on a real SO-101 arm</b>—from data collection to policy execution.</li>
+              <li><b>Speech recognition.</b> Integrated Qwen-Omni ASR with visual grounding to turn <b>spoken requests into task instructions</b> for π<sub>0.5</sub> and the robot arm.</li>
+              <li><b>Toward closed-loop execution.</b> Added <b>visual checks of progress and task completion</b>, with stopping, re-observation, and bounded retries to bring feedback around the policy’s open-loop action chunks.</li>
             </ul>
             <ul class="pub__points lang-zh">
-              <li><b>数据与策略：</b>在低成本 SO-101 上遥操作采集 11 类桌面任务共 <b>316 条 episode</b>，据此微调 π<sub>0.5</sub>：2B 视觉语言主干走 LoRA，300M action expert 全量训练。</li>
-              <li><b>把回路闭上：</b>VLA 输出开环动作块、从不核验结果。低频视觉监督器持续判断进度与终态，触发停止、返回、重新观测或有界重试——终态判定 <b>F1 0.842</b>。</li>
-              <li><b>评测：</b>11 类任务端到端成功率 <b>70%</b>（抓取 85%、放置 75%）。未见过的「物体–目标」组合单独作为开放条件报告，不计入成功率。</li>
+              <li><b>π<sub>0.5</sub> 实机部署：</b>采集 11 类桌面任务的 <b>316 条演示</b>，完成 π<sub>0.5</sub> 微调与 <b>SO-101 机械臂实机部署</b>，打通数据采集、训练到策略执行的完整流程。</li>
+              <li><b>语音识别：</b>接入 Qwen-Omni 语音识别，结合现场图像确定操作目标，将<b>口头指令转为 π<sub>0.5</sub> 的任务指令</b>，驱动机械臂执行。</li>
+              <li><b>闭环探索：</b>加入<b>进度与任务完成状态的视觉核验</b>，通过停止、重新观测和有限次重试，为策略的开环动作块补充执行反馈。</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== §03 Proposal Ideas ====================================== -->
+    <section class="section rail" id="proposals">
+      <div class="rail__mark">§03<span><span class="lang-en">Proposal Ideas</span><span class="lang-zh">研究构想</span></span></div>
+      <div>
+
+        <div class="pub pub--proposal">
+          <div class="pub__card">
+            <h2 class="pub__title">Touch Without Touch: Measured-Touch Supervision for Visual Representations</h2>
+            <p class="pub__venue">
+              <span class="lang-en">Personal research idea · 2026 —</span>
+              <span class="lang-zh">个人研究构想 · 2026 —</span>
+            </p>
+          </div>
+          <div class="pub__body">
+          <div>
+            <ul class="pub__points lang-en">
+              <li><b>Question.</b> Can measured pressure, force, and contact teach a visual representation what visual self-supervision alone does not?</li>
+              <li><b>System.</b> JEPA-style latent prediction over five heterogeneous touch datasets; deployment stays <b>RGB-only</b>, no tactile sensor.</li>
+              <li><b>Rigor.</b> Every comparison and falsification criterion <b>preregistered before training</b>.</li>
+            </ul>
+            <ul class="pub__points lang-zh">
+              <li><b>问题：</b>实测的压力、力与接触，能否教会视觉表征仅靠视觉自监督学不到的东西？</li>
+              <li><b>系统：</b>JEPA 式潜空间预测，统一五个异构触觉数据集；部署时<b>只看 RGB</b>，无需触觉传感器。</li>
+              <li><b>严谨性：</b>所有对照与证伪判据均在<b>训练开始前预注册</b>。</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+
+        <div class="pub pub--proposal">
+          <div class="pub__card">
+            <h2 class="pub__title"><a href="flow2funnel.html">Flow2Funnel: Feedback-Complete Action Heads for Vision&ndash;Language&ndash;Action Policies</a></h2>
+            <p class="pub__venue">
+              <span class="lang-en">Personal research idea · 2026 —</span>
+              <span class="lang-zh">个人研究构想 · 2026 —</span>
+            </p>
+          </div>
+          <div class="pub__body">
+          <div>
+            <ul class="pub__points lang-en">
+              <li><b>Question.</b> When replanning is costly, can <b>feedback within an action chunk</b> improve disturbance recovery at the same VLA planning budget?</li>
+              <li><b>Approach.</b> Learn the local response around a frozen VLA’s sampled plan, then use Riccati recursion to build <b>feedback gains and a model-based recovery region</b>.</li>
+              <li><b>Research plan.</b> Test when local correction helps, when to request a new plan, and how these decisions hold up with <b>deployment-available observations and realistic latency</b>.</li>
+            </ul>
+            <ul class="pub__points lang-zh">
+              <li><b>问题：</b>当重规划有明显代价时，<b>动作块内部的反馈</b>能否在相同 VLA 规划预算下提高扰动恢复能力？</li>
+              <li><b>做法：</b>围绕冻结 VLA 采样出的计划学习局部动态响应，通过 Riccati 递推构造<b>反馈增益与基于模型的恢复区域</b>。</li>
+              <li><b>研究计划：</b>检验何时局部校正有效、何时应重新规划，并在<b>部署可得观测与真实推理延迟</b>下验证这些判断。</li>
             </ul>
           </div>
           </div>
@@ -583,9 +551,9 @@
       </div>
     </section>
 
-    <!-- ===== §03 Record ============================================== -->
+    <!-- ===== §04 Record ============================================== -->
     <section class="section rail" id="experience">
-      <div class="rail__mark">§03<span><span class="lang-en">Record</span><span class="lang-zh">履历</span></span></div>
+      <div class="rail__mark">§04<span><span class="lang-en">Record</span><span class="lang-zh">履历</span></span></div>
       <div>
 
         <h2 class="eyebrow"><span class="lang-en">Education</span><span class="lang-zh">教育背景</span></h2>
@@ -643,9 +611,9 @@
       </div>
     </section>
 
-    <!-- ===== §04 News ================================================ -->
+    <!-- ===== §05 News ================================================ -->
     <section class="section rail" id="news">
-      <div class="rail__mark">§04<span><span class="lang-en">News</span><span class="lang-zh">近况</span></span></div>
+      <div class="rail__mark">§05<span><span class="lang-en">News</span><span class="lang-zh">近况</span></span></div>
       <div>
         <ul class="timeline">
 

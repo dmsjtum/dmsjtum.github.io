@@ -52,8 +52,10 @@ that keeps the one-sweep horizon prediction.
 systems, vs. 79, 71, and 55 for ALTRO and direct collocation (IPOPT, SNOPT); where both were valid, baselines needed
 1.6–3.1× the solve time.
 Touch Without Touch: Measured-Touch Supervision for Visual Representations
+Independent research · personal idea
+
 Jun 2026 – present
-Advisors: Prof. Hesheng Wang, IRMV Lab, Shanghai Jiao Tong University · Prof. Lin Shao, RoboScience
+
 • Asks whether paired, measured touch — pressure, force, contact — can teach an RGB representation physical-interaction
 
 structure that visual self-supervision alone does not; inference stays strictly RGB-only at deployment.
@@ -73,9 +75,8 @@ Aug 2026 – present
 
 • Latent-action pretraining supervises contact and force only indirectly, and tactile or torque sensing covers only a small
 
-slice of human and robot video. A shared, horizon-structured representation of pressure, tactile, and torque signals is
-learned where sensors exist, inferred from causal RGB where they do not, and supervises the same latent actions as
-future visual prediction — no tactile or torque sensing at deployment.
+slice of human and robot video. Physical supervision is learned from that small instrumented slice and carried to
+ordinary human and robot video for pretraining — no tactile or torque sensing at deployment.
 • Outperforms VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and every SimplerEnv task group, and
 beats both VLA-JEPA and π0.5 on each of five real-world manipulation tasks.
 

@@ -27,7 +27,7 @@
   /* ---- Language (EN / 中文) ------------------------------------------- */
   /* English is the markup default, so the page is correct before this runs.
      We only ever ADD data-lang="zh"; removing it returns to English. */
-  var LKEY = "paper-lang";
+  var LKEY = "paper-lang-session";
 
   var setLang = function (lang, remember) {
     if (lang === "zh") {
@@ -47,14 +47,14 @@
 
     /* The <title> is outside the .lang-* mechanism, so swap it by hand. */
     document.title = "Miaomiao Dai 代淼淼";   /* name shown in both */
-    if (remember) { try { localStorage.setItem(LKEY, lang); } catch (e) {} }
+    if (remember) { try { sessionStorage.setItem(LKEY, lang); } catch (e) {} }
   };
 
   var savedLang = null;
-  try { savedLang = localStorage.getItem(LKEY); } catch (e) {}
-  /* English is the default for every first visit — deliberately NOT
-     browser-detected, since the audience is international. Only a returning
-     visitor who chose 中文 gets it back. */
+  try { savedLang = sessionStorage.getItem(LKEY); } catch (e) {}
+  /* Start each new visit in English, regardless of browser language or an
+     old localStorage preference. An explicit switch lasts for this tab's
+     session so following research links keeps the chosen language. */
   setLang(savedLang === "zh" ? "zh" : "en", false);
 
   document.addEventListener("click", function (e) {
@@ -617,8 +617,8 @@
       }).then(function (res) {
         done();
         if (!res.ok || !res.d.reply) {
-          say("err", t("Sorry — I could not reach the model. Email dmmsjtu@umich.edu and Miaomiao will answer directly.",
-                       "抱歉，模型没连上。可以邮件 dmmsjtu@umich.edu，淼淼会直接回你。"));
+          say("err", t("Sorry — I could not reach the model. Email dmmsjtu@engineering.upenn.edu and Miaomiao will answer directly.",
+                       "抱歉，模型没连上。可以邮件 dmmsjtu@engineering.upenn.edu，淼淼会直接回你。"));
           history.pop();
           return;
         }
@@ -627,8 +627,8 @@
       }).catch(function () {
         done();
         history.pop();
-        say("err", t("Sorry — something went wrong. Email dmmsjtu@umich.edu instead.",
-                     "抱歉，出了点问题。可以直接邮件 dmmsjtu@umich.edu。"));
+        say("err", t("Sorry — something went wrong. Email dmmsjtu@engineering.upenn.edu instead.",
+                     "抱歉，出了点问题。可以直接邮件 dmmsjtu@engineering.upenn.edu。"));
       });
     };
 
