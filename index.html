@@ -414,13 +414,10 @@
   </div>
 </article>
 
-<!-- ICLR 2027 entry, double-blind until the December 2026 decision:
-     descriptive heading, motivation and the three-stage architecture only.
-     The method name (PhysLA) is shown at the user's request; no method
-     details (encoders, objectives, training recipe), full title, co-authors
-     or numbers. The side figure is the architecture
-     column of the paper's overview figure (wordmark removed); it opens the
-     full overview. -->
+<!-- ICLR 2027 entry (PhysLA), double-blind until the December 2026 decision.
+     At the user's request the card names the method and shows the paper's
+     architecture figure (Figure 2) with the user's own part, stages (a) and
+     (b). Still withheld: full title, co-authors, numbers. -->
 <article class="pub research-preview">
   <div class="pub__card">
     <h2 class="pub__title">PhysLA: Transferring Physical Supervision to Latent-Action VLA Pretraining</h2>
@@ -432,18 +429,20 @@
       <div class="research-summary">
 <ul class="research-points lang-en">
   <li><b>Motivation.</b> Latent-action pretraining learns from action-free video, but its targets come from visual change: look-alike motions can hide different contact and force, and the sensors that measure them cover only a <b>small slice of video</b>.</li>
-  <li><b>Architecture.</b> Interactions recorded with pressure, tactile, and torque sensors define <b>shared physical targets</b>; a transfer model <b>infers them from RGB</b> for ordinary human and robot video; <b>visual prediction and these targets jointly supervise latent actions</b>. No tactile or torque sensing at deployment.</li>
+  <li><b>Architecture.</b> <b>(a)</b> learns horizon-structured physical targets from heterogeneous pressure, tactile, and torque measurements; <b>(b)</b> infers those targets from causal RGB, carrying them to human and robot video that has no sensors; <b>(c)</b> uses them alongside visual prediction to supervise latent actions in VLA pretraining. No tactile or torque sensing at deployment.</li>
+  <li><b>My role.</b> Designed the ideas behind <b>(a) physical representation learning</b> and <b>(b) causal physical-supervision transfer</b>.</li>
   <li><b>Evidence.</b> Beats VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and every SimplerEnv task group, and beats both VLA-JEPA and &pi;<sub>0.5</sub> on <b>each of five real-robot tasks</b>.</li>
 </ul>
 <ul class="research-points lang-zh">
   <li><b>动机：</b>隐动作预训练能从没有动作标签的视频中学习，但监督来自画面变化：外观相似的动作，接触与受力可能完全不同；而能直接测量它们的传感器只覆盖<b>很小一部分视频</b>。</li>
-  <li><b>架构：</b>带压力、触觉、力矩传感器的交互定义<b>共享物理目标</b>；迁移模型<b>只凭 RGB 推断</b>这些目标，覆盖普通的人类与机器人视频；<b>视觉预测与物理目标共同监督隐动作</b>。部署时无需触觉或力矩传感。</li>
+  <li><b>架构：</b><b>(a)</b> 从压力、触觉、力矩等异构测量中学出按时间视界组织的物理目标；<b>(b)</b> 只凭因果 RGB 推断这些目标，把它们带到没有传感器的人类与机器人视频上；<b>(c)</b> 与视觉预测一起监督 VLA 预训练中的隐动作。部署时无需触觉或力矩传感。</li>
+  <li><b>我的贡献：</b>设计了 <b>(a) 物理表征学习</b>与 <b>(b) 因果物理监督迁移</b>两部分的思路。</li>
   <li><b>证据：</b>在 LIBERO 与 SimplerEnv 全部任务组上超过所比较的最强隐动作基线 VLA-JEPA；五个真实机器人任务上，<b>每一项</b>都高于 VLA-JEPA 与 &pi;<sub>0.5</sub>。</li>
 </ul>
 </div>
     </div>
     <figure class="research-figure">
-      <a class="research-visual" href="assets/pub-physical-supervision.png" aria-label="Open the full overview figure"><img src="assets/pub-physical-supervision-arch.png" alt="Architecture: pressure, tactile, and torque recordings from human and robot interactions define shared physical targets; a causal transfer step infers these targets from RGB for uninstrumented video; visual prediction and physical supervision jointly ground the latent actions." width="906" height="759" loading="lazy"></a>
+      <a class="research-visual" href="assets/pub-physla-architecture.png" aria-label="Open the PhysLA architecture figure"><img src="assets/pub-physla-architecture.png" alt="PhysLA architecture: (a) physical representation learning from pressure, tactile, and torque measurements; (b) causal physical supervision transfer from RGB to human and robot videos; (c) joint visual-physical pretraining of latent actions with an action decoder." width="1600" height="1144" loading="lazy"></a>
     </figure>
   </div>
 </article>

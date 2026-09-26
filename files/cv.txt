@@ -48,9 +48,12 @@ Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · first-author man
 • Extends HOP to hard state–control constraints (obstacles, actuator limits) with an augmented-Lagrangian formulation
 
 that keeps the one-sweep horizon prediction.
+
 • Produced solutions valid under the full nonlinear dynamics on 100/100 benchmark problems across 10 dynamical
+
 systems, vs. 79, 71, and 55 for ALTRO and direct collocation (IPOPT, SNOPT); where both were valid, baselines needed
 1.6–3.1× the solve time.
+
 PhysLA: Transferring Physical Supervision to Latent-Action VLA Pretraining
 Second author · under double-blind review at ICLR 2027
 
@@ -58,8 +61,11 @@ Aug 2026 – present
 
 • Latent-action pretraining supervises contact and force only indirectly, and tactile or torque sensing covers only a small
 
-slice of human and robot video. Physical supervision is learned from that small instrumented slice and carried to
-ordinary human and robot video for pretraining — no tactile or torque sensing at deployment.
+slice of video. PhysLA learns physical targets where sensors exist, infers them from causal RGB elsewhere, and uses them
+with visual prediction to supervise latent actions — no tactile or torque sensing at deployment.
+• Designed two of its three stages: physical representation learning, which turns heterogeneous pressure, tactile, and
+torque measurements into horizon-structured physical targets, and the causal RGB transfer that carries those targets to
+sensor-free video.
 • Outperforms VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and every SimplerEnv task group, and
 beats both VLA-JEPA and π0.5 on each of five real-world manipulation tasks.
 Voice-Interactive Closed-Loop VLA Manipulation (B.E. thesis)
