@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Control-Faithful World Models — Miaomiao Dai</title>
+<meta name="description" content="A one-page research proposal: train latent world models so their local response to actions is faithful, and use that response for Riccati feedback on a frozen VLA's plan.">
+<meta property="og:title" content="Control-Faithful World Models">
+<meta property="og:description" content="What does a small push do? Training latent world models to answer it, and using the answer for Riccati feedback on frozen VLA plans.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dmsjtum.github.io/control-faithful-world-models.html">
+<meta property="og:image" content="https://dmsjtum.github.io/assets/cfwm-method.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1080">
+<meta property="og:image:alt" content="A frozen VLA publishes a plan; a latent world model is linearized along it to give A and B; Riccati re-solves every step and corrects the action; push-and-see pairs train the model offline.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://dmsjtum.github.io/control-faithful-world-models.html">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Source+Sans+3:wght@200..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/paper.css">
+
+<!-- Page-local layout for the one-page proposal. -->
+<style>
+  .cf-page { max-width: var(--measure); margin-inline: auto; }
+  .cf-page h1, .cf-page h2, .cf-page h3, .cf-page .cf-label { text-transform: none; font-variant-caps: normal; }
+  .cf-hero { padding-top: 44px; padding-bottom: 0; }
+  .cf-hero .display { font-size: clamp(34px, 5.2vw, 52px); line-height: 1.08; text-wrap: balance; }
+  .cf-hero .hero__sub { font: 400 19px/1.5 var(--sans); max-width: 56ch; margin-inline: auto; }
+  .cf-status { font: 400 12px/1.6 var(--mono); color: var(--ink-2); margin-top: 18px; }
+  .cf-question { margin-top: 30px; padding: 22px 24px; background: var(--card-surface); border: 1px solid var(--edge); box-shadow: var(--lift-sm); }
+  .cf-question p { margin: 0; font: 400 19px/1.55 var(--sans); }
+  .cf-label { display: block; font: 600 12px/1.5 var(--mono); letter-spacing: .01em; color: var(--accent); margin-bottom: 8px; }
+  .cf-figure { margin: 34px 0 0; }
+  .cf-figure .cf-well { overflow-x: auto; border: 1px solid var(--rule-hi); background: #faf9f5; }
+  .cf-figure img { display: block; width: 100%; min-width: 680px; height: auto; }
+  .cf-figure > a { display: block; cursor: zoom-in; }
+  .cf-figurebar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; margin: 12px 0 6px; font: 400 12px/1.5 var(--mono); color: var(--ink-2); }
+  .cf-figurebar a { color: var(--accent); text-underline-offset: 3px; }
+  .cf-block { margin-top: 40px; padding-top: 26px; border-top: 1px solid var(--rule-hi); }
+  .cf-block h2 { margin: 0 0 14px; font: 500 24px/1.3 var(--sans); text-wrap: balance; }
+  .cf-block p { margin: 0 0 13px; }
+  .cf-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+  .cf-list { padding-left: 1.2em; margin: 12px 0 14px; }
+  .cf-list li { padding-left: 3px; }
+  .cf-list li + li { margin-top: 10px; }
+  .cf-list li::marker { color: var(--ink); font-family: var(--mono); font-size: 13px; }
+  .cf-list b { font-weight: 650; }
+  .cf-eq { margin: 10px 0 14px; padding: 10px 12px; border: 1px solid var(--rule); background: var(--paper-hi); overflow-x: auto; white-space: nowrap; font: 400 17px/1.6 Georgia, "Times New Roman", serif; }
+  .cf-note { padding: 14px 18px; border-left: 2px solid var(--accent); background: var(--paper-hi); font: 400 15px/1.6 var(--sans); }
+  .cf-gates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 14px 0 16px; }
+  .cf-gate { padding: 14px 16px; border: 1px solid var(--rule-hi); background: var(--card-surface); font: 400 15px/1.55 var(--sans); }
+  .cf-gate b { display: block; font: 600 12px/1.5 var(--mono); color: var(--accent); margin-bottom: 4px; }
+  .cf-refs { font: 400 14px/1.55 var(--sans); overflow-wrap: anywhere; }
+  .cf-refs li + li { margin-top: 6px; }
+  .cf-contact { overflow-wrap: anywhere; }
+  html[data-lang="zh"] .cf-page { line-break: strict; }
+  @media (max-width: 720px) {
+    .cf-cols, .cf-gates { grid-template-columns: 1fr; gap: 12px; }
+    .cf-hero { padding-top: 26px; }
+    .cf-question { padding: 18px; }
+  }
+</style>
+
+<!-- Same entrance gate as index.html; see the comment there. -->
+<script>
+  (function () {
+    var el = document.documentElement;
+    try {
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    } catch (e) { return; }
+    el.setAttribute("data-motion", "on");
+    setTimeout(function () {
+      if (!window.__paperEntrance) el.removeAttribute("data-motion");
+    }, 2500);
+  })();
+</script>
+</head>
+<body>
+
+<div class="shell">
+
+  <header class="masthead">
+    <a class="wordmark" href="index.html">Miaomiao Dai <span class="accent">(&tau;)</span></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html"><span class="lang-en">Home</span><span class="lang-zh">首页</span></a>
+      <a href="index.html#publications"><span class="lang-en">Research</span><span class="lang-zh">研究</span></a>
+      <a href="index.html#projects"><span class="lang-en">Projects</span><span class="lang-zh">项目</span></a>
+      <a href="index.html#proposals"><span class="lang-en">Ideas</span><span class="lang-zh">构想</span></a>
+      <a href="index.html#experience"><span class="lang-en">Record</span><span class="lang-zh">履历</span></a>
+      <a href="mailto:dmmsjtu@engineering.upenn.edu">Email</a>
+      <button class="lang-toggle" data-lang-toggle type="button"><b>EN</b> / ZH</button>
+    </nav>
+  </header>
+
+  <main class="cf-page">
+    <section class="hero hero--center cf-hero">
+      <ol class="crumbs"><li><a href="index.html">Home</a></li><li><a href="index.html#proposals"><span class="lang-en">Proposal Ideas</span><span class="lang-zh">研究构想</span></a></li><li><span class="lang-en">Control-Faithful World Models</span><span class="lang-zh">控制可信的世界模型</span></li></ol>
+      <h1 class="display">Control-Faithful World Models</h1>
+      <p class="hero__sub"><span class="lang-en">Latent dynamics whose local responses drive Riccati feedback on frozen VLAs.</span><span class="lang-zh">让隐空间世界模型的局部响应足够准确，用来驱动冻结 VLA 上的 Riccati 反馈。</span></p>
+      <p class="cf-status"><b>Miaomiao Dai</b> &middot; <span class="lang-en">One-page research proposal &middot; September 2026 &middot; formerly &ldquo;Flow2Funnel&rdquo;</span><span class="lang-zh">一页研究计划 &middot; 2026 年 9 月 &middot; 原名 &ldquo;Flow2Funnel&rdquo;</span></p>
+    </section>
+
+    <div class="cf-question">
+      <span class="cf-label"><span class="lang-en">Research question</span><span class="lang-zh">核心问题</span></span>
+      <p><span class="lang-en">A world model used for control is asked one thing: <i>what happens if I nudge the action?</i> Can we train latent world models so that this answer&mdash;their local response along a plan&mdash;is faithful, and use it to correct a frozen VLA&rsquo;s plan at every control step?</span><span class="lang-zh">用于控制的世界模型，其实只被问一件事：<i>把动作轻推一下，会发生什么？</i>能否训练隐空间世界模型，让它沿计划的局部响应足够准确，并用这个响应在每个控制步修正冻结 VLA 的计划？</span></p>
+    </div>
+
+    <figure class="figure cf-figure" id="method">
+      <a class="cf-well" href="assets/cfwm-method.png" target="_blank" rel="noopener" aria-label="Open the method figure at full size"><img src="assets/cfwm-method.svg" width="1000" height="540" alt="A frozen VLA publishes a plan once per replan. Camera and proprioception history are encoded into a latent state z. A latent world model z_(k+1) = F(z_k, a_k) is linearized along the plan to give A_k and B_k. A Riccati controller, re-solved at every control step with box limits, adds a correction delta a to the VLA's action. Offline, push-and-see pairs (the same plan rerun with a small push at one step, later commands held fixed) train F so that its predicted response matches the measured one." fetchpriority="high"></a>
+      <div class="cf-figurebar"><span><span class="lang-en">Method overview</span><span class="lang-zh">方法总览</span></span><a href="assets/cfwm-method.png" target="_blank" rel="noopener"><span class="lang-en">View full size ↗</span><span class="lang-zh">查看原图 ↗</span></a></div>
+      <figcaption><span class="lang-en">The VLA plans; the world model supplies how the scene will evolve (A) and how a nudge moves it (B); Riccati turns that into a bounded correction at every step. Goals, action limits and latency enter only as Riccati inputs, so the same model is reused unchanged.</span><span class="lang-zh">VLA 负责出计划；世界模型给出场景如何演化（A）、轻推一下会怎样（B）；Riccati 据此在每一步算出有界修正。目标、动作上限与延迟只是 Riccati 的输入，同一个模型无需重训即可复用。</span></figcaption>
+    </figure>
+
+    <section class="cf-block prose" id="why">
+      <div class="cf-cols">
+        <div>
+          <h2><span class="lang-en">Why world models, and why faithfulness</span><span class="lang-zh">为什么要世界模型，为什么强调&ldquo;可信&rdquo;</span></h2>
+          <p class="lang-en">Vision&ndash;language&ndash;action models plan well but execute blind: they emit an action chunk from one frame and run it open loop. When objects move or inference lags, the chunk goes stale. On DOMINO, a dynamic-manipulation benchmark, &pi;<sub>0.5</sub> succeeds on 44.8% of static tasks but on under 10% once the targets move [1].</p>
+          <p class="lang-zh">视觉–语言–动作模型擅长出计划，执行时却是&ldquo;闭眼&rdquo;的：它根据单帧画面给出一段动作，然后开环执行。物体一动或推理一慢，这段动作就过时了。在动态操作基准 DOMINO 上，&pi;<sub>0.5</sub> 在静态任务上成功率 44.8%，目标一旦运动就不到 10% [1]。</p>
+          <p class="lang-en">A world model is the natural fix: predict how the scene will evolve, then correct. But world models are trained and judged on how well they imagine the future. A controller needs something narrower and harder: the right <b>local response to a small change of action</b>&mdash;the A and B of the linearized dynamics. A model can roll out plausibly and still get this derivative wrong, and then feedback pushes the wrong way.</p>
+          <p class="lang-zh">世界模型是自然的补救：先预测场景如何演化，再修正。但世界模型通常按&ldquo;想象未来像不像&rdquo;来训练和评价，而控制器需要的东西更窄也更难：<b>动作微小改变时的局部响应</b>，即线性化动力学里的 A 和 B。一个模型可以滚动预测得很像样，导数却是错的；这时反馈会往错的方向推。</p>
+        </div>
+        <div>
+          <h2><span class="lang-en">The idea</span><span class="lang-zh">方法</span></h2>
+          <ol class="cf-list">
+            <li><span class="lang-en"><b>Latent state.</b> Encode the recent camera and proprioception history into a compact state z: frozen visual features plus a small learned map.</span><span class="lang-zh"><b>隐状态。</b>把最近的相机画面与本体感知历史编码成紧凑的状态 z：冻结的视觉特征，加一个小的可学习映射。</span></li>
+            <li><span class="lang-en"><b>One world model.</b> Learn z<sub>k+1</sub> = F(z<sub>k</sub>, a<sub>k</sub>). Along the VLA&rsquo;s plan its derivatives give A<sub>k</sub> = &part;F/&part;z and B<sub>k</sub> = &part;F/&part;a; the controller uses the model&rsquo;s own linearization, not separate matrix heads.</span><span class="lang-zh"><b>一个世界模型。</b>学习 z<sub>k+1</sub> = F(z<sub>k</sub>, a<sub>k</sub>)。沿 VLA 的计划求导即得 A<sub>k</sub> = &part;F/&part;z 与 B<sub>k</sub> = &part;F/&part;a；控制器直接用模型自身的线性化，不另设矩阵输出头。</span></li>
+            <li><span class="lang-en"><b>Riccati at every step.</b> Re-solve a box-constrained LQR over the rest of the plan at each control step and add the bounded correction to the VLA&rsquo;s action. The VLA stays frozen.</span><span class="lang-zh"><b>每步 Riccati。</b>每个控制步沿剩余计划重解一次带盒约束的 LQR，把有界修正加到 VLA 的动作上；VLA 本身保持冻结。</span></li>
+          </ol>
+          <p><span class="lang-en"><b>Training signal: push-and-see pairs.</b> Rerun the same plan with a small push &plusmn;&delta; at step j, hold every later command fixed, and fit F so that its response matches the measured one at every later step k:</span><span class="lang-zh"><b>训练信号：&ldquo;推一下看看&rdquo;的成对回放。</b>同一计划重跑一遍，只在第 j 步施加 &plusmn;&delta; 的轻推、之后的命令全部锁定；让 F 的响应在之后每一步 k 都与实测一致：</span></p>
+          <div class="cf-eq">&Delta;y<sub>k</sub> / 2&delta; &nbsp;&asymp;&nbsp; C A<sub>k&minus;1</sub> &hellip; A<sub>j+1</sub> B<sub>j</sub></div>
+          <p><span class="lang-en">plus predicting the unpushed rollout. No reward and no pixel reconstruction: the model is trained on exactly the quantity the controller consumes.</span><span class="lang-zh">再加上预测未推动的那条轨迹。不需要奖励，也不重建像素：模型被训练的，正是控制器要用的那个量。</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cf-block prose" id="insight">
+      <h2><span class="lang-en">Why this could work</span><span class="lang-zh">为什么可能有效</span></h2>
+      <p class="lang-en">Pilot studies on simulated mechanisms point to where faithfulness matters. Re-solving at every step already forgives errors in the <i>size</i> of the response; it cannot forgive errors in its <i>direction</i> or in the scene&rsquo;s <i>memory</i>&mdash;inertia, springs, a target that keeps moving. Those are exactly what a camera reveals and a single global model gets wrong, so they are where a learned, state-dependent A<sub>k</sub> and B<sub>k</sub> should pay off. In the same pilots, a correction head fitted to one VLA&rsquo;s plans did not carry over to another VLA, while a model of the world&rsquo;s response carried over better.</p>
+      <p class="lang-zh">在仿真机构上的初步实验提示了&ldquo;可信&rdquo;在哪里要紧：每步重解已经能容忍响应<i>大小</i>的误差，却容忍不了响应<i>方向</i>的误差，也容忍不了场景的<i>记忆</i>（惯性、弹簧、持续运动的目标）。这些正是相机看得见、而单一全局模型会弄错的量，所以学出随状态变化的 A<sub>k</sub>、B<sub>k</sub> 应当在这里见效。同一批实验中，按一个 VLA 的计划拟合的修正头迁移不到另一个 VLA，而&ldquo;世界如何响应&rdquo;的模型迁移得更好。</p>
+      <p class="cf-note"><span class="lang-en">These are pilot observations that shaped the design, not results.</span><span class="lang-zh">以上是影响设计的初步观察，不是结论。</span></p>
+    </section>
+
+    <section class="cf-block prose" id="tests">
+      <h2><span class="lang-en">How it will be tested</span><span class="lang-zh">如何检验</span></h2>
+      <p class="lang-en"><b>Benchmark.</b> DOMINO [1]: 35 dual-arm tasks with moving targets and an official &pi;<sub>0.5</sub> checkpoint. The study uses a subset where &pi;<sub>0.5</sub> works on static scenes but fails once objects move, after reproducing the official baselines. The latency protocol of real-time chunking [2] and learned chunk correction [3] on Kinetix and LIBERO gives a second, directly comparable testbed.</p>
+      <p class="lang-zh"><b>基准。</b>DOMINO [1]：35 个双臂任务，目标会运动，并提供官方 &pi;<sub>0.5</sub> 权重。选取&ldquo;静态会做、物体一动就失败&rdquo;的任务子集，先复现官方基线再比较方法。另用实时分块 [2] 与学习式块修正 [3] 在 Kinetix 和 LIBERO 上的延迟评测协议，作为可直接对比的第二个测试床。</p>
+      <div class="cf-gates">
+        <div class="cf-gate"><b><span class="lang-en">1 · Room</span><span class="lang-zh">1 · 余量</span></b><span class="lang-en">With the true local response, Riccati must beat the best single global model by at least 10 points; otherwise the setting does not reward learning A and B, and the setting changes, not the claim.</span><span class="lang-zh">给出真实局部响应时，Riccati 必须比最好的单一全局模型高至少 10 个百分点；否则说明这个设定不奖励学 A、B，要换的是设定，而不是主张。</span></div>
+        <div class="cf-gate"><b><span class="lang-en">2 · Faithfulness</span><span class="lang-zh">2 · 可信</span></b><span class="lang-en">On held-out pushes, the predicted response is within 20% at the 90th percentile and at least 20% better than a global model, without hurting open-loop prediction.</span><span class="lang-zh">在留出的轻推上，预测响应的误差 90 分位 &le; 20%，且比全局模型小至少 20%，同时不损害开环预测。</span></div>
+        <div class="cf-gate"><b><span class="lang-en">3 · Closed loop</span><span class="lang-zh">3 · 闭环</span></b><span class="lang-en">On held-out scenes and three seeds, beat the VLA alone, a global model, a shuffled latent, and a correction head that reads the same inputs.</span><span class="lang-zh">在留出场景、三个种子上，胜过单独的 VLA、全局模型、打乱的隐状态，以及读取相同输入的修正头。</span></div>
+        <div class="cf-gate"><b><span class="lang-en">4 · Reuse</span><span class="lang-zh">4 · 复用</span></b><span class="lang-en">The same frozen model serves new targets, cost weights, action limits and latency&mdash;only Riccati&rsquo;s inputs change&mdash;against a correction head that also reads the task.</span><span class="lang-zh">同一个冻结的模型服务新的目标、代价权重、动作上限与延迟（只改 Riccati 的输入），对照同样读取任务信息的修正头。</span></div>
+      </div>
+    </section>
+
+    <section class="cf-block prose" id="contribution">
+      <h2><span class="lang-en">What it would add to world models</span><span class="lang-zh">对世界模型研究的意义</span></h2>
+      <p class="lang-en">If it works, <b>control-faithfulness</b> becomes a measurable property of world models alongside rollout quality: paired pushes are a cheap probe for asking any action-conditioned world model&mdash;video world models included&mdash;whether it knows what an action does, and a training signal to fix it when it does not. The control side stays classical and transparent: one model, its derivatives, one Riccati pass.</p>
+      <p class="lang-zh">如果成立，<b>控制可信度</b>就成为世界模型与&ldquo;滚动预测质量&rdquo;并列、可以测量的属性：成对轻推是一种廉价的探针，可以拿来检验任何动作条件的世界模型（包括视频世界模型）是否知道一个动作会带来什么；它答错时，同一信号又能用来训练纠正。控制部分保持经典、透明：一个模型、它的导数、一次 Riccati。</p>
+      <p class="cf-note"><span class="lang-en"><b>Status (September 2026).</b> Simulated pilot mechanisms are built; the official &pi;<sub>0.5</sub> baselines are being reproduced on a DOMINO subset before any method comparison. An earlier version of this idea (Flow2Funnel) trained separate local heads per plan; <a href="assets/flow2funnel-architecture.png" target="_blank" rel="noopener">its architecture</a> is kept for reference.</span><span class="lang-zh"><b>当前进展（2026 年 9 月）。</b>仿真中的初步机构已搭好；正在 DOMINO 子集上复现官方 &pi;<sub>0.5</sub> 基线，之后才做方法比较。本构想的早期版本（Flow2Funnel）为每个计划单独训练局部输出头，<a href="assets/flow2funnel-architecture.png" target="_blank" rel="noopener">其架构图</a>保留备查。</span></p>
+    </section>
+
+    <section class="cf-block prose" id="references">
+      <h2><span class="lang-en">References</span><span class="lang-zh">参考文献</span></h2>
+      <ol class="cf-list cf-refs">
+        <li>Fang, Li, Wang, Xi, Liang &amp; Bai. <a href="https://arxiv.org/abs/2603.15620">Towards Generalizable Robotic Manipulation in Dynamic Environments (DOMINO).</a> 2026.</li>
+        <li>Black, Galliker &amp; Levine. <a href="https://arxiv.org/abs/2506.07339">Real-Time Execution of Action Chunking Flow Policies.</a> NeurIPS 2025.</li>
+        <li><a href="https://arxiv.org/abs/2509.23224">Leave No Observation Behind: Real-time Correction for VLA Action Chunks.</a> 2025.</li>
+        <li>Watter, Springenberg, Boedecker &amp; Riedmiller. <a href="https://arxiv.org/abs/1506.07365">Embed to Control: A Locally Linear Latent Dynamics Model for Control from Raw Images.</a> NeurIPS 2015.</li>
+        <li>Physical Intelligence. <a href="https://arxiv.org/abs/2504.16054">&pi;<sub>0.5</sub>: a Vision-Language-Action Model with Open-World Generalization.</a> 2025.</li>
+      </ol>
+    </section>
+
+    <section class="cf-block prose" id="contact">
+      <h2><span class="lang-en">About me</span><span class="lang-zh">关于我</span></h2>
+      <p class="cf-contact"><span class="lang-en">I am an M.S.E. Robotics student at the University of Pennsylvania, with trajectory-optimization research (<a href="project.html">HOP</a>, <a href="al-hop.html">AL-HOP</a>) and <a href="index.html#projects">&pi;<sub>0.5</sub> hardware deployment</a> behind me. I would like to develop this question with a world-models group; notes and experiment records are available on request.</span><span class="lang-zh">我在宾夕法尼亚大学攻读机器人学硕士，做过轨迹优化研究（<a href="project.html">HOP</a>、<a href="al-hop.html">AL-HOP</a>），也有 <a href="index.html#projects">&pi;<sub>0.5</sub> 实机部署</a>经验。希望与世界模型方向的课题组一起推进这个问题，可提供研究笔记与实验记录。</span><br><a href="mailto:dmmsjtu@engineering.upenn.edu">dmmsjtu@engineering.upenn.edu</a></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>&copy; 2026 Miaomiao Dai</span>
+    <span><button class="theme-toggle" data-theme-toggle type="button">Dark</button></span>
+  </footer>
+
+</div>
+
+<script src="assets/paper.js"></script>
+</body>
+</html>
