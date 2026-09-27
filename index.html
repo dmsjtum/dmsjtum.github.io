@@ -518,14 +518,14 @@
           <div class="pub__body">
           <div>
             <ul class="pub__points lang-en">
-              <li><b>Question.</b> A world model used for control is asked one thing: <b>what does a small nudge of the action do?</b> Can latent world models get this Jacobian right, and use it to correct a frozen VLA’s plan at every control step?</li>
-              <li><b>Approach.</b> One latent world model F(z, a); its derivatives along the VLA’s plan give A and B for a <b>Riccati correction re-solved every step</b>, trained on push-and-see pairs so the local response matches reality.</li>
-              <li><b>Research plan.</b> Test on <b>DOMINO dynamic manipulation</b> and a standard latency protocol against the VLA alone, a global model and learned correction heads, and <b>reuse the same model</b> across goals, limits and latency.</li>
+              <li><b>Question.</b> If I nudge a robot’s action a little, what happens? That answer is a world model’s <b>Jacobian</b>. Can we learn world models whose Jacobians are accurate, and use them to correct a VLA’s plan as it runs?</li>
+              <li><b>Approach.</b> One latent world model, trained on <b>push-and-see pairs</b> so its Jacobians A and B are right; a <b>Riccati controller</b> uses them to add a small correction at every step. The VLA is never changed.</li>
+              <li><b>Research plan.</b> Test on <b>DOMINO dynamic manipulation</b> and a standard latency protocol, against the VLA alone and a correction head trained on the same data; <b>reuse the same model</b> for new goals, limits and delays.</li>
             </ul>
             <ul class="pub__points lang-zh">
-              <li><b>问题：</b>用于控制的世界模型只被问一件事：<b>把动作轻推一下会怎样？</b>能否让隐空间世界模型的这个导数准确，并用它在每个控制步修正冻结 VLA 的计划？</li>
-              <li><b>做法：</b>一个隐空间世界模型 F(z, a)；沿 VLA 计划求导得到 A、B，供<b>每步重解的 Riccati 修正</b>使用；用&ldquo;推一下看看&rdquo;的成对回放训练，使局部响应与实测一致。</li>
-              <li><b>研究计划：</b>在 <b>DOMINO 动态操作基准</b>和标准延迟评测上，对比单独的 VLA、全局模型与学习式修正头，并检验<b>同一模型</b>在不同目标、约束与延迟下的复用。</li>
+              <li><b>问题：</b>把机器人的动作轻推一点，会怎样？这个答案就是世界模型的<b>导数（雅可比）</b>。能否学到导数准确的世界模型，并用它在执行中修正 VLA 的计划？</li>
+              <li><b>做法：</b>一个隐空间世界模型，用<b>&ldquo;推一下看看&rdquo;的成对回放</b>训练，让它的导数 A、B 准确；<b>Riccati 控制器</b>用它们在每一步加一个小修正，VLA 本身不改。</li>
+              <li><b>研究计划：</b>在 <b>DOMINO 动态操作基准</b>和标准延迟评测上，对比单独的 VLA 和用同样数据训练的修正头；换目标、换动作上限、换延迟时<b>复用同一个模型</b>。</li>
             </ul>
           </div>
           </div>
