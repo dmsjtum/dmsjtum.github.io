@@ -78,15 +78,15 @@ vision–language backbone, full 300M action expert), and deployed it on a real 
 with stop, re-observation, and bounded retries; the full system reached 70% end-to-end success.
 
 Research Proposal
-Control-Faithful World Models: Latent Dynamics for Riccati Feedback on Frozen VLAs
+Jacobian-Accurate World Models: Latent Dynamics for Riccati Feedback on Frozen VLAs
 Independent research proposal (formerly Flow2Funnel)
 
 2026 – present
 
-• Asks whether a latent world model can be trained so that its local response to a small action nudge is faithful: one
+• Asks whether a latent world model can be trained so that its Jacobian (its response to a small action nudge) is accurate:
 
-model whose derivatives along a frozen VLA’s plan give Ak , Bk for a Riccati correction re-solved every control step,
-supervised by paired push-and-see rollouts; to be tested on DOMINO dynamic manipulation.
+one model whose derivatives along a frozen VLA’s plan give Ak , Bk for a Riccati correction re-solved every control
+step, supervised by paired push-and-see rollouts; to be tested on DOMINO dynamic manipulation.
 
 Honors & Awards
 James B. Angell Scholar, University of Michigan

@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Control-Faithful World Models — Miaomiao Dai</title>
-<meta name="description" content="A one-page research proposal: train latent world models so their local response to actions is faithful, and use that response for Riccati feedback on a frozen VLA's plan.">
-<meta property="og:title" content="Control-Faithful World Models">
-<meta property="og:description" content="What does a small push do? Training latent world models to answer it, and using the answer for Riccati feedback on frozen VLA plans.">
+<title>Jacobian-Accurate World Models — Miaomiao Dai</title>
+<meta name="description" content="A one-page research proposal: train latent world models so their Jacobians — their local response to actions — are accurate, and use them for Riccati feedback on a frozen VLA's plan.">
+<meta property="og:title" content="Jacobian-Accurate World Models">
+<meta property="og:description" content="What does a small push do? Training latent world models to get their Jacobians right, and using them for Riccati feedback on frozen VLA plans.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://dmsjtum.github.io/control-faithful-world-models.html">
-<meta property="og:image" content="https://dmsjtum.github.io/assets/cfwm-method.png">
+<meta property="og:url" content="https://dmsjtum.github.io/jacobian-accurate-world-models.html">
+<meta property="og:image" content="https://dmsjtum.github.io/assets/jawm-method.png">
 <meta property="og:image:width" content="2000">
 <meta property="og:image:height" content="1080">
 <meta property="og:image:alt" content="A frozen VLA publishes a plan; a latent world model is linearized along it to give A and B; Riccati re-solves every step and corrects the action; push-and-see pairs train the model offline.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://dmsjtum.github.io/control-faithful-world-models.html">
+<link rel="canonical" href="https://dmsjtum.github.io/jacobian-accurate-world-models.html">
 <link rel="icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,31 +96,31 @@
 
   <main class="cf-page">
     <section class="hero hero--center cf-hero">
-      <ol class="crumbs"><li><a href="index.html">Home</a></li><li><a href="index.html#proposals"><span class="lang-en">Proposal Ideas</span><span class="lang-zh">研究构想</span></a></li><li><span class="lang-en">Control-Faithful World Models</span><span class="lang-zh">控制可信的世界模型</span></li></ol>
-      <h1 class="display">Control-Faithful World Models</h1>
-      <p class="hero__sub"><span class="lang-en">Latent dynamics whose local responses drive Riccati feedback on frozen VLAs.</span><span class="lang-zh">让隐空间世界模型的局部响应足够准确，用来驱动冻结 VLA 上的 Riccati 反馈。</span></p>
+      <ol class="crumbs"><li><a href="index.html">Home</a></li><li><a href="index.html#proposals"><span class="lang-en">Proposal Ideas</span><span class="lang-zh">研究构想</span></a></li><li><span class="lang-en">Jacobian-Accurate World Models</span><span class="lang-zh">导数准确的世界模型</span></li></ol>
+      <h1 class="display">Jacobian-Accurate World Models</h1>
+      <p class="hero__sub"><span class="lang-en">World models whose Jacobians, not just their rollouts, are right, so a Riccati controller can correct a frozen VLA&rsquo;s plan.</span><span class="lang-zh">不只让世界模型的滚动预测像样，更让它的导数（雅可比）准确，从而让 Riccati 控制器能修正冻结 VLA 的计划。</span></p>
       <p class="cf-status"><b>Miaomiao Dai</b> &middot; <span class="lang-en">One-page research proposal &middot; September 2026 &middot; formerly &ldquo;Flow2Funnel&rdquo;</span><span class="lang-zh">一页研究计划 &middot; 2026 年 9 月 &middot; 原名 &ldquo;Flow2Funnel&rdquo;</span></p>
     </section>
 
     <div class="cf-question">
       <span class="cf-label"><span class="lang-en">Research question</span><span class="lang-zh">核心问题</span></span>
-      <p><span class="lang-en">A world model used for control is asked one thing: <i>what happens if I nudge the action?</i> Can we train latent world models so that this answer&mdash;their local response along a plan&mdash;is faithful, and use it to correct a frozen VLA&rsquo;s plan at every control step?</span><span class="lang-zh">用于控制的世界模型，其实只被问一件事：<i>把动作轻推一下，会发生什么？</i>能否训练隐空间世界模型，让它沿计划的局部响应足够准确，并用这个响应在每个控制步修正冻结 VLA 的计划？</span></p>
+      <p><span class="lang-en">A world model used for control is asked one thing: <i>what happens if I nudge the action?</i> The answer is the model&rsquo;s Jacobian along the plan. Can we train latent world models so that this Jacobian is accurate, and use it to correct a frozen VLA&rsquo;s plan at every control step?</span><span class="lang-zh">用于控制的世界模型，其实只被问一件事：<i>把动作轻推一下，会发生什么？</i>答案就是模型沿计划的导数（雅可比）。能否训练隐空间世界模型，让这个导数足够准确，并用它在每个控制步修正冻结 VLA 的计划？</span></p>
     </div>
 
     <figure class="figure cf-figure" id="method">
-      <a class="cf-well" href="assets/cfwm-method.png" target="_blank" rel="noopener" aria-label="Open the method figure at full size"><img src="assets/cfwm-method.svg" width="1000" height="540" alt="A frozen VLA publishes a plan once per replan. Camera and proprioception history are encoded into a latent state z. A latent world model z_(k+1) = F(z_k, a_k) is linearized along the plan to give A_k and B_k. A Riccati controller, re-solved at every control step with box limits, adds a correction delta a to the VLA's action. Offline, push-and-see pairs (the same plan rerun with a small push at one step, later commands held fixed) train F so that its predicted response matches the measured one." fetchpriority="high"></a>
-      <div class="cf-figurebar"><span><span class="lang-en">Method overview</span><span class="lang-zh">方法总览</span></span><a href="assets/cfwm-method.png" target="_blank" rel="noopener"><span class="lang-en">View full size ↗</span><span class="lang-zh">查看原图 ↗</span></a></div>
+      <a class="cf-well" href="assets/jawm-method.png" target="_blank" rel="noopener" aria-label="Open the method figure at full size"><img src="assets/jawm-method.svg" width="1000" height="540" alt="A frozen VLA publishes a plan once per replan. Camera and proprioception history are encoded into a latent state z. A latent world model z_(k+1) = F(z_k, a_k) is linearized along the plan to give A_k and B_k. A Riccati controller, re-solved at every control step with box limits, adds a correction delta a to the VLA's action. Offline, push-and-see pairs (the same plan rerun with a small push at one step, later commands held fixed) train F so that its predicted response matches the measured one." fetchpriority="high"></a>
+      <div class="cf-figurebar"><span><span class="lang-en">Method overview</span><span class="lang-zh">方法总览</span></span><a href="assets/jawm-method.png" target="_blank" rel="noopener"><span class="lang-en">View full size ↗</span><span class="lang-zh">查看原图 ↗</span></a></div>
       <figcaption><span class="lang-en">The VLA plans; the world model supplies how the scene will evolve (A) and how a nudge moves it (B); Riccati turns that into a bounded correction at every step. Goals, action limits and latency enter only as Riccati inputs, so the same model is reused unchanged.</span><span class="lang-zh">VLA 负责出计划；世界模型给出场景如何演化（A）、轻推一下会怎样（B）；Riccati 据此在每一步算出有界修正。目标、动作上限与延迟只是 Riccati 的输入，同一个模型无需重训即可复用。</span></figcaption>
     </figure>
 
     <section class="cf-block prose" id="why">
       <div class="cf-cols">
         <div>
-          <h2><span class="lang-en">Why world models, and why faithfulness</span><span class="lang-zh">为什么要世界模型，为什么强调&ldquo;可信&rdquo;</span></h2>
+          <h2><span class="lang-en">Why world models, and why Jacobians</span><span class="lang-zh">为什么要世界模型，为什么强调导数</span></h2>
           <p class="lang-en">Vision&ndash;language&ndash;action models plan well but execute blind: they emit an action chunk from one frame and run it open loop. When objects move or inference lags, the chunk goes stale. On DOMINO, a dynamic-manipulation benchmark, &pi;<sub>0.5</sub> succeeds on 44.8% of static tasks but on under 10% once the targets move [1].</p>
           <p class="lang-zh">视觉–语言–动作模型擅长出计划，执行时却是&ldquo;闭眼&rdquo;的：它根据单帧画面给出一段动作，然后开环执行。物体一动或推理一慢，这段动作就过时了。在动态操作基准 DOMINO 上，&pi;<sub>0.5</sub> 在静态任务上成功率 44.8%，目标一旦运动就不到 10% [1]。</p>
-          <p class="lang-en">A world model is the natural fix: predict how the scene will evolve, then correct. But world models are trained and judged on how well they imagine the future. A controller needs something narrower and harder: the right <b>local response to a small change of action</b>&mdash;the A and B of the linearized dynamics. A model can roll out plausibly and still get this derivative wrong, and then feedback pushes the wrong way.</p>
-          <p class="lang-zh">世界模型是自然的补救：先预测场景如何演化，再修正。但世界模型通常按&ldquo;想象未来像不像&rdquo;来训练和评价，而控制器需要的东西更窄也更难：<b>动作微小改变时的局部响应</b>，即线性化动力学里的 A 和 B。一个模型可以滚动预测得很像样，导数却是错的；这时反馈会往错的方向推。</p>
+          <p class="lang-en">A world model is the natural fix: predict how the scene will evolve, then correct. But world models are trained and judged on how well they imagine the future. A controller needs something narrower and harder: the right <b>local response to a small change of action</b>&mdash;the Jacobians A and B of the dynamics. A model can roll out plausibly and still get its Jacobian wrong, and then feedback pushes the wrong way.</p>
+          <p class="lang-zh">世界模型是自然的补救：先预测场景如何演化，再修正。但世界模型通常按&ldquo;想象未来像不像&rdquo;来训练和评价，而控制器需要的东西更窄也更难：<b>动作微小改变时的局部响应</b>，即动力学的雅可比 A 和 B。一个模型可以滚动预测得很像样，导数却是错的；这时反馈会往错的方向推。</p>
         </div>
         <div>
           <h2><span class="lang-en">The idea</span><span class="lang-zh">方法</span></h2>
@@ -131,7 +131,7 @@
           </ol>
           <p><span class="lang-en"><b>Training signal: push-and-see pairs.</b> Rerun the same plan with a small push &plusmn;&delta; at step j, hold every later command fixed, and fit F so that its response matches the measured one at every later step k:</span><span class="lang-zh"><b>训练信号：&ldquo;推一下看看&rdquo;的成对回放。</b>同一计划重跑一遍，只在第 j 步施加 &plusmn;&delta; 的轻推、之后的命令全部锁定；让 F 的响应在之后每一步 k 都与实测一致：</span></p>
           <div class="cf-eq">&Delta;y<sub>k</sub> / 2&delta; &nbsp;&asymp;&nbsp; C A<sub>k&minus;1</sub> &hellip; A<sub>j+1</sub> B<sub>j</sub></div>
-          <p><span class="lang-en">plus predicting the unpushed rollout. No reward and no pixel reconstruction: the model is trained on exactly the quantity the controller consumes.</span><span class="lang-zh">再加上预测未推动的那条轨迹。不需要奖励，也不重建像素：模型被训练的，正是控制器要用的那个量。</span></p>
+          <p><span class="lang-en">plus predicting the unpushed rollout. No reward and no pixel reconstruction: the model is trained on exactly the quantity the controller consumes. Contact makes the true derivative jump; a push is a finite difference over one control period, which stays well defined, and the controller uses it only within one contact phase.</span><span class="lang-zh">再加上预测未推动的那条轨迹。不需要奖励，也不重建像素：模型被训练的，正是控制器要用的那个量。接触会让真实导数跳变；这里的&ldquo;推一下&rdquo;本身就是一个控制周期上的有限差分，始终有定义，控制器也只在同一接触阶段内使用它。</span></p>
         </div>
       </div>
     </section>
@@ -149,7 +149,7 @@
       <p class="lang-zh"><b>基准。</b>DOMINO [1]：35 个双臂任务，目标会运动，并提供官方 &pi;<sub>0.5</sub> 权重。选取&ldquo;静态会做、物体一动就失败&rdquo;的任务子集，先复现官方基线再比较方法。另用实时分块 [2] 与学习式块修正 [3] 在 Kinetix 和 LIBERO 上的延迟评测协议，作为可直接对比的第二个测试床。</p>
       <div class="cf-gates">
         <div class="cf-gate"><b><span class="lang-en">1 · Room</span><span class="lang-zh">1 · 余量</span></b><span class="lang-en">With the true local response, Riccati must beat the best single global model by at least 10 points; otherwise the setting does not reward learning A and B, and the setting changes, not the claim.</span><span class="lang-zh">给出真实局部响应时，Riccati 必须比最好的单一全局模型高至少 10 个百分点；否则说明这个设定不奖励学 A、B，要换的是设定，而不是主张。</span></div>
-        <div class="cf-gate"><b><span class="lang-en">2 · Faithfulness</span><span class="lang-zh">2 · 可信</span></b><span class="lang-en">On held-out pushes, the predicted response is within 20% at the 90th percentile and at least 20% better than a global model, without hurting open-loop prediction.</span><span class="lang-zh">在留出的轻推上，预测响应的误差 90 分位 &le; 20%，且比全局模型小至少 20%，同时不损害开环预测。</span></div>
+        <div class="cf-gate"><b><span class="lang-en">2 · Jacobian accuracy</span><span class="lang-zh">2 · 导数准确</span></b><span class="lang-en">On held-out pushes, the predicted response is within 20% at the 90th percentile and at least 20% better than a global model, without hurting open-loop prediction.</span><span class="lang-zh">在留出的轻推上，预测响应的误差 90 分位 &le; 20%，且比全局模型小至少 20%，同时不损害开环预测。</span></div>
         <div class="cf-gate"><b><span class="lang-en">3 · Closed loop</span><span class="lang-zh">3 · 闭环</span></b><span class="lang-en">On held-out scenes and three seeds, beat the VLA alone, a global model, a shuffled latent, and a correction head that reads the same inputs.</span><span class="lang-zh">在留出场景、三个种子上，胜过单独的 VLA、全局模型、打乱的隐状态，以及读取相同输入的修正头。</span></div>
         <div class="cf-gate"><b><span class="lang-en">4 · Reuse</span><span class="lang-zh">4 · 复用</span></b><span class="lang-en">The same frozen model serves new targets, cost weights, action limits and latency&mdash;only Riccati&rsquo;s inputs change&mdash;against a correction head that also reads the task.</span><span class="lang-zh">同一个冻结的模型服务新的目标、代价权重、动作上限与延迟（只改 Riccati 的输入），对照同样读取任务信息的修正头。</span></div>
       </div>
@@ -157,8 +157,8 @@
 
     <section class="cf-block prose" id="contribution">
       <h2><span class="lang-en">What it would add to world models</span><span class="lang-zh">对世界模型研究的意义</span></h2>
-      <p class="lang-en">If it works, <b>control-faithfulness</b> becomes a measurable property of world models alongside rollout quality: paired pushes are a cheap probe for asking any action-conditioned world model&mdash;video world models included&mdash;whether it knows what an action does, and a training signal to fix it when it does not. The control side stays classical and transparent: one model, its derivatives, one Riccati pass.</p>
-      <p class="lang-zh">如果成立，<b>控制可信度</b>就成为世界模型与&ldquo;滚动预测质量&rdquo;并列、可以测量的属性：成对轻推是一种廉价的探针，可以拿来检验任何动作条件的世界模型（包括视频世界模型）是否知道一个动作会带来什么；它答错时，同一信号又能用来训练纠正。控制部分保持经典、透明：一个模型、它的导数、一次 Riccati。</p>
+      <p class="lang-en">If it works, <b>Jacobian accuracy</b> becomes a measurable property of world models alongside rollout quality: paired pushes are a cheap probe for asking any action-conditioned world model&mdash;video world models included&mdash;whether its Jacobian is right, and a training signal to fix it when it is not. The control side stays classical and transparent: one model, its derivatives, one Riccati pass.</p>
+      <p class="lang-zh">如果成立，<b>导数准确度</b>就成为世界模型与&ldquo;滚动预测质量&rdquo;并列、可以测量的属性：成对轻推是一种廉价的探针，可以拿来检验任何动作条件的世界模型（包括视频世界模型）的导数是否准确；它答错时，同一信号又能用来训练纠正。控制部分保持经典、透明：一个模型、它的导数、一次 Riccati。</p>
       <p class="cf-note"><span class="lang-en"><b>Status (September 2026).</b> Simulated pilot mechanisms are built; the official &pi;<sub>0.5</sub> baselines are being reproduced on a DOMINO subset before any method comparison. An earlier version of this idea (Flow2Funnel) trained separate local heads per plan; <a href="assets/flow2funnel-architecture.png" target="_blank" rel="noopener">its architecture</a> is kept for reference.</span><span class="lang-zh"><b>当前进展（2026 年 9 月）。</b>仿真中的初步机构已搭好；正在 DOMINO 子集上复现官方 &pi;<sub>0.5</sub> 基线，之后才做方法比较。本构想的早期版本（Flow2Funnel）为每个计划单独训练局部输出头，<a href="assets/flow2funnel-architecture.png" target="_blank" rel="noopener">其架构图</a>保留备查。</span></p>
     </section>
 
