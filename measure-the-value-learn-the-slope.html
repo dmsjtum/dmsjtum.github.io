@@ -485,17 +485,9 @@ table.gl.sealed td:nth-child(2) { width: 20%; color: var(--ink-2); }
 }
 </style>
 <style>
-.db { display: flex; flex-direction: column; gap: 16px; margin: 6px 0 10px; }
-.db-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-.db-t b { font-weight: 600; }
-.db-sub { display: block; color: var(--muted); font-size: 0.86em; }
-.db-num { font-family: var(--mono); white-space: nowrap; color: var(--muted); font-size: 0.92em; }
-.db-num b { color: var(--slope); font-weight: 600; }
-.db-track { position: relative; height: 14px; margin-top: 6px; background: linear-gradient(var(--rule), var(--rule)) center / 100% 2px no-repeat; }
-.db-line { position: absolute; top: 6px; height: 2px; background: var(--slope-2); }
-.db-dot { position: absolute; top: 2px; width: 10px; height: 10px; border-radius: 50%; transform: translateX(-50%); box-sizing: border-box; }
-.db-dot.off { background: var(--paper); border: 2px solid var(--muted); }
-.db-dot.on { background: var(--slope); }
+.fa-cam { font: italic 400 16px/1 var(--serif); fill: var(--ink-2); }
+.fa-narrow .fa-cam { font-size: 14px; }
+.fa-gl { font-weight: 400; font-size: 17px; }
 </style>
 </head>
 <body>
@@ -516,7 +508,7 @@ table.gl.sealed td:nth-child(2) { width: 20%; color: var(--ink-2); }
     <div class="lang" role="group" aria-label="Language"><button type="button" id="lang-en" data-set="en" aria-pressed="true">EN</button><button type="button" id="lang-zh" data-set="zh" aria-pressed="false">中文</button></div>
   </div>
   <h1><span class="en">Measure the Value, Learn the Slope</span><span class="zh">值靠测，斜率靠学</span></h1>
-  <p class="tldr col"><span class="en">When the world quietly changes, a world model’s predictions go wrong, but its sense of direction survives. So the camera gives the values and the model gives only the direction: measure where the action really ended, then correct it along the model’s slope.</span><span class="zh">现实悄悄变化时，世界模型的预测会出错，但它的方向感还在。所以让相机给数值、让模型只给方向：实测动作实际落在哪，再沿模型的斜率修正。</span></p>
+  <p class="tldr col"><span class="en">When the world quietly changes, a world model’s predicted landing point goes wrong, but its slope, its sense of direction, survives. So the camera measures the value, where the action really landed, and the model gives only the slope: measure the miss, then correct the action along the slope.</span><span class="zh">现实悄悄变化时，世界模型预测的落点会出错，但它的斜率（方向感）还在。所以数值（落点）交给相机实测，模型只给斜率：量出差了多少，再沿斜率修正动作。</span></p>
 </header>
 <script>
 (function () {
@@ -538,7 +530,7 @@ table.gl.sealed td:nth-child(2) { width: 20%; color: var(--ink-2); }
   <figure class="fa-fig">
 <svg class="fa-wide fb" viewBox="0 0 960 600" role="img" aria-labelledby="fb-tw fb-dw">
 <title id="fb-tw" class="en">How it is trained and how it is used</title><title class="zh">怎么训练，怎么使用</title>
-<desc id="fb-dw" class="en">Top, training, once and offline, the usual way: ordinary robot videos and actions go through an image encoder to a latent state; one world model F, applied again at every step, predicts the next latent from the current latent and the action, and is trained so that the prediction matches the next frame. Public models such as TD-MPC2, DINO-WM and LeWM can be used instead. The trained model is then frozen. Bottom, use at test time with every weight frozen: a frozen policy proposes an action chunk; the robot, whose world has changed in a hidden way, executes it; the camera and the frozen encoder measure where it really ended; the miss is that measured end minus the goal. The frozen world model, run on the same chunk, gives only the slope of its predicted end with respect to the chunk, by automatic differentiation; its predicted end point itself is not used. The chunk is corrected by minimising the squared norm of e plus G delta plus rho times the squared norm of delta, and the robot tries again from the same start, at most 5 times. Values come from the real world, slopes from the model.</desc><desc class="zh">上半部分是训练，离线、一次、按常规方式：普通的机器人视频和动作经过图像编码器得到潜变量；同一个世界模型 F 每一步重复使用，由当前潜变量和动作预测下一步潜变量，训练目标是让预测对上下一帧。也可以直接用 TD-MPC2、DINO-WM、LeWM 等公开模型。训练好的模型随后冻结。下半部分是测试时的使用，所有权重冻结：冻结的策略给出动作块；世界被悄悄改变的机器人执行它；相机和冻结的编码器测出它实际停在哪里；偏差等于实测终点减去目标。冻结的世界模型在同一个动作块上运行，只通过自动求导给出预测终点对动作块的斜率，预测的终点本身不使用。用 min ‖e + Gδ‖² + ρ‖δ‖² 修正动作块，机器人从同一起点再试，最多 5 次。数值来自真实世界，斜率来自模型。</desc>
+<desc id="fb-dw" class="en">Top, training, once and offline, the usual way: ordinary robot videos and actions go through an image encoder to a latent state; one world model F, applied again at every step, predicts the next latent from the current latent and the action, and is trained so that the prediction matches the next frame. Public models such as TD-MPC2, DINO-WM and LeWM can be used instead. The trained model is then frozen. Bottom, use at test time with every weight frozen: a frozen policy proposes an action chunk; the robot, whose world has changed in a hidden way, executes it; the camera and the frozen encoder measure where it really ended; the miss is that measured end minus the goal. The frozen world model, run on the same chunk, gives only the slope of its predicted end with respect to the chunk, by automatic differentiation; its predicted end point itself is not used. The chunk is corrected by minimising the squared norm of e plus G delta plus rho times the squared norm of delta, and the robot tries again from the same start, at most 5 times. Values come from the real world, slopes from the model.</desc><desc class="zh">上半部分是训练，离线、一次、按常规方式：普通的机器人视频和动作经过图像编码器得到潜变量；同一个世界模型 F 每一步重复使用，由当前潜变量和动作预测下一步潜变量，训练目标是让预测对上下一帧。也可以直接用 TD-MPC2、DINO-WM、LeWM 等公开模型。训练好的模型随后冻结。下半部分是测试时的使用，所有权重冻结：冻结的策略给出动作块；世界被悄悄改变的机器人执行它；相机和冻结的编码器测出它实际停在哪里；偏差等于实测落点减去目标。冻结的世界模型在同一个动作块上运行，只通过自动求导给出预测落点对动作块的斜率（方向感），预测的落点本身不使用。用 min ‖e + Gδ‖² + ρ‖δ‖² 修正动作块，机器人从同一起点再试，最多 5 次。数值（落点）来自真实世界，斜率（方向感）来自模型。</desc>
 <defs><marker id="fb-ah-w" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fb-mk"/></marker><marker id="fb-ahs-w" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fb-mk-s"/></marker><marker id="fb-ahw-w" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fb-mk-w"/></marker></defs>
 <rect class="fa-card" x="0.5" y="0.5" width="959" height="599" rx="9"/>
 <text class="fa-lab en" x="18" y="46">Train · once, offline</text><text class="fa-lab zh" x="18" y="46">训练 · 离线一次</text>
@@ -587,11 +579,11 @@ table.gl.sealed td:nth-child(2) { width: 20%; color: var(--ink-2); }
 <text class="fa-t slope en" x="394" y="347">World model <tspan class="fb-it">F</tspan></text><text class="fa-t slope zh" x="394" y="347">世界模型 <tspan class="fb-it">F</tspan></text>
 <path class="fa-arr" d="M250,428 V338 H357" marker-end="url(#fb-ah-w)"/>
 <path class="fb-arr-s" d="M556,326 H830 V396" marker-end="url(#fb-ahs-w)"/>
-<text class="fa-t slope en" x="578" y="316">slope <tspan class="fb-it">G</tspan></text><text class="fa-t slope zh" x="578" y="316">斜率 <tspan class="fb-it">G</tspan></text>
-<text class="fa-s fa-m en" x="670" y="316">autodiff · ∂ end / ∂ <tspan class="fb-it">U</tspan></text><text class="fa-s fa-m zh" x="670" y="316">自动求导 · ∂ 终点 / ∂ <tspan class="fb-it">U</tspan></text>
+<text class="fa-t slope en" x="578" y="316">slope <tspan class="fb-it">G</tspan></text><text class="fa-t slope zh" x="578" y="316">斜率 <tspan class="fb-it">G</tspan><tspan class="fa-gl">（方向感）</tspan></text>
+<text class="fa-s fa-m en" x="670" y="316">autodiff · ∂ end / ∂ <tspan class="fb-it">U</tspan></text><text class="fa-s fa-m zh" x="742" y="316">自动求导 · ∂ 落点 / ∂ <tspan class="fb-it">U</tspan></text>
 <path class="fb-ghost" d="M558,354 H590"/>
 <path class="fb-x" d="M596,348 L606,358 M606,348 L596,358"/>
-<text class="fa-s fb-s-muted en" x="614" y="359">predicted end · not used</text><text class="fa-s fb-s-muted zh" x="614" y="359">预测终点 · 不用</text>
+<text class="fa-s fb-s-muted en" x="614" y="359">predicted end · not used</text><text class="fa-s fb-s-muted zh" x="614" y="359">预测落点 · 不用</text>
 <polygon class="fb-net" points="18,400 112,410 112,446 18,456"/>
 <path class="fb-ice" d="M31,406.5 L31,419.5 M36.6,409.8 L25.4,416.2 M36.6,416.2 L25.4,409.8 M31,416.6 L32.7,418.2 M31,416.6 L29.3,418.2 M27.9,414.8 L27.3,417 M27.9,414.8 L25.6,414.2 M27.9,411.2 L25.6,411.8 M27.9,411.2 L27.3,409 M31,409.4 L29.3,407.8 M31,409.4 L32.7,407.8 M34.1,411.2 L34.7,409 M34.1,411.2 L36.4,411.8 M34.1,414.8 L36.4,414.2 M34.1,414.8 L34.7,417"/>
 <text class="fb-n en" x="44" y="435">policy</text><text class="fb-n zh" x="44" y="435">策略</text>
@@ -611,12 +603,13 @@ table.gl.sealed td:nth-child(2) { width: 20%; color: var(--ink-2); }
 <text class="fa-t en" x="300" y="424">Robot</text><text class="fa-t zh" x="300" y="424">机器人</text>
 <text class="fa-s fb-s-warn en" x="300" y="446">hidden change</text><text class="fa-s fb-s-warn zh" x="300" y="446">隐藏变化</text>
 <path class="fa-arr" d="M418,428 H438" marker-end="url(#fb-ah-w)"/>
+<text class="fa-cam en" x="428" y="393" text-anchor="middle">camera</text><text class="fa-cam zh" x="428" y="393" text-anchor="middle">相机</text>
 <polygon class="fb-net" points="442,400 542,412 542,444 442,456"/>
 <path class="fb-ice" d="M455,406.5 L455,419.5 M460.6,409.8 L449.4,416.2 M460.6,416.2 L449.4,409.8 M455,416.6 L456.7,418.2 M455,416.6 L453.3,418.2 M451.9,414.8 L451.3,417 M451.9,414.8 L449.6,414.2 M451.9,411.2 L449.6,411.8 M451.9,411.2 L451.3,409 M455,409.4 L453.3,407.8 M455,409.4 L456.7,407.8 M458.1,411.2 L458.7,409 M458.1,411.2 L460.4,411.8 M458.1,414.8 L460.4,414.2 M458.1,414.8 L458.7,417"/>
 <text class="fb-n en" x="466" y="435">encoder</text><text class="fb-n zh" x="466" y="435">编码器</text>
 <path class="fa-arr" d="M544,428 H555" marker-end="url(#fb-ah-w)"/>
 <rect class="fb-tok meas" x="558" y="417" width="13" height="22" rx="3"/><rect class="fb-tok meas" x="574" y="417" width="13" height="22" rx="3"/><rect class="fb-tok meas" x="590" y="417" width="13" height="22" rx="3"/>
-<text class="fa-s en" x="580.5" y="470" text-anchor="middle">measured end</text><text class="fa-s zh" x="580.5" y="470" text-anchor="middle">实测终点</text>
+<text class="fa-s en" x="580.5" y="470" text-anchor="middle">measured end</text><text class="fa-s zh" x="580.5" y="470" text-anchor="middle">实测落点</text>
 <path class="fa-arr" d="M606,428 H625" marker-end="url(#fb-ah-w)"/>
 <circle class="fb-sum" cx="640" cy="428" r="13"/>
 <text class="fb-sign" x="618" y="416">+</text>
@@ -636,11 +629,11 @@ table.gl.sealed td:nth-child(2) { width: 20%; color: var(--ink-2); }
 <g class="en"><g transform="translate(18,560) scale(1.0)"><path class="fb-fire" d="M6 0 C7.6 2.6 12 5.6 12 10.2 C12 13.6 9.4 16 6 16 C2.6 16 0 13.6 0 10.2 C0 7.4 1.8 5.6 3.2 4.4 C3.3 6.4 4.2 7.6 5.2 8.2 C4.6 5.4 5 2.4 6 0 Z"/><path class="fb-fire-in" d="M6 9 C7.4 10.4 8.4 11.6 8.4 13 C8.4 14.4 7.3 15.2 6 15.2 C4.7 15.2 3.6 14.4 3.6 13 C3.6 11.6 4.8 10.4 6 9 Z"/></g><text class="fa-s" x="36" y="575">learned here</text><path class="fb-ice" d="M150,561 L150,575 M156.1,564.5 L143.9,571.5 M156.1,571.5 L143.9,564.5 M150,571.9 L151.8,573.6 M150,571.9 L148.2,573.6 M146.7,569.9 L146,572.4 M146.7,569.9 L144.2,569.3 M146.7,566.1 L144.2,566.7 M146.7,566.1 L146,563.6 M150,564.1 L148.2,562.4 M150,564.1 L151.8,562.4 M153.3,566.1 L154,563.6 M153.3,566.1 L155.8,566.7 M153.3,569.9 L155.8,569.3 M153.3,569.9 L154,572.4"/><text class="fa-s" x="164" y="575">frozen</text></g>
 <g class="zh"><g transform="translate(18,560) scale(1.0)"><path class="fb-fire" d="M6 0 C7.6 2.6 12 5.6 12 10.2 C12 13.6 9.4 16 6 16 C2.6 16 0 13.6 0 10.2 C0 7.4 1.8 5.6 3.2 4.4 C3.3 6.4 4.2 7.6 5.2 8.2 C4.6 5.4 5 2.4 6 0 Z"/><path class="fb-fire-in" d="M6 9 C7.4 10.4 8.4 11.6 8.4 13 C8.4 14.4 7.3 15.2 6 15.2 C4.7 15.2 3.6 14.4 3.6 13 C3.6 11.6 4.8 10.4 6 9 Z"/></g><text class="fa-s" x="36" y="575">在此学习</text><path class="fb-ice" d="M122,561 L122,575 M128.1,564.5 L115.9,571.5 M128.1,571.5 L115.9,564.5 M122,571.9 L123.8,573.6 M122,571.9 L120.2,573.6 M118.7,569.9 L118,572.4 M118.7,569.9 L116.2,569.3 M118.7,566.1 L116.2,566.7 M118.7,566.1 L118,563.6 M122,564.1 L120.2,562.4 M122,564.1 L123.8,562.4 M125.3,566.1 L126,563.6 M125.3,566.1 L127.8,566.7 M125.3,569.9 L127.8,569.3 M125.3,569.9 L126,572.4"/><text class="fa-s" x="136" y="575">冻结</text></g>
 <text class="fa-msg en" x="560" y="576" text-anchor="middle"><tspan class="fa-msg-a">Values from the real world</tspan><tspan class="fa-msg-sep"> · </tspan><tspan class="fa-msg-b">slopes from the model</tspan></text>
-<text class="fa-msg zh" x="560" y="576" text-anchor="middle"><tspan class="fa-msg-a">数值来自真实世界</tspan><tspan class="fa-msg-sep"> · </tspan><tspan class="fa-msg-b">斜率来自模型</tspan></text>
+<text class="fa-msg zh" x="560" y="576" text-anchor="middle"><tspan class="fa-msg-a">数值（落点）来自真实世界</tspan><tspan class="fa-msg-sep"> · </tspan><tspan class="fa-msg-b">斜率（方向感）来自模型</tspan></text>
 </svg>
 <svg class="fa-narrow fb" viewBox="0 0 380 1150" role="img" aria-labelledby="fb-tn fb-dn">
 <title id="fb-tn" class="en">How it is trained and how it is used</title><title class="zh">怎么训练，怎么使用</title>
-<desc id="fb-dn" class="en">Top, training, once and offline, the usual way: ordinary robot videos and actions go through an image encoder to a latent state; one world model F, applied again at every step, predicts the next latent from the current latent and the action, and is trained so that the prediction matches the next frame. Public models such as TD-MPC2, DINO-WM and LeWM can be used instead. The trained model is then frozen. Bottom, use at test time with every weight frozen: a frozen policy proposes an action chunk; the robot, whose world has changed in a hidden way, executes it; the camera and the frozen encoder measure where it really ended; the miss is that measured end minus the goal. The frozen world model, run on the same chunk, gives only the slope of its predicted end with respect to the chunk, by automatic differentiation; its predicted end point itself is not used. The chunk is corrected by minimising the squared norm of e plus G delta plus rho times the squared norm of delta, and the robot tries again from the same start, at most 5 times. Values come from the real world, slopes from the model.</desc><desc class="zh">上半部分是训练，离线、一次、按常规方式：普通的机器人视频和动作经过图像编码器得到潜变量；同一个世界模型 F 每一步重复使用，由当前潜变量和动作预测下一步潜变量，训练目标是让预测对上下一帧。也可以直接用 TD-MPC2、DINO-WM、LeWM 等公开模型。训练好的模型随后冻结。下半部分是测试时的使用，所有权重冻结：冻结的策略给出动作块；世界被悄悄改变的机器人执行它；相机和冻结的编码器测出它实际停在哪里；偏差等于实测终点减去目标。冻结的世界模型在同一个动作块上运行，只通过自动求导给出预测终点对动作块的斜率，预测的终点本身不使用。用 min ‖e + Gδ‖² + ρ‖δ‖² 修正动作块，机器人从同一起点再试，最多 5 次。数值来自真实世界，斜率来自模型。</desc>
+<desc id="fb-dn" class="en">Top, training, once and offline, the usual way: ordinary robot videos and actions go through an image encoder to a latent state; one world model F, applied again at every step, predicts the next latent from the current latent and the action, and is trained so that the prediction matches the next frame. Public models such as TD-MPC2, DINO-WM and LeWM can be used instead. The trained model is then frozen. Bottom, use at test time with every weight frozen: a frozen policy proposes an action chunk; the robot, whose world has changed in a hidden way, executes it; the camera and the frozen encoder measure where it really ended; the miss is that measured end minus the goal. The frozen world model, run on the same chunk, gives only the slope of its predicted end with respect to the chunk, by automatic differentiation; its predicted end point itself is not used. The chunk is corrected by minimising the squared norm of e plus G delta plus rho times the squared norm of delta, and the robot tries again from the same start, at most 5 times. Values come from the real world, slopes from the model.</desc><desc class="zh">上半部分是训练，离线、一次、按常规方式：普通的机器人视频和动作经过图像编码器得到潜变量；同一个世界模型 F 每一步重复使用，由当前潜变量和动作预测下一步潜变量，训练目标是让预测对上下一帧。也可以直接用 TD-MPC2、DINO-WM、LeWM 等公开模型。训练好的模型随后冻结。下半部分是测试时的使用，所有权重冻结：冻结的策略给出动作块；世界被悄悄改变的机器人执行它；相机和冻结的编码器测出它实际停在哪里；偏差等于实测落点减去目标。冻结的世界模型在同一个动作块上运行，只通过自动求导给出预测落点对动作块的斜率（方向感），预测的落点本身不使用。用 min ‖e + Gδ‖² + ρ‖δ‖² 修正动作块，机器人从同一起点再试，最多 5 次。数值（落点）来自真实世界，斜率（方向感）来自模型。</desc>
 <defs><marker id="fb-ah-n" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fb-mk"/></marker><marker id="fb-ahs-n" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fb-mk-s"/></marker><marker id="fb-ahw-n" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fb-mk-w"/></marker></defs>
 <rect class="fa-card" x="0.5" y="0.5" width="379" height="1149" rx="9"/>
 <text class="fa-lab en" x="14" y="36">Train · once, offline</text><text class="fa-lab zh" x="14" y="36">训练 · 离线一次</text>
@@ -700,10 +693,11 @@ table.gl.sealed td:nth-child(2) { width: 20%; color: var(--ink-2); }
 <text class="fa-t en" x="28" y="688">Robot</text><text class="fa-t zh" x="28" y="688">机器人</text>
 <text class="fa-s fb-s-warn en" x="28" y="710">hidden change</text><text class="fa-s fb-s-warn zh" x="28" y="710">隐藏变化</text>
 <path class="fa-arr" d="M162.5,722 V744" marker-end="url(#fb-ah-n)"/>
+<text class="fa-cam en" x="172" y="738">camera</text><text class="fa-cam zh" x="172" y="738">相机</text>
 <polygon class="fb-net" points="14,746 310,756 310,798 14,808"/>
 <path class="fb-ice" d="M28,754 L28,766 M33.2,757 L22.8,763 M33.2,763 L22.8,757 M28,763.3 L29.5,764.8 M28,763.3 L26.5,764.8 M25.1,761.6 L24.6,763.7 M25.1,761.6 L23.1,761.1 M25.1,758.4 L23.1,758.9 M25.1,758.4 L24.6,756.3 M28,756.7 L26.5,755.2 M28,756.7 L29.5,755.2 M30.9,758.4 L31.4,756.3 M30.9,758.4 L32.9,758.9 M30.9,761.6 L32.9,761.1 M30.9,761.6 L31.4,763.7"/>
 <text class="fb-n en" x="42" y="783">encoder</text><text class="fb-n zh" x="42" y="783">编码器</text>
-<text class="fa-s en" x="152" y="783">→ measured end</text><text class="fa-s zh" x="152" y="783">→ 实测终点</text>
+<text class="fa-s en" x="152" y="783">→ measured end</text><text class="fa-s zh" x="152" y="783">→ 实测落点</text>
 <path class="fa-arr" d="M162.5,805 V829" marker-end="url(#fb-ah-n)"/>
 <circle class="fb-sum" cx="162.5" cy="844" r="13"/>
 <text class="fb-sign" x="171" y="828">+</text>
@@ -721,8 +715,8 @@ table.gl.sealed td:nth-child(2) { width: 20%; color: var(--ink-2); }
 <polygon class="fb-net slope" points="60,984 310,994 310,1058 60,1068"/>
 <path class="fb-ice" d="M74,992 L74,1004 M79.2,995 L68.8,1001 M79.2,1001 L68.8,995 M74,1001.3 L75.5,1002.8 M74,1001.3 L72.5,1002.8 M71.1,999.6 L70.6,1001.7 M71.1,999.6 L69.1,999.1 M71.1,996.4 L69.1,996.9 M71.1,996.4 L70.6,994.3 M74,994.7 L72.5,993.2 M74,994.7 L75.5,993.2 M76.9,996.4 L77.4,994.3 M76.9,996.4 L78.9,996.9 M76.9,999.6 L78.9,999.1 M76.9,999.6 L77.4,1001.7"/>
 <text class="fa-t slope en" x="88" y="1016">World model <tspan class="fb-it">F</tspan></text><text class="fa-t slope zh" x="88" y="1016">世界模型 <tspan class="fb-it">F</tspan></text>
-<text class="fa-s en" x="74" y="1038">slope by autodiff</text><text class="fa-s zh" x="74" y="1038">自动求导给出斜率</text>
-<text class="fa-s fb-s-muted en" x="74" y="1057">predicted end · not used</text><text class="fa-s fb-s-muted zh" x="74" y="1057">预测终点 · 不用</text>
+<text class="fa-s en" x="74" y="1038">slope by autodiff</text><text class="fa-s zh" x="74" y="1038">自动求导给出斜率（方向感）</text>
+<text class="fa-s fb-s-muted en" x="74" y="1057">predicted end · not used</text><text class="fa-s fb-s-muted zh" x="74" y="1057">预测落点 · 不用</text>
 <text class="fb-v" x="16" y="1030">U<tspan dy="5" style="font-size:13px">j</tspan></text>
 <path class="fa-arr" d="M38,1025 H57" marker-end="url(#fb-ah-n)"/>
 <path class="fa-ret" d="M311,916 H346 V624 H178" marker-end="url(#fb-ah-n)"/>
@@ -731,42 +725,272 @@ table.gl.sealed td:nth-child(2) { width: 20%; color: var(--ink-2); }
 <g class="zh"><rect class="fa-bg" x="322" y="748" width="48" height="42" rx="4"/><text class="fa-ret-t" x="346" y="766" text-anchor="middle">≤ 5</text><text class="fa-ret-t" x="346" y="783" text-anchor="middle">次</text></g>
 <line class="fa-div" x1="14" y1="1090" x2="366" y2="1090"/>
 <text class="fa-msg en" x="190" y="1114" text-anchor="middle"><tspan class="fa-msg-a">Values from the real world</tspan></text><text class="fa-msg en" x="190" y="1135" text-anchor="middle"><tspan class="fa-msg-b">slopes from the model</tspan></text>
-<text class="fa-msg zh" x="190" y="1124" text-anchor="middle"><tspan class="fa-msg-a">数值来自真实世界</tspan><tspan class="fa-msg-sep"> · </tspan><tspan class="fa-msg-b">斜率来自模型</tspan></text>
+<text class="fa-msg zh" x="190" y="1114" text-anchor="middle"><tspan class="fa-msg-a">数值（落点）来自真实世界</tspan></text><text class="fa-msg zh" x="190" y="1135" text-anchor="middle"><tspan class="fa-msg-b">斜率（方向感）来自模型</tspan></text>
 <g class="en"><g transform="translate(196,49) scale(0.85)"><path class="fb-fire" d="M6 0 C7.6 2.6 12 5.6 12 10.2 C12 13.6 9.4 16 6 16 C2.6 16 0 13.6 0 10.2 C0 7.4 1.8 5.6 3.2 4.4 C3.3 6.4 4.2 7.6 5.2 8.2 C4.6 5.4 5 2.4 6 0 Z"/><path class="fb-fire-in" d="M6 9 C7.4 10.4 8.4 11.6 8.4 13 C8.4 14.4 7.3 15.2 6 15.2 C4.7 15.2 3.6 14.4 3.6 13 C3.6 11.6 4.8 10.4 6 9 Z"/></g><text class="fa-s" x="210" y="62">learned</text><path class="fb-ice" d="M281,51 L281,63 M286.2,54 L275.8,60 M286.2,60 L275.8,54 M281,60.3 L282.5,61.8 M281,60.3 L279.5,61.8 M278.1,58.6 L277.6,60.7 M278.1,58.6 L276.1,58.1 M278.1,55.4 L276.1,55.9 M278.1,55.4 L277.6,53.3 M281,53.7 L279.5,52.2 M281,53.7 L282.5,52.2 M283.9,55.4 L284.4,53.3 M283.9,55.4 L285.9,55.9 M283.9,58.6 L285.9,58.1 M283.9,58.6 L284.4,60.7"/><text class="fa-s" x="292" y="62">frozen</text></g><g class="zh"><g transform="translate(150,49) scale(0.85)"><path class="fb-fire" d="M6 0 C7.6 2.6 12 5.6 12 10.2 C12 13.6 9.4 16 6 16 C2.6 16 0 13.6 0 10.2 C0 7.4 1.8 5.6 3.2 4.4 C3.3 6.4 4.2 7.6 5.2 8.2 C4.6 5.4 5 2.4 6 0 Z"/><path class="fb-fire-in" d="M6 9 C7.4 10.4 8.4 11.6 8.4 13 C8.4 14.4 7.3 15.2 6 15.2 C4.7 15.2 3.6 14.4 3.6 13 C3.6 11.6 4.8 10.4 6 9 Z"/></g><text class="fa-s" x="164" y="62">在此学习</text><path class="fb-ice" d="M250,51 L250,63 M255.2,54 L244.8,60 M255.2,60 L244.8,54 M250,60.3 L251.5,61.8 M250,60.3 L248.5,61.8 M247.1,58.6 L246.6,60.7 M247.1,58.6 L245.1,58.1 M247.1,55.4 L245.1,55.9 M247.1,55.4 L246.6,53.3 M250,53.7 L248.5,52.2 M250,53.7 L251.5,52.2 M252.9,55.4 L253.4,53.3 M252.9,55.4 L254.9,55.9 M252.9,58.6 L254.9,58.1 M252.9,58.6 L253.4,60.7"/><text class="fa-s" x="261" y="62">冻结</text></g>
 </svg>
-    <figcaption><span class="en">Train once, offline, the usual way, or download a public model. At test time nothing is trained: the camera measures where the action ended, the frozen model gives only the slope, and one ridge step corrects the action. The same step also runs between the re-plans of a slow planner.</span><span class="zh">离线按常规训练一次，或直接用公开模型。测试时不训练任何东西：相机测出动作实际落在哪，冻结的模型只给斜率，一步岭修正改动作。同一步修正也能放在慢规划器的两次规划之间。</span></figcaption>
+    <figcaption><span class="en">Train once, offline, the usual way, or download a public model. At test time nothing is trained: the robot runs the chunk, and its last camera frame goes through the same frozen encoder to give the measured end, the value. The frozen model gives only the slope, and one ridge step corrects the chunk. The same step also runs between the re-plans of a slow planner.</span><span class="zh">离线按常规训练一次，或直接用公开模型。测试时不训练任何东西：机器人执行动作块，相机拍下最后一帧，经同一个冻结的编码器得到实测落点，也就是数值；冻结的模型只给斜率，一步岭修正改动作块。同一步修正也能放在慢规划器的两次规划之间。</span></figcaption>
   </figure>
 </section>
 <section aria-labelledby="results">
-  <p class="label" id="results"><span class="en">Results · re-run on fresh data</span><span class="zh">结果 · 已在新数据上重跑确认</span></p>
-  <div class="db col">
-    <div class="db-row">
-      <div class="db-head"><span class="db-t"><span class="en"><b>Fix a frozen action in five tries</b><span class="db-sub">LeWM Reacher, weaker motor</span></span><span class="zh"><b>冻结的动作，试 5 次修好</b><span class="db-sub">LeWM Reacher，电机变弱</span></span></span><span class="db-num">17% → <b>96%</b></span></div>
-      <div class="db-track" aria-hidden="true"><span class="db-line" style="left:17.2%;width:78.9%"></span><span class="db-dot off" style="left:17.2%"></span><span class="db-dot on" style="left:96.1%"></span></div>
-    </div>
-    <div class="db-row">
-      <div class="db-head"><span class="db-t"><span class="en"><b>Fix the world model’s own plan</b><span class="db-sub">LeWM PushT, five tries</span></span><span class="zh"><b>修好世界模型自己的规划</b><span class="db-sub">LeWM PushT，试 5 次</span></span></span><span class="db-num">69% → <b>94%</b></span></div>
-      <div class="db-track" aria-hidden="true"><span class="db-line" style="left:68.8%;width:25.0%"></span><span class="db-dot off" style="left:68.8%"></span><span class="db-dot on" style="left:93.8%"></span></div>
-    </div>
-    <div class="db-row">
-      <div class="db-head"><span class="db-t"><span class="en"><b>One slope step per block inside the planner</b><span class="db-sub">LeWM Reacher, three conditions</span></span><span class="zh"><b>在规划器里每块修正一步</b><span class="db-sub">LeWM Reacher，三种条件</span></span></span><span class="db-num">58% → <b>84%</b></span></div>
-      <div class="db-track" aria-hidden="true"><span class="db-line" style="left:57.8%;width:26.6%"></span><span class="db-dot off" style="left:57.8%"></span><span class="db-dot on" style="left:84.4%"></span></div>
-    </div>
-    <div class="db-row">
-      <div class="db-head"><span class="db-t"><span class="en"><b>The same, all four LeWM tasks</b><span class="db-sub">Reacher, PushT, TwoRoom, Cube</span></span><span class="zh"><b>同上，LeWM 全部四个任务</b><span class="db-sub">Reacher、PushT、TwoRoom、Cube</span></span></span><span class="db-num">62% → <b>75%</b></span></div>
-      <div class="db-track" aria-hidden="true"><span class="db-line" style="left:62.2%;width:12.8%"></span><span class="db-dot off" style="left:62.2%"></span><span class="db-dot on" style="left:75.0%"></span></div>
-    </div>
-    <div class="db-row">
-      <div class="db-head"><span class="db-t"><span class="en"><b>A large model that can plan only once</b><span class="db-sub">DINO-WM Wall, weaker motor; a plan takes 4 s, a step 0.15 s</span></span><span class="zh"><b>只来得及规划一次的大模型</b><span class="db-sub">DINO-WM Wall，电机变弱；规划一次 4 秒，修正一步 0.15 秒</span></span></span><span class="db-num">57% → <b>77%</b></span></div>
-      <div class="db-track" aria-hidden="true"><span class="db-line" style="left:57.0%;width:20.3%"></span><span class="db-dot off" style="left:57.0%"></span><span class="db-dot on" style="left:77.3%"></span></div>
-    </div>
-  </div>
-  <p class="fine col"><span class="en">Success rate, ○ without the step and ● with it. Each comparison was pre-registered and then re-run on fresh starts with everything frozen; inside the planner the baseline is the authors’ own loop. Planning on the model’s predictions alone never beat doing nothing under a hidden change (8 of 8 settings).</span><span class="zh">成功率，○ 没有这一步，● 有这一步。每个对比都先预登记，再在全新起点上、所有设置冻结后重跑确认；规划器里的对照就是作者自己的循环。只按模型的预测去规划，在隐藏变化下从未胜过什么都不做（8 组里 8 组）。</span></p>
+  <p class="label" id="results"><span class="en">Results · slopes vs predicted values</span><span class="zh">结果 · 斜率对比预测值</span></p>
+  <p class="lead"><span class="en">In all 10 settings, measuring the value and correcting along the model’s slope beats planning on the same model’s predicted values; planning on predictions ends worse than doing nothing in 8 of 10.</span><span class="zh">10 组设定全部如此：实测数值（落点）、再沿模型的斜率（方向感）修正，胜过用同一个模型的预测值去规划；按预测值规划有 8 组比什么都不做还差。</span></p>
+  <figure class="hb-fig">
+    <p class="fine"><span class="en">Simulation · try-5 error / no-correction error · lower is better · 1.00 = do nothing</span><span class="zh">仿真 · 第 5 次误差 / 未纠偏误差 · 越低越好 · 1.00 = 什么也不做</span></p>
+    <p class="fine"><span class="en">A: a fixed push, kick or offset · B: changed friction, damping or action gain</span><span class="zh">A：固定的推力、速度冲击或目标偏移 · B：改变了的摩擦、阻尼或动作增益</span></p>
+<svg class="hb-wide" viewBox="0 0 920 428" role="img" aria-labelledby="hb-t-w">
+<title id="hb-t-w" class="en">Try-5 error divided by no-correction error for ten settings. Three bars each: measure + slope (ours), plan with predicted values (same model), and no correction, which is 1.00. Ours is below planning in all ten, between 0.10 and 0.79; planning ends above 1.00 in eight of ten. The DINO-WM PushT B planner bar is cut at 4.04.</title>
+<title class="zh">十种设定下，第 5 次误差除以未纠偏误差。每组三根柱：实测 + 斜率（我们的方法）、用预测值规划（同一模型）、未纠偏（即 1.00）。十种设定中我们的结果都低于规划，在 0.10 到 0.79 之间；十种设定中有八种规划的结果高于 1.00。DINO-WM PushT B 的规划柱被截断，实际为 4.04。</title>
+
+<text class="hb-band en" x="48" y="16">Our pixel world model</text><text class="hb-band zh" x="48" y="16">我们的像素世界模型</text>
+<line class="hb-rule" x1="48" y1="26" x2="382.4" y2="26"/>
+<text class="hb-band en" x="398.4" y="16">DINO-WM · public, pretrained</text><text class="hb-band zh" x="398.4" y="16">DINO-WM · 公开预训练模型</text>
+<line class="hb-rule" x1="398.4" y1="26" x2="908" y2="26"/>
+<rect class="hb-alt" x="217.2" y="80" width="171.2" height="260"/>
+<rect class="hb-alt" x="567.6" y="80" width="171.2" height="260"/>
+<line class="gl" x1="40" y1="257.24" x2="916" y2="257.24"/>
+<line class="hb-ref" x1="40" y1="174.48" x2="916" y2="174.48"/>
+<path class="axl" fill="none" d="M40,80 V340 H916"/>
+<text class="ax" x="32" y="344" text-anchor="end">0</text>
+<text class="ax" x="32" y="261.24" text-anchor="end">0.5</text>
+<text class="ax" x="32" y="178.48" text-anchor="end">1</text>
+<rect class="hb-ours" x="42.8" y="297.01" width="26" height="42.99"/>
+<text class="hb-v o" x="55.8" y="291.01" text-anchor="middle">0.26</text>
+<rect class="hb-plan" x="70.8" y="138.47" width="26" height="201.53"/>
+<text class="hb-v p" x="83.8" y="132.47" text-anchor="middle">1.22</text>
+<rect class="hb-none" x="98.8" y="174.48" width="26" height="165.52"/>
+<text class="hb-v n" x="111.8" y="168.48" text-anchor="middle">1.00</text>
+<text class="hb-g" x="83.8" y="362" text-anchor="middle">A</text>
+<text class="hb-dl" x="83.8" y="380" text-anchor="middle">−79%</text>
+<rect class="hb-ours" x="130.4" y="260.21" width="26" height="79.79"/>
+<text class="hb-v o" x="143.4" y="254.21" text-anchor="middle">0.48</text>
+<rect class="hb-plan" x="158.4" y="156.9" width="26" height="183.1"/>
+<text class="hb-v p" x="171.4" y="150.9" text-anchor="middle">1.11</text>
+<rect class="hb-none" x="186.4" y="174.48" width="26" height="165.52"/>
+<text class="hb-v n" x="199.4" y="168.48" text-anchor="middle">1.00</text>
+<text class="hb-g" x="171.4" y="362" text-anchor="middle">B</text>
+<text class="hb-dl" x="171.4" y="380" text-anchor="middle">−56%</text>
+<rect class="hb-ours" x="218" y="262.83" width="26" height="77.17"/>
+<text class="hb-v o" x="231" y="256.83" text-anchor="middle">0.47</text>
+<rect class="hb-plan" x="246" y="131.59" width="26" height="208.41"/>
+<text class="hb-v p" x="259" y="125.59" text-anchor="middle">1.26</text>
+<rect class="hb-none" x="274" y="174.48" width="26" height="165.52"/>
+<text class="hb-v n" x="287" y="168.48" text-anchor="middle">1.00</text>
+<text class="hb-g" x="259" y="362" text-anchor="middle">A</text>
+<text class="hb-dl" x="259" y="380" text-anchor="middle">−63%</text>
+<rect class="hb-ours" x="305.6" y="278.64" width="26" height="61.36"/>
+<text class="hb-v o" x="318.6" y="272.64" text-anchor="middle">0.37</text>
+<rect class="hb-plan" x="333.6" y="151.69" width="26" height="188.31"/>
+<text class="hb-v p" x="346.6" y="145.69" text-anchor="middle">1.14</text>
+<rect class="hb-none" x="361.6" y="174.48" width="26" height="165.52"/>
+<text class="hb-v n" x="374.6" y="168.48" text-anchor="middle">1.00</text>
+<text class="hb-g" x="346.6" y="362" text-anchor="middle">B</text>
+<text class="hb-dl" x="346.6" y="380" text-anchor="middle">−67%</text>
+<rect class="hb-ours" x="393.2" y="255.12" width="26" height="84.88"/>
+<text class="hb-v o" x="406.2" y="249.12" text-anchor="middle">0.51</text>
+<rect class="hb-plan" x="421.2" y="149.53" width="26" height="190.47"/>
+<text class="hb-v p" x="434.2" y="143.53" text-anchor="middle">1.15</text>
+<rect class="hb-none" x="449.2" y="174.48" width="26" height="165.52"/>
+<text class="hb-v n" x="462.2" y="168.48" text-anchor="middle">1.00</text>
+<text class="hb-g" x="434.2" y="362" text-anchor="middle">A</text>
+<text class="hb-dl" x="434.2" y="380" text-anchor="middle">−55%</text>
+<rect class="hb-ours" x="480.8" y="209.55" width="26" height="130.45"/>
+<text class="hb-v o" x="493.8" y="203.55" text-anchor="middle">0.79</text>
+<rect class="hb-plan" x="508.8" y="100" width="26" height="240"/>
+<polygon class="hb-cut" points="504.8,130 538.8,118 538.8,125 504.8,137"/>
+<text class="hb-v p" x="521.8" y="94" text-anchor="middle">4.04</text>
+<rect class="hb-none" x="536.8" y="174.48" width="26" height="165.52"/>
+<text class="hb-v n" x="549.8" y="168.48" text-anchor="middle">1.00</text>
+<text class="hb-g" x="521.8" y="362" text-anchor="middle">B</text>
+<text class="hb-dl" x="521.8" y="380" text-anchor="middle">−80%</text>
+<rect class="hb-ours" x="568.4" y="311.14" width="26" height="28.86"/>
+<text class="hb-v o" x="581.4" y="305.14" text-anchor="middle">0.17</text>
+<rect class="hb-plan" x="596.4" y="136.27" width="26" height="203.73"/>
+<text class="hb-v p" x="609.4" y="130.27" text-anchor="middle">1.23</text>
+<rect class="hb-none" x="624.4" y="174.48" width="26" height="165.52"/>
+<text class="hb-v n" x="637.4" y="168.48" text-anchor="middle">1.00</text>
+<text class="hb-g" x="609.4" y="362" text-anchor="middle">A</text>
+<text class="hb-dl" x="609.4" y="380" text-anchor="middle">−86%</text>
+<rect class="hb-ours" x="656" y="323.19" width="26" height="16.81"/>
+<text class="hb-v o" x="669" y="317.19" text-anchor="middle">0.10</text>
+<rect class="hb-plan" x="684" y="106.43" width="26" height="233.57"/>
+<text class="hb-v p" x="697" y="100.43" text-anchor="middle">1.41</text>
+<rect class="hb-none" x="712" y="174.48" width="26" height="165.52"/>
+<text class="hb-v n" x="725" y="168.48" text-anchor="middle">1.00</text>
+<text class="hb-g" x="697" y="362" text-anchor="middle">B</text>
+<text class="hb-dl" x="697" y="380" text-anchor="middle">−93%</text>
+<rect class="hb-ours" x="743.6" y="265.26" width="26" height="74.74"/>
+<text class="hb-v o" x="756.6" y="259.26" text-anchor="middle">0.45</text>
+<rect class="hb-plan" x="771.6" y="228.69" width="26" height="111.31"/>
+<text class="hb-v p" x="784.6" y="222.69" text-anchor="middle">0.67</text>
+<rect class="hb-none" x="799.6" y="174.48" width="26" height="165.52"/>
+<text class="hb-v n" x="812.6" y="168.48" text-anchor="middle">1.00</text>
+<text class="hb-g" x="784.6" y="362" text-anchor="middle">A</text>
+<text class="hb-dl" x="784.6" y="380" text-anchor="middle">−33%</text>
+<rect class="hb-ours" x="831.2" y="257.48" width="26" height="82.52"/>
+<text class="hb-v o" x="844.2" y="251.48" text-anchor="middle">0.50</text>
+<rect class="hb-plan" x="859.2" y="220.33" width="26" height="119.67"/>
+<text class="hb-v p" x="872.2" y="214.33" text-anchor="middle">0.72</text>
+<rect class="hb-none" x="887.2" y="174.48" width="26" height="165.52"/>
+<text class="hb-v n" x="900.2" y="168.48" text-anchor="middle">1.00</text>
+<text class="hb-g" x="872.2" y="362" text-anchor="middle">B</text>
+<text class="hb-dl" x="872.2" y="380" text-anchor="middle">−31%</text>
+<line class="hb-rule" x1="50" y1="392" x2="205.2" y2="392"/>
+<text class="hb-g" x="127.6" y="412" text-anchor="middle">PushT</text>
+<line class="hb-rule" x1="225.2" y1="392" x2="380.4" y2="392"/>
+<text class="hb-g" x="302.8" y="412" text-anchor="middle">Puck</text>
+<line class="hb-rule" x1="400.4" y1="392" x2="555.6" y2="392"/>
+<text class="hb-g" x="478" y="412" text-anchor="middle">PushT</text>
+<line class="hb-rule" x1="575.6" y1="392" x2="730.8" y2="392"/>
+<text class="hb-g" x="653.2" y="412" text-anchor="middle">Wall</text>
+<line class="hb-rule" x1="750.8" y1="392" x2="906" y2="392"/>
+<text class="hb-g" x="828.4" y="412" text-anchor="middle">PointMaze</text>
+</svg>
+<svg class="hb-narrow" viewBox="0 0 400 956" role="img" aria-labelledby="hb-t-n">
+<title id="hb-t-n" class="en">Try-5 error divided by no-correction error for ten settings. Three bars each: measure + slope (ours), plan with predicted values (same model), and no correction, which is 1.00. Ours is below planning in all ten, between 0.10 and 0.79; planning ends above 1.00 in eight of ten. The DINO-WM PushT B planner bar is cut at 4.04.</title>
+<title class="zh">十种设定下，第 5 次误差除以未纠偏误差。每组三根柱：实测 + 斜率（我们的方法）、用预测值规划（同一模型）、未纠偏（即 1.00）。十种设定中我们的结果都低于规划，在 0.10 到 0.79 之间；十种设定中有八种规划的结果高于 1.00。DINO-WM PushT B 的规划柱被截断，实际为 4.04。</title>
+
+<text class="hb-band en" x="14" y="14">Our pixel world model</text><text class="hb-band zh" x="14" y="14">我们的像素世界模型</text>
+<line class="hb-rule" x1="14" y1="23" x2="392" y2="23"/>
+<text class="hb-g" x="14" y="50">PushT · A</text>
+<text class="hb-d en" x="136" y="50">repeatable push</text><text class="hb-d zh" x="136" y="50">可重复扰动</text>
+<text class="hb-dl en" x="392" y="50" text-anchor="end">−79% vs planning</text><text class="hb-dl zh" x="392" y="50" text-anchor="end">比规划低 79%</text>
+<line class="gl" x1="130" y1="57" x2="130" y2="110"/>
+<line class="hb-ref" x1="246" y1="57" x2="246" y2="110"/>
+<line class="axl" x1="14" y1="57" x2="14" y2="110"/>
+<rect class="hb-ours" x="14" y="60" width="60.26" height="13"/>
+<text class="hb-v o" x="80.26" y="71">0.26</text>
+<rect class="hb-plan" x="14" y="77" width="282.48" height="13"/>
+<text class="hb-v p" x="302.48" y="88">1.22</text>
+<rect class="hb-none" x="14" y="94" width="232" height="13"/>
+<text class="hb-v n" x="252" y="105">1.00</text>
+<text class="hb-g" x="14" y="137">PushT · B</text>
+<text class="hb-d en" x="136" y="137">unseen friction</text><text class="hb-d zh" x="136" y="137">未见摩擦</text>
+<text class="hb-dl en" x="392" y="137" text-anchor="end">−56% vs planning</text><text class="hb-dl zh" x="392" y="137" text-anchor="end">比规划低 56%</text>
+<line class="gl" x1="130" y1="144" x2="130" y2="197"/>
+<line class="hb-ref" x1="246" y1="144" x2="246" y2="197"/>
+<line class="axl" x1="14" y1="144" x2="14" y2="197"/>
+<rect class="hb-ours" x="14" y="147" width="111.84" height="13"/>
+<text class="hb-v o" x="131.84" y="158">0.48</text>
+<rect class="hb-plan" x="14" y="164" width="256.64" height="13"/>
+<text class="hb-v p" x="276.64" y="175">1.11</text>
+<rect class="hb-none" x="14" y="181" width="232" height="13"/>
+<text class="hb-v n" x="252" y="192">1.00</text>
+<text class="hb-g" x="14" y="224">Puck · A</text>
+<text class="hb-d en" x="136" y="224">fixed disturbance</text><text class="hb-d zh" x="136" y="224">固定扰动</text>
+<text class="hb-dl en" x="392" y="224" text-anchor="end">−63% vs planning</text><text class="hb-dl zh" x="392" y="224" text-anchor="end">比规划低 63%</text>
+<line class="gl" x1="130" y1="231" x2="130" y2="284"/>
+<line class="hb-ref" x1="246" y1="231" x2="246" y2="284"/>
+<line class="axl" x1="14" y1="231" x2="14" y2="284"/>
+<rect class="hb-ours" x="14" y="234" width="108.17" height="13"/>
+<text class="hb-v o" x="128.17" y="245">0.47</text>
+<rect class="hb-plan" x="14" y="251" width="292.13" height="13"/>
+<text class="hb-v p" x="312.13" y="262">1.26</text>
+<rect class="hb-none" x="14" y="268" width="232" height="13"/>
+<text class="hb-v n" x="252" y="279">1.00</text>
+<text class="hb-g" x="14" y="311">Puck · B</text>
+<text class="hb-d en" x="136" y="311">double damping</text><text class="hb-d zh" x="136" y="311">双倍阻尼</text>
+<text class="hb-dl en" x="392" y="311" text-anchor="end">−67% vs planning</text><text class="hb-dl zh" x="392" y="311" text-anchor="end">比规划低 67%</text>
+<line class="gl" x1="130" y1="318" x2="130" y2="371"/>
+<line class="hb-ref" x1="246" y1="318" x2="246" y2="371"/>
+<line class="axl" x1="14" y1="318" x2="14" y2="371"/>
+<rect class="hb-ours" x="14" y="321" width="86.01" height="13"/>
+<text class="hb-v o" x="106.01" y="332">0.37</text>
+<rect class="hb-plan" x="14" y="338" width="263.95" height="13"/>
+<text class="hb-v p" x="283.95" y="349">1.14</text>
+<rect class="hb-none" x="14" y="355" width="232" height="13"/>
+<text class="hb-v n" x="252" y="366">1.00</text>
+<text class="hb-band en" x="14" y="408">DINO-WM · public, pretrained</text><text class="hb-band zh" x="14" y="408">DINO-WM · 公开预训练模型</text>
+<line class="hb-rule" x1="14" y1="417" x2="392" y2="417"/>
+<text class="hb-g" x="14" y="444">PushT · A</text>
+<text class="hb-d en" x="136" y="444">repeatable push</text><text class="hb-d zh" x="136" y="444">可重复扰动</text>
+<text class="hb-dl en" x="392" y="444" text-anchor="end">−55% vs planning</text><text class="hb-dl zh" x="392" y="444" text-anchor="end">比规划低 55%</text>
+<line class="gl" x1="130" y1="451" x2="130" y2="504"/>
+<line class="hb-ref" x1="246" y1="451" x2="246" y2="504"/>
+<line class="axl" x1="14" y1="451" x2="14" y2="504"/>
+<rect class="hb-ours" x="14" y="454" width="118.98" height="13"/>
+<text class="hb-v o" x="138.98" y="465">0.51</text>
+<rect class="hb-plan" x="14" y="471" width="266.98" height="13"/>
+<text class="hb-v p" x="286.98" y="482">1.15</text>
+<rect class="hb-none" x="14" y="488" width="232" height="13"/>
+<text class="hb-v n" x="252" y="499">1.00</text>
+<text class="hb-g" x="14" y="531">PushT · B</text>
+<text class="hb-d en" x="136" y="531">unseen friction</text><text class="hb-d zh" x="136" y="531">未见摩擦</text>
+<text class="hb-dl en" x="392" y="531" text-anchor="end">−80% vs planning</text><text class="hb-dl zh" x="392" y="531" text-anchor="end">比规划低 80%</text>
+<line class="gl" x1="130" y1="538" x2="130" y2="591"/>
+<line class="hb-ref" x1="246" y1="538" x2="246" y2="591"/>
+<line class="axl" x1="14" y1="538" x2="14" y2="591"/>
+<rect class="hb-ours" x="14" y="541" width="182.85" height="13"/>
+<text class="hb-v o" x="202.85" y="552">0.79</text>
+<rect class="hb-plan" x="14" y="558" width="336.4" height="13"/>
+<polygon class="hb-cut" points="321.4,573 331.4,556 336.4,556 326.4,573"/>
+<text class="hb-v p" x="356.4" y="569">4.04</text>
+<rect class="hb-none" x="14" y="575" width="232" height="13"/>
+<text class="hb-v n" x="252" y="586">1.00</text>
+<text class="hb-g" x="14" y="618">Wall · A</text>
+<text class="hb-d en" x="136" y="618">fixed push</text><text class="hb-d zh" x="136" y="618">固定推挤</text>
+<text class="hb-dl en" x="392" y="618" text-anchor="end">−86% vs planning</text><text class="hb-dl zh" x="392" y="618" text-anchor="end">比规划低 86%</text>
+<line class="gl" x1="130" y1="625" x2="130" y2="678"/>
+<line class="hb-ref" x1="246" y1="625" x2="246" y2="678"/>
+<line class="axl" x1="14" y1="625" x2="14" y2="678"/>
+<rect class="hb-ours" x="14" y="628" width="40.45" height="13"/>
+<text class="hb-v o" x="60.45" y="639">0.17</text>
+<rect class="hb-plan" x="14" y="645" width="285.57" height="13"/>
+<text class="hb-v p" x="305.57" y="656">1.23</text>
+<rect class="hb-none" x="14" y="662" width="232" height="13"/>
+<text class="hb-v n" x="252" y="673">1.00</text>
+<text class="hb-g" x="14" y="705">Wall · B</text>
+<text class="hb-d en" x="136" y="705">action gain</text><text class="hb-d zh" x="136" y="705">动作增益</text>
+<text class="hb-dl en" x="392" y="705" text-anchor="end">−93% vs planning</text><text class="hb-dl zh" x="392" y="705" text-anchor="end">比规划低 93%</text>
+<line class="gl" x1="130" y1="712" x2="130" y2="765"/>
+<line class="hb-ref" x1="246" y1="712" x2="246" y2="765"/>
+<line class="axl" x1="14" y1="712" x2="14" y2="765"/>
+<rect class="hb-ours" x="14" y="715" width="23.57" height="13"/>
+<text class="hb-v o" x="43.57" y="726">0.10</text>
+<rect class="hb-plan" x="14" y="732" width="327.38" height="13"/>
+<text class="hb-v p" x="347.38" y="743">1.41</text>
+<rect class="hb-none" x="14" y="749" width="232" height="13"/>
+<text class="hb-v n" x="252" y="760">1.00</text>
+<text class="hb-g" x="14" y="792">PointMaze · A</text>
+<text class="hb-d en" x="136" y="792">velocity kick</text><text class="hb-d zh" x="136" y="792">速度冲击</text>
+<text class="hb-dl en" x="392" y="792" text-anchor="end">−33% vs planning</text><text class="hb-dl zh" x="392" y="792" text-anchor="end">比规划低 33%</text>
+<line class="gl" x1="130" y1="799" x2="130" y2="852"/>
+<line class="hb-ref" x1="246" y1="799" x2="246" y2="852"/>
+<line class="axl" x1="14" y1="799" x2="14" y2="852"/>
+<rect class="hb-ours" x="14" y="802" width="104.77" height="13"/>
+<text class="hb-v o" x="124.77" y="813">0.45</text>
+<rect class="hb-plan" x="14" y="819" width="156.02" height="13"/>
+<text class="hb-v p" x="176.02" y="830">0.67</text>
+<rect class="hb-none" x="14" y="836" width="232" height="13"/>
+<text class="hb-v n" x="252" y="847">1.00</text>
+<text class="hb-g" x="14" y="879">PointMaze · B</text>
+<text class="hb-d en" x="136" y="879">joint damping</text><text class="hb-d zh" x="136" y="879">关节阻尼</text>
+<text class="hb-dl en" x="392" y="879" text-anchor="end">−31% vs planning</text><text class="hb-dl zh" x="392" y="879" text-anchor="end">比规划低 31%</text>
+<line class="gl" x1="130" y1="886" x2="130" y2="939"/>
+<line class="hb-ref" x1="246" y1="886" x2="246" y2="939"/>
+<line class="axl" x1="14" y1="886" x2="14" y2="939"/>
+<rect class="hb-ours" x="14" y="889" width="115.66" height="13"/>
+<text class="hb-v o" x="135.66" y="900">0.50</text>
+<rect class="hb-plan" x="14" y="906" width="167.74" height="13"/>
+<text class="hb-v p" x="187.74" y="917">0.72</text>
+<rect class="hb-none" x="14" y="923" width="232" height="13"/>
+<text class="hb-v n" x="252" y="934">1.00</text>
+<text class="ax" x="14" y="948" text-anchor="middle">0</text>
+<text class="ax" x="130" y="948" text-anchor="middle">0.5</text>
+<text class="ax" x="246" y="948" text-anchor="middle">1</text>
+</svg>
+<div class="legend">
+  <span class="key"><span class="sq o"></span><span class="en">measure + slope (ours)</span><span class="zh">实测 + 斜率（我们的方法）</span></span>
+  <span class="key"><span class="sq p"></span><span class="en">plan with predicted values (same model)</span><span class="zh">用预测值规划（同一模型）</span></span>
+  <span class="key"><span class="sq n"></span><span class="en">no correction</span><span class="zh">未纠偏</span></span>
+  <span class="key k-wide"><span class="dlk">−N%</span><span class="en">lower error than planning</span><span class="zh">比规划误差低</span></span>
+</div>
+    <figcaption><span class="en">Same model and the same 5 tries in every group; 472 action chunks per setting (<span class="nb">DINO-WM</span> Wall and PointMaze: 200). In this chart the value is read from the simulator’s own pose or position sensor; from the camera image alone, <span class="nb">DINO-WM</span>’s gains are smaller. Pre-registered; the PushT, Wall and our-model results were re-run on fresh data and held.</span><span class="zh">每组同一个模型、同样 5 次尝试；每种设定 472 个动作块（<span class="nb">DINO-WM</span> Wall 与 PointMaze 为 200 个）。这张图里的数值读自仿真器自带的位置/姿态传感器；只用相机画面时，<span class="nb">DINO-WM</span> 的收益小一些。均预先登记判据；PushT、Wall 和我们模型上的结果已在新数据上重跑确认。</span></figcaption>
+  </figure>
 </section>
 <section aria-labelledby="found">
   <p class="label" id="found"><span class="en">Where it fits</span><span class="zh">适用在哪</span></p>
-  <p class="col"><span class="en"><b>Repeated actions.</b> Measure the miss, step along the slope, try again: a few tries fix it.</span><span class="zh"><b>可重复的动作。</b>测出偏差，沿斜率修正，再试一次：几次就能修好。</span></p>
-  <p class="col"><span class="en"><b>Slow planners.</b> A large world model plans too slowly to re-plan every step (DINO-WM: 4–12 s per plan), so it re-plans only every few blocks, or just once. One slope step from the current frame (0.15 s) fills the gap: on DINO-WM with a single plan, success rose from 57% to 77%. Re-planning every block instead took 2.7× longer and was not better (LeWM).</span><span class="zh"><b>慢的规划器。</b>大型世界模型规划太慢（DINO-WM 一次 4–12 秒），没法每步重新规划，只能隔几块规划一次，甚至只规划一次。用当前画面沿斜率修正一步（0.15 秒）填上中间的空档：DINO-WM 只规划一次时，成功率从 57% 升到 77%。改成每块都重新规划，耗时 2.7 倍，效果也不更好（LeWM）。</span></p>
+  <p class="col"><span class="en"><b>Repeated actions.</b> Measure the miss, step along the slope, try again: a few tries fix it. On the LeWM benchmark, measuring from the camera image alone, a frozen action under a weaker motor went from 17% to 96% success in five tries.</span><span class="zh"><b>可重复的动作。</b>测出偏差，沿斜率修正，再试一次：几次就能修好。在 LeWM 基准上只用相机画面测数值，冻结的动作遇到变弱的电机，试 5 次后成功率从 17% 升到 96%。</span></p>
+  <p class="col"><span class="en"><b>Slow planners.</b> A large world model plans too slowly to re-plan every step (DINO-WM: 4–12 s per plan), so it re-plans only every few blocks, or just once. One slope step from the current frame (0.15 s) fills the gap: success rose from 62% to 75% over four LeWM tasks, and from 57% to 77% on DINO-WM with a single plan. Re-planning every block instead took 2.7× longer and was not better (LeWM).</span><span class="zh"><b>慢的规划器。</b>大型世界模型规划太慢（DINO-WM 一次 4–12 秒），没法每步重新规划，只能隔几块规划一次，甚至只规划一次。用当前画面沿斜率修正一步（0.15 秒）填上中间的空档：LeWM 四个任务的成功率从 62% 升到 75%，DINO-WM 只规划一次时从 57% 升到 77%。改成每块都重新规划，耗时 2.7 倍，效果也不更好（LeWM）。</span></p>
   <p class="col"><span class="en"><b>Not needed, or not useful.</b> Agents that already decide cheaply at every step (TD-MPC2, DreamerV3) absorb the change themselves. When contact turns the action’s effect, the model’s direction is wrong.</span><span class="zh"><b>用不着或用不上。</b>每步都能便宜地重新决策的智能体（TD-MPC2、DreamerV3）自己就吸收了变化；接触让动作的效果转了方向时，模型的方向是错的。</span></p>
 </section>
 <section aria-labelledby="next">
