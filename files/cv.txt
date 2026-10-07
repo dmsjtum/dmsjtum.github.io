@@ -28,18 +28,6 @@ Trajectory Optimization.” In submission to IEEE International Conference on Ro
 review). Under review at ICLR 2027; second author.
 
 Research Experience
-Measure the Value, Learn the Slope
-Independent research, University of Pennsylvania · first author, in preparation for ICML 2027
-
-Sep 2026 – present
-
-• Proposed a test-time correction for frozen world models. When the world quietly changes (say, a motor 20% weaker),
-
-the model’s predicted landing point goes wrong, yet its slope (which way to move) still holds; so the method measures
-where the action lands and takes only the direction from the model, one small step per try, with nothing retrained.
-• Pre-registered every test and re-ran it on fresh starts: on LeWM’s Reacher task with that weaker motor, success rises from
-17% to 96% in five tries; between the re-plans of a slow planner, 62% → 75% on LeWM and 57% → 77% on DINO-WM.
-
 HOP: Horizon-Optimal Trajectory Planning
 Jul 2025 – Feb 2026
 Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · RSS 2026 talk, undergraduate first author
@@ -58,9 +46,7 @@ Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · first-author man
 • Proposed AL-HOP, extending HOP to hard state, control, and obstacle constraints: it alternates horizon selection on an
 
 augmented-Lagrangian LQ model with trajectory optimization, perturbing the horizon to escape local minima.
-
 • Valid on 100% of 500 runs (100 problems across 10 systems) vs. 79.8%, 79.8%, and 70% for ALTRO and direct collocation
-
 with IPOPT and SNOPT, and 2.4–4.8× faster on problems both solved, at comparable cost.
 
 PhysLA: Transferring Physical Supervision to Latent-Action VLA Pretraining
@@ -77,7 +63,7 @@ pressure, tactile, and torque measurements, and transferring them to sensor-free
 • Outperforms VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and every SimplerEnv task group, and
 beats both VLA-JEPA and π0.5 on each of five real-robot tasks.
 
-Projects
+Projects
 A Voice-Interactive Closed-Loop VLA System for Low-Cost Tabletop Manipulation
 Feb 2026 – Aug 2026
 B.E. thesis, Shanghai Jiao Tong University · project lead, team of 5 · Advisors: Prof. Hesheng Wang & Prof. Yunlong Guo
@@ -91,7 +77,7 @@ vision–language backbone, full 300M action expert), and deployed it on a real 
 
 with stop, re-observation, and bounded retries; the full system reached 70% end-to-end success.
 
-Honors & Awards
+Honors & Awards
 James B. Angell Scholar, University of Michigan
 University Honors, University of Michigan (3 terms)
 Dean’s List, University of Michigan (3 terms)
