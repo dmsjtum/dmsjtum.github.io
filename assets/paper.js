@@ -281,6 +281,7 @@
     var t = function (en, cn) { return zh() ? cn : en; };
 
     var CHIPS = [
+      ["What is Measure the Value, Learn the Slope?", "「值靠测，斜率靠学」讲的是什么？"],
       ["What is HOP, in one paragraph?", "HOP 用一段话讲是什么？"],
       ["How does AL-HOP compare to ALTRO?", "AL-HOP 和 ALTRO 比结果如何？"],
       ["What is the ICLR 2027 paper about?", "ICLR 2027 那篇论文讲什么？"],
@@ -348,8 +349,8 @@
         t("I'm dollar, Miaomiao's cat.", "我是 dollar，淼淼养的猫。")));
       hint.appendChild(document.createElement("br"));
       hint.appendChild(document.createTextNode(
-        t("Running DeepSeek V4 Flash — ask me about their work.",
-          "接入了 DeepSeek V4 Flash，问我关于淼淼的事。")));
+        t("Running DeepSeek V4.1 Flash — ask me about their work.",
+          "接入了 DeepSeek V4.1 Flash，问我关于淼淼的事。")));
       btn.setAttribute("aria-label", t("Open the assistant", "打开小助手"));
       panel.querySelector(".chat__title").textContent =
         t("dollar · Miaomiao's cat", "dollar · 淼淼养的猫");
@@ -536,6 +537,48 @@
     });
     place();
 
+    /* --- the nudge ----------------------------------------------------
+       Once a visit, a beat after the page settles, she introduces herself
+       for a few seconds and then gets out of the way. After that the bubble
+       comes back only while a mouse is on her or she has keyboard focus. It
+       used to stay up until the chat was opened, parked over the nav and
+       over every card that scrolled underneath it. Opening the chat hushes
+       it for the rest of the visit, as before. */
+    var HINT_KEY = "dollar-hinted";
+    var hintTimer = 0;
+    var hideHint = function () {
+      if (hintTimer) { clearTimeout(hintTimer); hintTimer = 0; }
+      wrap.classList.remove("is-hinting");
+    };
+    var showHint = function (ms) {
+      if (drag || wrap.classList.contains("is-hushed")) return;
+      if (hintTimer) { clearTimeout(hintTimer); hintTimer = 0; }
+      wrap.classList.add("is-hinting");
+      if (ms) hintTimer = setTimeout(hideHint, ms);
+    };
+    var hinted = false;
+    try { hinted = sessionStorage.getItem(HINT_KEY) === "1"; } catch (e) {}
+    if (!hinted) {
+      setTimeout(function () {
+        showHint(5500);
+        try { sessionStorage.setItem(HINT_KEY, "1"); } catch (e) {}
+      }, 1400);
+    }
+    // Mouse only: a touch "enter" is the start of a tap, which opens the chat.
+    wrap.addEventListener("pointerenter", function (e) {
+      if (e.pointerType === "mouse") showHint(0);
+    });
+    wrap.addEventListener("pointerleave", function (e) {
+      if (e.pointerType !== "mouse") return;
+      if (hintTimer) clearTimeout(hintTimer);
+      hintTimer = setTimeout(hideHint, 250);   // room to cross the gap to it
+    });
+    btn.addEventListener("focus", function () {
+      if (btn.matches(":focus-visible")) showHint(0);
+    });
+    btn.addEventListener("blur", hideHint);
+    btn.addEventListener("pointerdown", hideHint);  // picking her up
+
     /* --- open / close ------------------------------------------------ */
     var open = function (yes) {
       panel.setAttribute("data-open", yes ? "1" : "0");
@@ -545,10 +588,10 @@
         wrap.classList.add("is-hushed");
         input.focus();
         if (!log.children.length) {
-          say("cat", t("Hi — I'm dollar, the cat Miaomiao keeps, running on DeepSeek V4 Flash. " +
+          say("cat", t("Hi — I'm dollar, the cat Miaomiao keeps, running on DeepSeek V4.1 Flash. " +
                        "Ask me anything about their research, papers, or background, and I'll answer from the CV and the papers themselves. " +
                        "You can drag me anywhere on the page, and click me to change my face.",
-                       "你好，我是 dollar，淼淼养的猫，接入了 DeepSeek V4 Flash。" +
+                       "你好，我是 dollar，淼淼养的猫，接入了 DeepSeek V4.1 Flash。" +
                        "关于淼淼的研究、论文、经历都可以随便问，我依据简历和论文原文来答。" +
                        "你可以把我拖到页面上任何地方，点我一下我会换个表情。"));
         }

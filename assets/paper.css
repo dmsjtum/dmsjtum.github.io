@@ -874,6 +874,21 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
 .research-visual:hover { outline: 1px solid var(--accent); outline-offset: 4px; }
 .research-visual svg { background: var(--paper-hi); }
 .research-visual svg text { font-family: var(--sans); fill: currentColor; }
+/* A results chart drawn inline on a research card, so it follows the theme.
+   Marks take `color` from their group, as in the duo chart: grey for the
+   baselines, accent for ours, a faint 100% track behind every bar. */
+.card-chart .cc-title { font-size: 13.5px; font-weight: 600; }
+.card-chart .cc-sub { font-size: 11px; color: var(--ink-3); }
+.card-chart .cc-foot { font-size: 10.5px; color: var(--ink-3); }
+.card-chart .cc-group { font: 400 10px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+html[data-lang="zh"] .card-chart .cc-group { letter-spacing: .02em; }
+.card-chart .cc-label { font-size: 12px; color: var(--ink-2); }
+.card-chart .cc-label--ours { color: var(--ink); font-weight: 600; }
+.card-chart .cc-value { font: 600 12px/1 var(--mono); font-variant-numeric: tabular-nums; }
+.card-chart .cc-base .cc-value { color: var(--ink-2); }
+.card-chart .cc-track { color: var(--rule); }
+.card-chart .cc-base { color: var(--ink-3); }
+.card-chart .cc-ours { color: var(--accent); }
 
 /* Illustrated research articles share one reading measure. */
 .research-page { max-width: var(--measure); margin-inline: auto; }
@@ -1310,18 +1325,26 @@ html[data-motion="on"] .bio__side.is-in {
    the one place on this layout that is doing nothing. Below that width there
    is no margin to sit in, so she becomes an ordinary corner button.
    -------------------------------------------------------------------------- */
-/* Top right by default, and draggable from there — paper.js writes left/top
-   inline once she has been moved, and remembers where you left her. No desk
-   margin rule any more: with dragging, a predictable corner beats a clever
-   position that depends on viewport width. */
+/* Bottom right by default, and draggable from there — paper.js writes
+   left/top inline once she has been moved, and remembers where you left her.
+   Not the top right any more: there she sat on the nav (Email, EN/ZH) at any
+   width where the sheet reaches the window edge. The bottom corner is where
+   readers expect a chat to live, and nothing on the page is anchored there. */
 .dollar {
   position: fixed;
-  top: 18px;
   right: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
   z-index: 60;
   display: flex;
   align-items: flex-end;
   gap: 10px;
+}
+
+/* Room for her at the end of the page. Below ~1240px she overlaps the
+   sheet, and at full scroll she would sit on the footer's language and
+   theme toggles; this lets the footer scroll clear of her. */
+@media (max-width: 1239px) {
+  body { padding-bottom: 96px; }
 }
 
 .dollar__btn { cursor: grab; touch-action: none; }
@@ -1339,7 +1362,7 @@ html[data-motion="on"] .bio__side.is-in {
 /* The hint sits above her by default; when she is near the top of the window
    there is no room up there, so it goes underneath instead — and its little
    tail has to move to the other edge and point back up at her. */
-.dollar--top .dollar__hint { top: 136px; bottom: auto; }
+.dollar--top .dollar__hint { top: calc(100% + 12px); bottom: auto; }
 .dollar--top .dollar__hint::after {
   bottom: auto;
   top: -5px;
@@ -1355,7 +1378,7 @@ html[data-motion="on"] .bio__side.is-in {
   background: none;
   padding: 0;
   cursor: grab;
-  width: 104px;
+  width: 84px;
   line-height: 0;
   transition: transform .18s cubic-bezier(.22,.61,.36,1);
 }
@@ -1392,15 +1415,15 @@ html[data-motion="on"] .bio__side.is-in {
   50%      { transform: translateY(-5px) }
 }
 
-/* The nudge. It is the only thing telling a visitor the cat is clickable, so
-   it stays until it is used or dismissed once. */
-/* Above her, not beside her: the desk margin is ~220px at 1440 and this
-   label is wider than that, so sitting it to the left drops the tail right
-   on the sheet's border and into the "Hello!" the artwork already carries. */
+/* The nudge. It used to stay up until the chat was opened, and a bubble
+   that never leaves covers whatever scrolls under it. Now paper.js shows it
+   once a visit for a few seconds, then only while the pointer is on her or
+   she has keyboard focus (.is-hinting). It sits above her, right-aligned to
+   her edge, so it never runs off the side of the window. */
 .dollar__hint {
   position: absolute;
-  right: 6px;
-  bottom: 136px;
+  right: 0;
+  bottom: calc(100% + 12px);
   /* Two lines of introduction now, so it wraps instead of running off the
      edge — bounded so it never grows wider than a phone screen. */
   white-space: normal;
@@ -1414,11 +1437,23 @@ html[data-motion="on"] .bio__side.is-in {
   box-shadow: var(--lift-sm);
   padding: 7px 10px;
   cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity .18s ease, transform .18s ease, visibility 0s linear .18s;
 }
+.dollar.is-hinting .dollar__hint {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity .18s ease, transform .18s ease, visibility 0s;
+}
+/* The tail points at the middle of her: half of her 84px, less half its own
+   rotated width. */
 .dollar__hint::after {
   content: "";
   position: absolute;
-  right: 34px;
+  right: 37px;
   bottom: -5px;
   width: 8px;
   height: 8px;
@@ -1435,7 +1470,7 @@ html[data-motion="on"] .bio__side.is-in {
   position: fixed;
   z-index: 61;
   right: 20px;
-  bottom: 138px;
+  bottom: 116px;
   width: 372px;
   max-width: calc(100vw - 32px);
   background: var(--paper);
@@ -1498,7 +1533,7 @@ html[data-lang="zh"] .chat__title { letter-spacing: .04em; }
 .chat__msg--cat b { color: var(--ink); font-weight: 600; }
 .chat__msg--err { align-self: flex-start; color: var(--accent); }
 
-/* Three dots while the model thinks. v4-flash reasons before it writes, so
+/* Three dots while the model thinks. V4.1 Flash reasons before it writes, so
    this is on screen long enough to matter. */
 .chat__dots span {
   display: inline-block; width: 4px; height: 4px; margin-right: 3px;
@@ -1551,12 +1586,14 @@ html[data-lang="zh"] .chat__title { letter-spacing: .04em; }
 }
 
 @media (max-width: 560px) {
-  .dollar__btn { width: 74px; }
-  .dollar__hint { right: 68px; bottom: 44px; }
-  .chat { right: 12px; left: 12px; width: auto; bottom: 104px; }
+  .dollar { right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+  .dollar__btn { width: 60px; }
+  .dollar__hint::after { right: 25px; }
+  .chat { right: 12px; left: 12px; width: auto; bottom: 84px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .dollar__btn, .dollar__btn.is-busy { transition: none; animation: none; }
+  .dollar__hint, .dollar.is-hinting .dollar__hint { transition: none; transform: none; }
   .chat__dots span { animation: none; opacity: .5; }
 }
 

@@ -58,7 +58,6 @@
     <nav class="nav" aria-label="Primary">
       <a href="#publications"><span class="lang-en">Research</span><span class="lang-zh">研究</span></a>
       <a href="#projects"><span class="lang-en">Projects</span><span class="lang-zh">项目</span></a>
-      <a href="#proposals"><span class="lang-en">Ideas</span><span class="lang-zh">构想</span></a>
       <a href="#experience"><span class="lang-en">Record</span><span class="lang-zh">履历</span></a>
       <a href="#news"><span class="lang-en">News</span><span class="lang-zh">近况</span></a>
       <a href="files/cv.pdf">CV</a>
@@ -345,18 +344,92 @@
     </section>
 
     <!-- ===== §01 Research ============================================
-         Published, submitted, and in-progress work, in that order. Bold
-         marks me in an author list. Unpublished entries are deliberately
-         high level: no thresholds, no dataset inventory, no target venue
-         until the paper is out. -->
+         Current work first: the ICML 2027 project, which the research
+         summary page describes and outreach links to. Then published and
+         submitted papers. Bold marks me in an author list. The PhysLA card
+         stays high level while it is under double-blind review. -->
     <section class="section rail" id="publications">
       <div class="rail__mark">§01<span><span class="lang-en">Research</span><span class="lang-zh">研究</span></span></div>
       <div>
 
         <p class="section-intro">
-          <span class="lang-en">Time-optimal trajectory planning and physical supervision for vision&ndash;language&ndash;action policies.</span>
-          <span class="lang-zh">时间最优轨迹规划，以及视觉–语言–动作策略的物理监督。</span>
+          <span class="lang-en">World models for robot control, time-optimal trajectory planning, and physical supervision for vision&ndash;language&ndash;action policies.</span>
+          <span class="lang-zh">面向机器人控制的世界模型、时间最优轨迹规划，以及视觉–语言–动作策略的物理监督。</span>
         </p>
+
+<!-- Measure the Value, Learn the Slope (ICML 2027, in preparation).
+     Every number here is a pre-registered result that was re-run on fresh
+     starts, and each one appears on the research summary page. The chart
+     is inline SVG so it follows the theme: one row of the LeWM table, the
+     same Reacher setting the summary page animates. 2.28 px per point. -->
+<article class="pub research-preview">
+  <div class="pub__card">
+    <h2 class="pub__title"><a href="measure-the-value-learn-the-slope.html">Measure the Value, Learn the Slope</a></h2>
+    <p class="pub__authors"><span class="lang-en"><b>Miaomiao Dai</b> · First author</span><span class="lang-zh"><b>代淼淼</b> · 第一作者</span></p>
+    <p class="pub__venue"><span class="lang-en">In preparation for ICML 2027</span><span class="lang-zh">准备投稿 ICML 2027</span></p>
+  </div>
+  <div class="research-body">
+    <div>
+      <div class="research-summary">
+<ul class="research-points lang-en">
+  <li><b>Problem.</b> When the world quietly changes, say a motor turns 20% weaker, a frozen world model’s <b>predicted landing point</b> goes wrong, yet its <b>slope</b>, its sense of which way to move, still holds.</li>
+  <li><b>Idea.</b> <b>Measure</b> where the action really lands and take only the <b>direction</b> from the model: one small corrective step per try, with nothing retrained at test time.</li>
+  <li><b>Evidence.</b> Pre-registered and re-run on fresh starts. On LeWM’s Reacher task with that weaker motor, success rises from <b class="nowrap">17% to 96%</b> in five tries. Between the re-plans of a slow planner it rises <b class="nowrap">62% → 75%</b> on LeWM and <b class="nowrap">57% → 77%</b> on DINO-WM.</li>
+</ul>
+<ul class="research-points lang-zh">
+  <li><b>问题：</b>现实悄悄变化时（比如电机弱了 20%），冻结的世界模型预测的<b>落点</b>会错，但它的<b>斜率</b>（方向感，往哪边调）还在。</li>
+  <li><b>思路：</b>落点靠<b>实测</b>，方向向模型要：每次只走一小步修正，测试时不重新训练任何东西。</li>
+  <li><b>证据：</b>预先登记判据，并在全新起点上重跑确认。LeWM 的 Reacher 任务上电机弱 20% 时，五次尝试内成功率从 <b class="nowrap">17% 升到 96%</b>；放在慢规划器的两次规划之间，LeWM 上 <b class="nowrap">62% → 75%</b>，DINO-WM 上 <b class="nowrap">57% → 77%</b>。</li>
+</ul>
+</div>
+      <ul class="pub__links"><li><a href="measure-the-value-learn-the-slope.html"><span class="lang-en">Read the research →</span><span class="lang-zh">阅读研究详情 →</span></a></li></ul>
+    </div>
+    <figure class="research-figure">
+      <a class="research-visual" href="measure-the-value-learn-the-slope.html" aria-label="Read more about Measure the Value, Learn the Slope">
+        <svg class="card-chart" viewBox="0 0 260 270" width="260" height="270" role="img"
+             aria-label="LeWM benchmark, Reacher task with the motor 20% weaker, success after five tries from the camera image alone, 128 fresh starts: no correction 17%; the authors’ planner on its predictions 7%; the authors’ planner with the measured offset, best of five, 47%; ours 96%.">
+          <text x="16" y="25" class="cc-title"><tspan class="lang-en">Reacher · motor 20% weaker</tspan><tspan class="lang-zh">Reacher · 电机弱 20%</tspan></text>
+          <text x="16" y="42" class="cc-sub"><tspan class="lang-en">success after 5 tries · camera only</tspan><tspan class="lang-zh">第 5 次后的成功率 · 只用相机</tspan></text>
+
+          <g class="cc-track" fill="currentColor">
+            <rect x="16" y="79" width="228" height="9"/>
+            <rect x="16" y="141" width="228" height="9"/>
+            <rect x="16" y="177" width="228" height="9"/>
+            <rect x="16" y="221" width="228" height="9"/>
+          </g>
+
+          <text x="16" y="114" class="cc-group"><tspan class="lang-en">authors’ planner</tspan><tspan class="lang-zh">作者的规划器</tspan></text>
+
+          <g class="cc-base" fill="currentColor">
+            <text x="16" y="72" class="cc-label"><tspan class="lang-en">no correction</tspan><tspan class="lang-zh">不修正</tspan></text>
+            <text x="244" y="72" text-anchor="end" class="cc-value">17%</text>
+            <rect x="16" y="79" width="38.76" height="9"/>
+          </g>
+
+          <g class="cc-base" fill="currentColor">
+            <text x="16" y="134" class="cc-label"><tspan class="lang-en">predictions only</tspan><tspan class="lang-zh">只靠预测</tspan></text>
+            <text x="244" y="134" text-anchor="end" class="cc-value">7%</text>
+            <rect x="16" y="141" width="15.96" height="9"/>
+          </g>
+
+          <g class="cc-base" fill="currentColor">
+            <text x="16" y="170" class="cc-label"><tspan class="lang-en">+ measured offset, best of 5</tspan><tspan class="lang-zh">+ 实测纠偏，5 次取最好</tspan></text>
+            <text x="244" y="170" text-anchor="end" class="cc-value">47%</text>
+            <rect x="16" y="177" width="107.16" height="9"/>
+          </g>
+
+          <g class="cc-ours" fill="currentColor">
+            <text x="16" y="214" class="cc-label cc-label--ours"><tspan class="lang-en">ours: measure + slope</tspan><tspan class="lang-zh">我们：实测 + 斜率</tspan></text>
+            <text x="244" y="214" text-anchor="end" class="cc-value">96%</text>
+            <rect x="16" y="221" width="218.88" height="9"/>
+          </g>
+
+          <text x="16" y="256" class="cc-foot"><tspan class="lang-en">LeWM benchmark · 128 fresh starts</tspan><tspan class="lang-zh">LeWM 基准 · 128 个全新起点</tspan></text>
+        </svg>
+      </a>
+    </figure>
+  </div>
+</article>
 
 <article class="pub research-preview">
   <div class="pub__card">
@@ -502,41 +575,9 @@
       </div>
     </section>
 
-    <!-- ===== §03 Proposal Ideas ====================================== -->
-    <section class="section rail" id="proposals">
-      <div class="rail__mark">§03<span><span class="lang-en">Proposal Ideas</span><span class="lang-zh">研究构想</span></span></div>
-      <div>
-
-        <div class="pub pub--proposal">
-          <div class="pub__card">
-            <h2 class="pub__title"><a href="jacobian-accurate-world-models.html">Jacobian-Accurate World Models: Latent Dynamics for Riccati Feedback on Frozen VLAs</a></h2>
-            <p class="pub__venue">
-              <span class="lang-en">Personal research idea · 2026 — · formerly Flow2Funnel</span>
-              <span class="lang-zh">个人研究构想 · 2026 — · 原名 Flow2Funnel</span>
-            </p>
-          </div>
-          <div class="pub__body">
-          <div>
-            <ul class="pub__points lang-en">
-              <li><b>Question.</b> If I nudge a robot’s action a little, what happens? That answer is a world model’s <b>Jacobian</b>. Can we learn world models whose Jacobians are accurate, and use them to correct a VLA’s plan as it runs?</li>
-              <li><b>Approach.</b> One latent world model, trained on <b>push-and-see pairs</b> so its Jacobians A and B are right; a <b>Riccati controller</b> uses them to add a small correction at every step. The VLA is never changed.</li>
-              <li><b>Research plan.</b> Test on <b>DOMINO dynamic manipulation</b> and a standard latency protocol, against the VLA alone and a correction head trained on the same data; <b>reuse the same model</b> for new goals, limits and delays.</li>
-            </ul>
-            <ul class="pub__points lang-zh">
-              <li><b>问题：</b>把机器人的动作轻推一点，会怎样？这个答案就是世界模型的<b>导数（雅可比）</b>。能否学到导数准确的世界模型，并用它在执行中修正 VLA 的计划？</li>
-              <li><b>做法：</b>一个隐空间世界模型，用<b>&ldquo;推一下看看&rdquo;的成对回放</b>训练，让它的导数 A、B 准确；<b>Riccati 控制器</b>用它们在每一步加一个小修正，VLA 本身不改。</li>
-              <li><b>研究计划：</b>在 <b>DOMINO 动态操作基准</b>和标准延迟评测上，对比单独的 VLA 和用同样数据训练的修正头；换目标、换动作上限、换延迟时<b>复用同一个模型</b>。</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ===== §04 Record ============================================== -->
+    <!-- ===== §03 Record ============================================== -->
     <section class="section rail" id="experience">
-      <div class="rail__mark">§04<span><span class="lang-en">Record</span><span class="lang-zh">履历</span></span></div>
+      <div class="rail__mark">§03<span><span class="lang-en">Record</span><span class="lang-zh">履历</span></span></div>
       <div>
 
         <h2 class="eyebrow"><span class="lang-en">Education</span><span class="lang-zh">教育背景</span></h2>
@@ -594,9 +635,9 @@
       </div>
     </section>
 
-    <!-- ===== §05 News ================================================ -->
+    <!-- ===== §04 News ================================================ -->
     <section class="section rail" id="news">
-      <div class="rail__mark">§05<span><span class="lang-en">News</span><span class="lang-zh">近况</span></span></div>
+      <div class="rail__mark">§04<span><span class="lang-en">News</span><span class="lang-zh">近况</span></span></div>
       <div>
         <ul class="timeline">
 
