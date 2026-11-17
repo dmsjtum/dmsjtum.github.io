@@ -31,9 +31,9 @@ Research Experience
 HOP: Horizon-Optimal Trajectory Planning
 Jul 2025 – Feb 2026
 Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · RSS 2026 talk, undergraduate first author
-• Proposed HOP, a new algorithm that makes LQR and DDP horizon-optimal: it optimizes the trajectory and its horizon
+• Proposed HOP, a new algorithm that plans a motion and chooses how long it should take (its horizon) at the same
 
-together instead of fixing the horizon in advance.
+time; standard planners (LQR, DDP) need the horizon fixed in advance.
 
 • Proved the Riccati recursion is a linear fractional transformation, so all candidate horizons share one computation,
 
@@ -46,18 +46,18 @@ Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · first-author man
 • Proposed AL-HOP, extending HOP to hard state, control, and obstacle constraints: it alternates horizon selection on an
 
 augmented-Lagrangian LQ model with trajectory optimization, perturbing the horizon to escape local minima.
-• Valid on 100% of 500 runs (100 problems across 10 systems) vs. 79.8%, 79.8%, and 70% for ALTRO and direct collocation
-with IPOPT and SNOPT, and 2.4–4.8× faster on problems both solved, at comparable cost.
+• Returned a valid trajectory in 100% of 500 runs (100 problems across 10 systems) vs. 79.8%, 79.8%, and 70% for ALTRO
+and direct collocation with IPOPT and SNOPT, and ran 2.4–4.8× faster on problems both solved, at comparable cost.
 
 PhysLA: Transferring Physical Supervision to Latent-Action VLA Pretraining
 Researcher, Shanghai Jiao Tong University · second author, under review at ICLR 2027
 
 May 2026 – Sep 2026
 
-• Latent-action pretraining supervises contact and force only indirectly, and tactile or torque sensing covers only a small
+• Robots that learn from video see how a task looks, not how it feels: tactile or torque sensing covers only a small slice of
 
-slice of video. PhysLA learns physical targets where sensors exist, infers them from causal RGB elsewhere, and uses them
-with visual prediction to supervise latent actions — no tactile or torque sensing at deployment.
+video. PhysLA learns physical targets where sensors exist, infers them from causal RGB elsewhere, and uses them with
+visual prediction to supervise latent actions — no tactile or torque sensing at deployment.
 • Designed two of its three stages and co-implemented them: learning horizon-structured physical targets from
 pressure, tactile, and torque measurements, and transferring them to sensor-free video via causal RGB.
 • Outperforms VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and every SimplerEnv task group, and

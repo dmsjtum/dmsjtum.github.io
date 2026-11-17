@@ -41,7 +41,6 @@
       <a href="index.html"><span class="lang-en">Home</span><span class="lang-zh">首页</span></a>
       <a href="index.html#publications"><span class="lang-en">Research</span><span class="lang-zh">研究</span></a>
       <a href="index.html#projects"><span class="lang-en">Projects</span><span class="lang-zh">项目</span></a>
-      <a href="index.html#proposals"><span class="lang-en">Ideas</span><span class="lang-zh">构想</span></a>
       <a href="index.html#experience"><span class="lang-en">Record</span><span class="lang-zh">履历</span></a>
       <a href="files/cv.pdf">CV</a>
       <a href="mailto:dmmsjtu@engineering.upenn.edu">Email</a>
@@ -58,7 +57,10 @@
 <div class="research-lead"><span class="lang-en">Choose the duration while respecting the constraints that make a trajectory usable.</span><span class="lang-zh">在选择运动时长的同时，满足让轨迹真正可用的约束。</span></div>
 <ul class="linkrow"><li><a class="btn" href="mailto:dmmsjtu@engineering.upenn.edu"><span class="lang-en">Discuss this research</span><span class="lang-zh">交流这项研究</span></a></li></ul>
 </section>
-<div class="research-article"><section class="research-section"><h2><span class="lang-en">Duration matters under constraints</span><span class="lang-zh">约束下，时长同样重要</span></h2>
+<div class="research-article"><section class="research-section"><h2><span class="lang-en">In plain words</span><span class="lang-zh">通俗地说</span></h2>
+<p class="lang-en">A flight plan is only useful if the drone can actually fly it: motors have limits, and there are walls to avoid. <a href="project.html">HOP</a> ignored such limits; AL-HOP respects them. It proposes a duration, plans a motion that respects those limits for that duration, and keeps the result only if it passes the checks and improves on the plan it already had.</p>
+<p class="lang-zh">一份飞行方案只有无人机真的飞得出来才有用：电机出力有上限，途中还有墙要避开。<a href="project.html">HOP</a> 不考虑这些限制，AL-HOP 则把它们都算进去。它先提出一个时长，在这个时长下规划出满足这些限制的动作，只有通过检验、并且比手头已有方案更好时才保留。</p><p class="lang-en">In our benchmark it returned a usable plan in <b>every run</b>, while three popular methods failed in 20–30% of theirs, and it was <b>2.4–4.8× faster</b> on the problems both could solve. The sections below give the technical version.</p>
+<p class="lang-zh">在我们的基准测试中，它<b>每一次运行</b>都给出了可用方案，而三种常用方法有 20%–30% 的运行失败；在双方都能解的题目上，它还<b>快 2.4–4.8 倍</b>。下面几节是技术版本。</p></section><section class="research-section"><h2><span class="lang-en">Duration matters under constraints</span><span class="lang-zh">约束下，时长同样重要</span></h2>
 <p class="lang-en">A useful trajectory must do more than reach a goal quickly. It must respect actuator limits, state bounds, and obstacles. AL-HOP extends horizon selection to this constrained setting, optimizing the motion and its integer terminal index under a common cost.</p>
 <p class="lang-zh">一条可用轨迹不仅要尽快抵达目标，还必须满足执行器限制、状态边界和障碍约束。AL-HOP 将视界选择扩展到这一场景，在统一代价下优化运动及其整数终止时刻。</p><p class="lang-en">Changing the horizon also changes which constraints matter. A promising prediction from a local model therefore needs to be solved and checked under the original nonlinear dynamics.</p>
 <p class="lang-zh">视界改变时，起作用的约束也可能改变。因此，局部模型给出的有希望的预测，还需要在原始非线性动力学下求解并验证。</p></section><section class="research-section"><h2><span class="lang-en">Predict, solve, verify</span><span class="lang-zh">预测、求解、验证</span></h2>

@@ -281,7 +281,6 @@
     var t = function (en, cn) { return zh() ? cn : en; };
 
     var CHIPS = [
-      ["What is Measure the Value, Learn the Slope?", "「值靠测，斜率靠学」讲的是什么？"],
       ["What is HOP, in one paragraph?", "HOP 用一段话讲是什么？"],
       ["How does AL-HOP compare to ALTRO?", "AL-HOP 和 ALTRO 比结果如何？"],
       ["What is the ICLR 2027 paper about?", "ICLR 2027 那篇论文讲什么？"],

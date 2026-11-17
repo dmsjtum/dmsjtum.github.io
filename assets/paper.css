@@ -874,21 +874,6 @@ html[data-lang="zh"] .display { letter-spacing: 0.01em; }
 .research-visual:hover { outline: 1px solid var(--accent); outline-offset: 4px; }
 .research-visual svg { background: var(--paper-hi); }
 .research-visual svg text { font-family: var(--sans); fill: currentColor; }
-/* A results chart drawn inline on a research card, so it follows the theme.
-   Marks take `color` from their group, as in the duo chart: grey for the
-   baselines, accent for ours, a faint 100% track behind every bar. */
-.card-chart .cc-title { font-size: 13.5px; font-weight: 600; }
-.card-chart .cc-sub { font-size: 11px; color: var(--ink-3); }
-.card-chart .cc-foot { font-size: 10.5px; color: var(--ink-3); }
-.card-chart .cc-group { font: 400 10px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
-html[data-lang="zh"] .card-chart .cc-group { letter-spacing: .02em; }
-.card-chart .cc-label { font-size: 12px; color: var(--ink-2); }
-.card-chart .cc-label--ours { color: var(--ink); font-weight: 600; }
-.card-chart .cc-value { font: 600 12px/1 var(--mono); font-variant-numeric: tabular-nums; }
-.card-chart .cc-base .cc-value { color: var(--ink-2); }
-.card-chart .cc-track { color: var(--rule); }
-.card-chart .cc-base { color: var(--ink-3); }
-.card-chart .cc-ours { color: var(--accent); }
 
 /* Illustrated research articles share one reading measure. */
 .research-page { max-width: var(--measure); margin-inline: auto; }
@@ -1132,11 +1117,6 @@ html[data-lang="zh"] .pub__role { letter-spacing: 0.04em; }
   .pub__figs { grid-template-columns: 1fr; }
   .pub__figs .pub__thumb { max-width: none; }
 }
-
-/* Proposal ideas have their own series within the same card layout. */
-#proposals { counter-reset: proposal; }
-.pub--proposal { counter-increment: proposal; }
-.pub--proposal .pub__card::after { content: "P" counter(proposal, decimal-leading-zero); }
 
 /* A project is the same title-label-plus-body as a publication, with its
    own series (PR01, PR02 …). `counter-increment` here replaces the .pub

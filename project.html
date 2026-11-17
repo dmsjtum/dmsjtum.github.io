@@ -46,7 +46,6 @@
       <a href="index.html"><span class="lang-en">Home</span><span class="lang-zh">首页</span></a>
       <a href="index.html#publications"><span class="lang-en">Research</span><span class="lang-zh">研究</span></a>
       <a href="index.html#projects"><span class="lang-en">Projects</span><span class="lang-zh">项目</span></a>
-      <a href="index.html#proposals"><span class="lang-en">Ideas</span><span class="lang-zh">构想</span></a>
       <a href="index.html#experience"><span class="lang-en">Record</span><span class="lang-zh">履历</span></a>
       <a href="files/cv.pdf">CV</a>
       <a href="mailto:dmmsjtu@engineering.upenn.edu">Email</a>
@@ -63,7 +62,10 @@
 <div class="research-lead"><span class="lang-en">Optimize how long the motion takes, together with how the robot moves.</span><span class="lang-zh">让运动持续多久，与机器人如何运动，一起成为优化的对象。</span></div>
 <ul class="linkrow"><li><a class="btn" href="files/HOP.pdf">Paper (PDF)</a></li></ul>
 </section>
-<div class="research-article"><section class="research-section"><h2><span class="lang-en">The horizon is a decision</span><span class="lang-zh">把视界作为决策变量</span></h2>
+<div class="research-article"><section class="research-section"><h2><span class="lang-en">In plain words</span><span class="lang-zh">通俗地说</span></h2>
+<p class="lang-en">Ask a drone to fly to a spot. Before a standard planner can work out the flight, someone has to tell it how long the flight should last. Too short, and the drone must fly harder than it needs to; too long, and it wastes time. HOP removes that guess: it works out the flight and its duration together.</p>
+<p class="lang-zh">让无人机飞到某个位置。传统规划方法在算出飞行动作之前，得先有人告诉它这一趟要飞多久：定得太短，无人机只能飞得过猛；定得太长，又白白浪费时间。HOP 省掉了这次猜测，把“怎么飞”和“飞多久”放在一起求解。</p><p class="lang-en">Planning the flight again for every possible duration would be slow. HOP does most of that work once and reuses it for every candidate, which makes it up to <b>40× faster</b> than trying each duration in turn. The sections below give the technical version.</p>
+<p class="lang-zh">为每一种可能的时长都重新规划一遍会很慢。HOP 把大部分计算只做一次，供所有候选时长复用，因此比逐个尝试<b>最高快 40 倍</b>。下面几节是技术版本。</p></section><section class="research-section"><h2><span class="lang-en">The horizon is a decision</span><span class="lang-zh">把视界作为决策变量</span></h2>
 <p class="lang-en">How long should a motion take? A fixed horizon answers that question before optimization even begins. HOP instead chooses an integer terminal index together with the control sequence, balancing the motion cost against a duration penalty.</p>
 <p class="lang-zh">一段运动应该持续多久？固定视界的规划器在开始优化前就给出了答案。HOP 则把整数终止时刻与控制序列一起选择，在运动代价与时长惩罚之间权衡。</p><p class="lang-en">Trying every candidate separately repeats much of the same computation. The key is to share that work across horizons while still accounting for the terminal cost at each possible endpoint.</p>
 <p class="lang-zh">逐个尝试候选视界会重复大量计算。关键是跨视界复用这些计算，同时正确处理每个候选终点对应的终端代价。</p></section><section class="research-section"><h2><span class="lang-en">Compose once, query every horizon</span><span class="lang-zh">一次组合，查询全部视界</span></h2>
