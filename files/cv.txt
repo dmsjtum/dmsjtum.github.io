@@ -28,7 +28,7 @@ Trajectory Optimization.” In submission to IEEE International Conference on Ro
 review). Under review at ICLR 2027; second author.
 
 Research Experience
-HOP: Horizon-Optimal Trajectory Planning
+HOP: Fast Differential Dynamic Programming for Horizon-Optimal Trajectory Planning
 Jul 2025 – Feb 2026
 Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · RSS 2026 talk, undergraduate first author
 • Proposed HOP, a new algorithm that makes LQR and DDP horizon-optimal: it optimizes the trajectory and its horizon
@@ -40,8 +40,9 @@ together instead of fixing the horizon in advance.
 O(N 2 ) → O(N ) even when time-varying; HOP-DDP handles nonlinear systems, up to 40× faster than brute force.
 • Designed and ran the evaluation on four systems, from a double integrator to a 12-dimensional quadrotor.
 
-AL-HOP: Constrained Horizon-Optimal Planning
+AL-HOP: Augmented-Lagrangian Horizon-Optimal Planning
 Mar 2026 – Sep 2026
+for Fast Constrained Trajectory Optimization
 Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · first-author manuscript in submission to ICRA 2027
 • Proposed AL-HOP, extending HOP to hard state, control, and obstacle constraints: it alternates horizon selection on an
 
