@@ -353,8 +353,8 @@
       <div>
 
         <p class="section-intro">
-          <span class="lang-en">Planning robot motions faster, and teaching robots about touch and force from ordinary video.</span>
-          <span class="lang-zh">让机器人更快地规划动作，并让它从普通视频中学到接触与受力。</span>
+          <span class="lang-en">Time-optimal trajectory planning and physical supervision for vision&ndash;language&ndash;action policies.</span>
+          <span class="lang-zh">时间最优轨迹规划，以及视觉–语言–动作策略的物理监督。</span>
         </p>
 
 <article class="pub research-preview">
@@ -367,14 +367,14 @@
     <div>
       <div class="research-summary">
 <ul class="research-points lang-en">
-  <li><b>Problem.</b> A robot planning a motion, such as a drone flying to a target, must also decide <b>how long the motion should take</b>. Standard planners need that fixed in advance.</li>
-  <li><b>Idea.</b> <b>HOP</b> is a new algorithm that plans the motion and <b>chooses its duration at the same time</b>; all candidate durations share one computation.</li>
-  <li><b>Result.</b> Up to <b>40× faster</b> than trying each duration one by one, with nearly identical results.</li>
+  <li><b>Idea.</b> <b>HOP</b>, a new algorithm that makes LQR and DDP <b>horizon-optimal</b>: it optimizes the trajectory and its horizon (duration) together instead of fixing it in advance.</li>
+  <li><b>Method.</b> Recasting the Riccati recursion as a <b>linear fractional transformation</b> lets all candidate horizons share one computation, <b>O(N²) → O(N)</b>, time-varying systems included; HOP-DDP extends it to nonlinear ones.</li>
+  <li><b>Result.</b> Up to <b>40× faster</b> than the brute-force baseline, with closely matching objective values.</li>
 </ul>
 <ul class="research-points lang-zh">
-  <li><b>问题：</b>机器人规划一段动作（比如无人机飞向目标）时，还得决定<b>这段动作该用多久</b>；传统规划方法要求事先把时长定好。</li>
-  <li><b>思路：</b>全新算法 <b>HOP</b> 在规划动作的同时<b>选出合适的时长</b>，所有候选时长共用一次计算。</li>
-  <li><b>结果：</b>比逐个尝试候选时长<b>最高快 40 倍</b>，结果几乎相同。</li>
+  <li><b>思路：</b>全新算法 <b>HOP</b> 让 LQR 与 DDP 实现<b>视界最优</b>：同时优化轨迹与视界（即运动时长），而不是预先固定视界。</li>
+  <li><b>方法：</b>把 Riccati 递推改写为<b>线性分式变换</b>，所有候选视界共享一次计算，<b>O(N²) → O(N)</b>，时变系统同样适用；HOP-DDP 再推广到非线性系统。</li>
+  <li><b>结果：</b>比暴力搜索基线<b>最高快 40 倍</b>，目标函数值接近。</li>
 </ul>
 </div>
       <ul class="pub__links"><li><a href="project.html"><span class="lang-en">Read the research →</span><span class="lang-zh">阅读研究详情 →</span></a></li><li><a href="files/HOP.pdf">Paper (PDF)</a></li></ul>
@@ -395,14 +395,14 @@
     <div>
       <div class="research-summary">
 <ul class="research-points lang-en">
-  <li><b>Problem.</b> Robots have limits: motors can only push so hard, and <b>obstacles must be avoided</b>. HOP could not handle them.</li>
-  <li><b>Idea.</b> <b>AL-HOP</b> extends HOP: it chooses the duration <b>within those limits</b> and keeps only plans that pass its checks.</li>
-  <li><b>Result.</b> On 100 test problems across 10 systems (cars, drones, a robot arm), run 5 times each, <b>every run gave a valid plan</b>; three popular methods managed 70–80%. Where both succeeded, it was <b>2.4–4.8× faster</b> at similar quality.</li>
+  <li><b>Idea.</b> <b>AL-HOP</b> extends HOP to hard state, control, and obstacle constraints, alternating horizon selection on an augmented-Lagrangian LQ model with trajectory optimization.</li>
+  <li><b>Validity.</b> Valid on <b>100%</b> of 500 runs (100 problems, 10 systems, 5 runs each), vs. 79.8% for ALTRO and DIRCOL/IPOPT and 70% for DIRCOL/SNOPT.</li>
+  <li><b>Speed &amp; quality.</b> <b>2.4–4.8× faster</b> than ALTRO, IPOPT, and SNOPT on problems both solve, at <b>comparable cost</b>.</li>
 </ul>
 <ul class="research-points lang-zh">
-  <li><b>问题：</b>真实机器人处处受限：电机出力有上限，还要<b>避开障碍物</b>。HOP 处理不了这些限制。</li>
-  <li><b>思路：</b><b>AL-HOP</b> 是 HOP 的推广：选出合适的时长，同时<b>满足这些限制</b>，方案通过检验才保留。</li>
-  <li><b>结果：</b>10 类系统（小车、无人机、机械臂等）共 100 道测试题，每题运行 5 次，<b>每一次都给出有效方案</b>；三种常用方法只有 70%–80%。在双方都成功的题目上，它<b>快 2.4–4.8 倍</b>，方案质量相当。</li>
+  <li><b>思路：</b><b>AL-HOP</b> 把 HOP 推广到状态、控制与障碍物硬约束：在增广拉格朗日 LQ 模型上选择视界，并与轨迹优化交替进行。</li>
+  <li><b>有效性：</b>10 类系统、100 个问题各运行 5 次，500 次<b>全部有效</b>；ALTRO 与 DIRCOL/IPOPT 为 79.8%，DIRCOL/SNOPT 为 70%。</li>
+  <li><b>速度与质量：</b>在双方都有效的问题上，比 ALTRO、IPOPT、SNOPT <b>快 2.4–4.8 倍</b>，<b>代价相当</b>。</li>
 </ul>
 </div>
       <ul class="pub__links"><li><a href="al-hop.html"><span class="lang-en">Read the research →</span><span class="lang-zh">阅读研究详情 →</span></a></li></ul>
@@ -427,16 +427,16 @@
     <div>
       <div class="research-summary">
 <ul class="research-points lang-en">
-  <li><b>Problem.</b> Video shows a robot how a task looks, not how it feels: how hard to press, when contact happens. Sensors that record this cover only a <b>small slice of video</b>.</li>
-  <li><b>Idea.</b> <b>(a)</b> Learn touch and force where sensors exist; <b>(b)</b> infer them from camera video alone, so ordinary video gets them too; <b>(c)</b> train the robot on both sight and inferred touch.</li>
-  <li><b>My role.</b> Designed and co-implemented steps <b>(a)</b> and <b>(b)</b>.</li>
-  <li><b>Result.</b> Beats two strong methods (VLA-JEPA, π<sub>0.5</sub>) on <b>all five real-robot tasks</b>, with <b>no touch sensors</b> at deployment.</li>
+  <li><b>Motivation.</b> Latent actions learned from visual change miss contact and force, yet physical sensors cover only a <b>small slice of video</b>.</li>
+  <li><b>Architecture.</b> <b>(a)</b> Learn physical targets from pressure, tactile, and torque; <b>(b)</b> infer them from RGB for sensor-free video; <b>(c)</b> co-supervise latent actions with visual prediction.</li>
+  <li><b>My role.</b> Designed and co-implemented stages <b>(a)</b> and <b>(b)</b>.</li>
+  <li><b>Evidence.</b> Outperforms VLA-JEPA and &pi;<sub>0.5</sub> on <b>all five real-robot tasks</b>, with no tactile sensing at deployment.</li>
 </ul>
 <ul class="research-points lang-zh">
-  <li><b>问题：</b>视频只让机器人看到动作“看起来怎样”，看不到“摸起来怎样”：按得多重、何时碰到物体。能记录这些的传感器只覆盖<b>很小一部分视频</b>。</li>
-  <li><b>思路：</b><b>(a)</b> 在有传感器的数据上学会触觉与受力；<b>(b)</b> 只看画面就推断出它们，让普通视频也用得上；<b>(c)</b> 让机器人同时从画面和推断出的触觉中学习。</li>
-  <li><b>我的贡献：</b>设计了 <b>(a)</b>、<b>(b)</b> 两步，并与学长共同实现。</li>
-  <li><b>结果：</b>五个真实机器人任务上<b>每一项</b>都超过两种强方法（VLA-JEPA、π<sub>0.5</sub>），部署时<b>无需触觉传感器</b>。</li>
+  <li><b>动机：</b>从画面变化学到的隐动作捕捉不到接触与受力，而物理传感器只覆盖<b>很小一部分视频</b>。</li>
+  <li><b>架构：</b><b>(a)</b> 从压力、触觉、力矩中学物理目标；<b>(b)</b> 只凭 RGB 为无传感器视频推断这些目标；<b>(c)</b> 与视觉预测共同监督隐动作。</li>
+  <li><b>我的贡献：</b>设计并与学长共同实现了 <b>(a)</b> 与 <b>(b)</b>。</li>
+  <li><b>证据：</b>五个真实机器人任务上<b>每一项</b>都超过 VLA-JEPA 与 &pi;<sub>0.5</sub>，部署时无需触觉传感。</li>
 </ul>
 </div>
     </div>
@@ -486,14 +486,14 @@
           </div>
           <div class="pub__body">
             <ul class="pub__points lang-en">
-              <li><b>What it does.</b> Say “put the tape in the drawer” and a <b>low-cost desktop robot arm</b> does it, after checking on camera that the object and target are there.</li>
-              <li><b>How it learned.</b> We recorded <b>316 demonstrations</b> of 11 tabletop tasks to further train π<sub>0.5</sub>, a general-purpose robot AI model, and <b>ran it on a real SO-101 arm</b>.</li>
-              <li><b>How it stays on track.</b> A camera check confirms the task is truly done; after a failure the arm stops, looks again, and retries within a set limit. From spoken request to finished task, the full system succeeded <b>70%</b> of the time.</li>
+              <li><b>π<sub>0.5</sub> on real hardware.</b> Collected <b>316 demonstrations</b> across 11 tabletop tasks, fine-tuned π<sub>0.5</sub> (LoRA on the 2B vision–language backbone, full 300M action expert), and <b>deployed it on a real SO-101 arm</b>.</li>
+              <li><b>Speech recognition.</b> Integrated Qwen-Omni ASR with visual grounding to turn <b>spoken requests into task instructions</b>.</li>
+              <li><b>Toward closed-loop execution.</b> Added <b>visual checks of progress and task completion</b> (terminal-verification F<sub>1</sub> <b>0.842</b>) with stop, re-observation, and bounded retries; the full system reached <b>70%</b> end-to-end success.</li>
             </ul>
             <ul class="pub__points lang-zh">
-              <li><b>它能做什么：</b>说一句“把胶带放进抽屉”，一台<b>低成本桌面机械臂</b>就会去完成；动手前，它会先从相机画面里确认物体和目标位置都在。</li>
-              <li><b>它怎么学会的：</b>我们采集了 11 类桌面任务的 <b>316 条演示</b>，用来进一步训练通用机器人大模型 π<sub>0.5</sub>，并<b>部署到真实的 SO-101 机械臂</b>上。</li>
-              <li><b>它怎么检查和纠错：</b>用相机确认任务是否真的完成；一旦失败，机械臂会停下、重新观察，并在限定次数内重试。从听到指令到完成任务，整套系统的成功率为 <b>70%</b>。</li>
+              <li><b>π<sub>0.5</sub> 实机部署：</b>采集 11 类桌面任务的 <b>316 条演示</b>，微调 π<sub>0.5</sub>（2B 视觉–语言主干 LoRA，300M 动作专家全量训练），并<b>部署到真实 SO-101 机械臂</b>。</li>
+              <li><b>语音识别：</b>接入 Qwen-Omni 语音识别并结合视觉定位，把<b>口头请求转成任务指令</b>。</li>
+              <li><b>闭环探索：</b>加入<b>进度与任务完成状态的视觉核验</b>（终态核验 F<sub>1</sub> <b>0.842</b>），支持停止、重新观测与有限次重试；完整系统端到端成功率 <b>70%</b>。</li>
             </ul>
           </div>
         </div>
@@ -597,8 +597,8 @@
                 </span>
               </div>
               <p class="entry__desc">
-                <span class="lang-en">PhysLA: teaching robots about touch and force from ordinary video. Under double-blind review; full title and co-authors after the December decision.</span>
-                <span class="lang-zh">PhysLA：让机器人从普通视频中学到接触与受力。双盲评审中，完整标题与合作者待 12 月结果公布后公开。</span>
+                <span class="lang-en">Physical supervision for latent-action VLA pretraining. Under double-blind review; title and co-authors after the December decision.</span>
+                <span class="lang-zh">为隐动作 VLA 预训练引入物理监督。双盲评审中，标题与合作者待 12 月结果公布后公开。</span>
               </p>
             </a>
           </li>
@@ -633,8 +633,8 @@
                 </span>
               </div>
               <p class="entry__desc">
-                <span class="lang-en">A robot arm that follows spoken requests and checks its own work. I led a team of five.</span>
-                <span class="lang-zh">一台听得懂口头指令、还会自查结果的机械臂。任五人小组组长。</span>
+                <span class="lang-en">A voice-interactive closed-loop VLA system. I led a team of five.</span>
+                <span class="lang-zh">语音交互式闭环 VLA 系统，任五人小组组长。</span>
               </p>
             </div>
           </li>

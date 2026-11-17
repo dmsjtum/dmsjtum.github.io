@@ -31,9 +31,9 @@ Research Experience
 HOP: Horizon-Optimal Trajectory Planning
 Jul 2025 – Feb 2026
 Advisor: Prof. Zhongqiang Ren, Shanghai Jiao Tong University · RSS 2026 talk, undergraduate first author
-• Proposed HOP, a new algorithm that plans a motion and chooses how long it should take (its horizon) at the same
+• Proposed HOP, a new algorithm that makes LQR and DDP horizon-optimal: it optimizes the trajectory and its horizon
 
-time; standard planners (LQR, DDP) need the horizon fixed in advance.
+together instead of fixing the horizon in advance.
 
 • Proved the Riccati recursion is a linear fractional transformation, so all candidate horizons share one computation,
 
@@ -54,10 +54,10 @@ Researcher, Shanghai Jiao Tong University · second author, under review at ICLR
 
 May 2026 – Sep 2026
 
-• Robots that learn from video see how a task looks, not how it feels: tactile or torque sensing covers only a small slice of
+• Latent-action pretraining supervises contact and force only indirectly, and tactile or torque sensing covers only a small
 
-video. PhysLA learns physical targets where sensors exist, infers them from causal RGB elsewhere, and uses them with
-visual prediction to supervise latent actions — no tactile or torque sensing at deployment.
+slice of video. PhysLA learns physical targets where sensors exist, infers them from causal RGB elsewhere, and uses them
+with visual prediction to supervise latent actions — no tactile or torque sensing at deployment.
 • Designed two of its three stages and co-implemented them: learning horizon-structured physical targets from
 pressure, tactile, and torque measurements, and transferring them to sensor-free video via causal RGB.
 • Outperforms VLA-JEPA, the strongest latent-action baseline tested, on LIBERO and every SimplerEnv task group, and
